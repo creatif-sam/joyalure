@@ -5,6 +5,10 @@ import TableOfContents from "@/components/blog/TableOfContents"
 import BlogSidebarProducts from "@/components/blog/BlogSideBarProducts"
 import Comments from "@/components/blog/Comments"
 
+
+export const dynamic = "force-dynamic"
+
+
 type PageProps = {
   params: Promise<{
     slug: string
