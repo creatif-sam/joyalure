@@ -5,19 +5,14 @@ import TableOfContents from "@/components/blog/TableOfContents"
 import BlogSidebarProducts from "@/components/blog/BlogSideBarProducts"
 import Comments from "@/components/blog/Comments"
 
-
-export const dynamic = "force-dynamic"
-
-
 type PageProps = {
-  params: Promise<{
+  params: {
     slug: string
-  }>
+  }
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const { slug } = await params
-  const post = blogPosts.find((p) => p.slug === slug)
+  const post = blogPosts.find((p) => p.slug === params.slug)
 
   if (!post) {
     notFound()
@@ -26,8 +21,6 @@ export default async function BlogPostPage({ params }: PageProps) {
   return (
     <section className="bg-white py-20 px-4">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-16">
-        
-        {/* ARTICLE */}
         <article className="lg:col-span-2">
           <Link
             href="/blog"
@@ -67,14 +60,12 @@ export default async function BlogPostPage({ params }: PageProps) {
           <Comments />
         </article>
 
-        {/* SIDEBAR */}
         <aside className="hidden lg:block space-y-8">
           <div className="sticky top-28 space-y-8">
             <TableOfContents sections={post.sections} />
             <BlogSidebarProducts />
           </div>
         </aside>
-
       </div>
     </section>
   )
