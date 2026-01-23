@@ -6,9 +6,11 @@ import { useCartStore } from "@/lib/cart-store"
 
 type Product = {
   id: string
-  name: string
+  name?: string
+  title?: string
   price: number
-  image_url: string
+  image_url?: string
+  image?: string
 }
 
 export default function FeaturedProducts() {
@@ -49,8 +51,8 @@ export default function FeaturedProducts() {
             >
               <div className="relative overflow-hidden bg-gray-100 rounded-lg">
                 <img
-                  src={product.image_url}
-                  alt={product.name}
+                  src={product.image_url || product.image || ""}
+                  alt={product.name || product.title || "Product"}
                   className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
@@ -64,7 +66,7 @@ export default function FeaturedProducts() {
 
               <div className="mt-4 space-y-2">
                 <p className="text-sm text-gray-800 font-medium">
-                  {product.name}
+                  {product.name || product.title}
                 </p>
 
                 <div className="flex items-center justify-between">
@@ -76,9 +78,9 @@ export default function FeaturedProducts() {
                     onClick={() =>
                       addItem({
                         id: product.id,
-                        name: product.name,
+                        name: product.name || product.title || "Product",
                         price: product.price,
-                        image: product.image_url,
+                        image: product.image_url || product.image || "",
                         quantity: 1
                       })
                     }

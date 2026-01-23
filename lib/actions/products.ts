@@ -1,7 +1,28 @@
-"use server"
 
+"use server"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
+
+export async function updateProduct(formData: FormData) {
+  const supabase = createServerSupabaseClient();
+  const id = formData.get("id") as string;
+  const name = formData.get("name") as string;
+  const price = Number(formData.get("price"));
+  const description = formData.get("description") as string;
+  const image_url = formData.get("image_url") as string;
+
+  const { error } = await supabase
+    .from("products")
+    .update({ name, price, description, image_url })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error("Product update failed");
+  }
+
+  revalidatePath("/admin/products");
+  revalidatePath("/");
+}
 
 export async function createProduct(formData: FormData) {
   const supabase = createServerSupabaseClient()

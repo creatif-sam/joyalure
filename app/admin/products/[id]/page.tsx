@@ -1,23 +1,27 @@
-import { createClient } from "@/lib/supabase/server"
+
+import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { cookies } from "next/headers"
 import { getCategories } from "@/lib/supabase/categories"
 import { updateProduct } from "@/lib/actions/products"
 
-export default async function EditProductPage({ params }: any) {
-  const supabase = createClient()
-  const categories = await getCategories()
+export default async function Page({ params }: { params: { id: string } }) {
+  const cookieStore = cookies();
+  const supabase = createServerSupabaseClient({ cookies: cookieStore });
+  const categories = await getCategories();
 
   const { data: product } = await supabase
     .from("products")
-    .select(`
-      *,
-      product_categories ( category_id )
-    `)
+    .select(`*, product_categories ( category_id )`)
     .eq("id", params.id)
-    .single()
+    .single();
 
-  const selected = product.product_categories.map(
-    (pc: any) => pc.category_id
-  )
+  if (!product) {
+    return <div className="p-8 text-center text-red-500">Product not found.</div>;
+  }
+
+  const selected = product.product_categories?.map(
+    (pc: { category_id: string }) => pc.category_id
+  ) || [];
 
   return (
     <form

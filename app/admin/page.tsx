@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation"
-import AdminTopbar from "@/components/admin/AdminTopbar"
 import DashboardStatCard from "@/components/admin/DashboardStatsCard"
 import DashboardChartPlaceholder from "@/components/admin/DashboardChartPlaceholder"
 import RecentOrdersTable from "@/components/admin/RecentOrdersTable"
@@ -20,21 +19,17 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div>
-      <AdminTopbar />
+    <section className="p-8 space-y-8">
+      <div className="grid grid-cols-4 gap-6">
+        <DashboardStatCard title="Revenue" value="$92,120" delta="+6%" />
+        <DashboardStatCard title="Orders" value="1,660" />
+        <DashboardStatCard title="Customers" value="845" />
+        <DashboardStatCard title="Conversion" value="3.2%" />
+      </div>
 
-      <section className="p-8 space-y-8">
-        <div className="grid grid-cols-4 gap-6">
-          <DashboardStatCard title="Revenue" value="$92,120" delta="+6%" />
-          <DashboardStatCard title="Orders" value="1,660" />
-          <DashboardStatCard title="Customers" value="845" />
-          <DashboardStatCard title="Conversion" value="3.2%" />
-        </div>
+      <DashboardChartPlaceholder />
 
-        <DashboardChartPlaceholder />
-
-        <RecentOrdersTable />
-      </section>
-    </div>
+      <RecentOrdersTable />
+    </section>
   )
 }

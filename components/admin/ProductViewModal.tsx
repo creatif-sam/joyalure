@@ -10,7 +10,7 @@ export default function ProductViewModal({ product, open, onOpenChange }) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>{product.title || product.name}</DialogTitle>
+          <DialogTitle>{product.title || product.name || "Product Details"}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center gap-4">
           {product.image_url && (

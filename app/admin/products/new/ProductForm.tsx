@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +16,6 @@ export function ProductForm() {
     e.preventDefault();
     setLoading(true);
 
-    const { createClient } = await import("@/lib/supabase/client");
     const supabase = createClient();
 
     const formData = new FormData(e.currentTarget);
