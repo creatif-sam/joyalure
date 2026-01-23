@@ -9,8 +9,13 @@ export default function InventoryPageUI({ products, lowStockProducts }: { produc
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState("");
   const [stock, setStock] = useState(0);
+  const [editMode, setEditMode] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  // Filter state
+  const [search, setSearch] = useState("");
+  const [stockFilter, setStockFilter] = useState("all"); // all | in | low | out
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,10 +27,11 @@ export default function InventoryPageUI({ products, lowStockProducts }: { produc
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ product_id: selectedProduct, stock }),
       });
-      if (!res.ok) throw new Error("Failed to add inventory");
+      if (!res.ok) throw new Error("Failed to update inventory");
       setOpen(false);
       setSelectedProduct("");
       setStock(0);
+      setEditMode(false);
       window.location.reload();
     } catch (err: any) {
       setError(err.message || "Unknown error");
@@ -34,25 +40,63 @@ export default function InventoryPageUI({ products, lowStockProducts }: { produc
     }
   }
 
+  // Filtering logic
+  const filteredProducts = products.filter((product: any) => {
+    const matchesSearch = product.title.toLowerCase().includes(search.toLowerCase());
+    let matchesStock = true;
+    const stock = product.inventory?.stock ?? 0;
+    if (stockFilter === "in") matchesStock = stock > 0;
+    if (stockFilter === "low") matchesStock = stock > 0 && stock < 10;
+    if (stockFilter === "out") matchesStock = stock === 0;
+    return matchesSearch && matchesStock;
+  });
+
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Inventory Management</h1>
-        <div className="flex gap-2">
-          <Button>
-            <PackageOpen className="mr-2 h-4 w-4" />
-            Update Stock
-          </Button>
-          <Button variant="secondary" onClick={() => setOpen(true)}>
-            + Add Inventory
-          </Button>
+      <div className="pl-6 pt-4">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold">Inventory Management</h1>
+          <div className="flex gap-2">
+            <Button className="bg-green-600 hover:bg-green-700 text-white">
+              <PackageOpen className="mr-2 h-4 w-4" />
+              Update Stock
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setOpen(true)}
+              className="bg-yellow-400 hover:bg-yellow-500 text-black"
+            >
+              + Add Inventory
+            </Button>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-col md:flex-row gap-3 items-center mt-4">
+          <input
+            type="text"
+            placeholder="Search product name..."
+            className="border rounded px-3 py-2 w-full md:w-64"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          <select
+            className="border rounded px-3 py-2 w-full md:w-48"
+            value={stockFilter}
+            onChange={e => setStockFilter(e.target.value)}
+          >
+            <option value="all">All Stock</option>
+            <option value="in">In Stock</option>
+            <option value="low">Low Stock (&lt;10)</option>
+            <option value="out">Out of Stock</option>
+          </select>
         </div>
       </div>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={(v: boolean) => { setOpen(v); if (!v) { setEditMode(false); setSelectedProduct(""); setStock(0); setError(""); } }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add Inventory</DialogTitle>
+            <DialogTitle>{editMode ? "Edit Inventory" : "Add Inventory"}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -62,6 +106,7 @@ export default function InventoryPageUI({ products, lowStockProducts }: { produc
                 value={selectedProduct}
                 onChange={e => setSelectedProduct(e.target.value)}
                 required
+                disabled={editMode}
               >
                 <option value="">Select a product</option>
                 {products.map((p) => (
@@ -82,8 +127,14 @@ export default function InventoryPageUI({ products, lowStockProducts }: { produc
             </div>
             {error && <div className="text-red-600 text-sm">{error}</div>}
             <div className="flex justify-end gap-2 mt-4">
-              <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={submitting}>Cancel</Button>
-              <Button type="submit" disabled={submitting || !selectedProduct}>Add</Button>
+              <Button type="button" variant="outline" onClick={() => { setOpen(false); setEditMode(false); }} disabled={submitting}>Cancel</Button>
+              <Button
+                type="submit"
+                disabled={submitting || !selectedProduct}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                {editMode ? "Update" : "Add"}
+              </Button>
             </div>
           </form>
         </DialogContent>
@@ -95,7 +146,7 @@ export default function InventoryPageUI({ products, lowStockProducts }: { produc
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {products?.map((product: any) => (
+            {filteredProducts.map((product: any) => (
               <div key={product.id} className="flex items-center justify-between p-4 border rounded-lg bg-white shadow-sm">
                 <div className="flex items-center space-x-4">
                   <img
@@ -115,7 +166,16 @@ export default function InventoryPageUI({ products, lowStockProducts }: { produc
                       {product.inventory?.stock ?? 0}
                     </p>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setEditMode(true);
+                      setOpen(true);
+                      setSelectedProduct(product.id);
+                      setStock(product.inventory?.stock ?? 0);
+                    }}
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
                 </div>
