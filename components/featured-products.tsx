@@ -1,11 +1,38 @@
 "use client"
 
-import { featuredProducts } from "@/lib/featured-products"
-import { useCartStore } from "@/lib/cart-store"
+import { useEffect, useState } from "react"
 import { Heart, ShoppingBag } from "lucide-react"
+import { useCartStore } from "@/lib/cart-store"
+
+type Product = {
+  id: string
+  name: string
+  price: number
+  image_url: string
+}
 
 export default function FeaturedProducts() {
-  const addItem = useCartStore((s) => s.addItem)
+  const [products, setProducts] = useState<Product[]>([])
+  const addItem = useCartStore(s => s.addItem)
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch("/api/products/featured")
+        if (!res.ok) {
+          setProducts([])
+          return
+        }
+        const data = await res.json()
+        if (Array.isArray(data)) {
+          setProducts(data)
+        }
+      } catch {
+        setProducts([])
+      }
+    }
+    load()
+  }, [])
 
   return (
     <section className="bg-white py-24 px-4">
@@ -15,14 +42,14 @@ export default function FeaturedProducts() {
         </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {featuredProducts.map((product) => (
+          {products.map((product) => (
             <div
               key={product.id}
               className="group relative"
             >
               <div className="relative overflow-hidden bg-gray-100 rounded-lg">
                 <img
-                  src={product.image}
+                  src={product.image_url}
                   alt={product.name}
                   className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -51,20 +78,11 @@ export default function FeaturedProducts() {
                         id: product.id,
                         name: product.name,
                         price: product.price,
-                        image: product.image,
+                        image: product.image_url,
                         quantity: 1
                       })
                     }
-                   className="
-  flex items-center gap-2
-  text-sm
-  border border-gray-900
-  px-4 py-2
-  rounded-md
-  transition-colors duration-300
-  hover:bg-gray-900 hover:text-white
-"
-
+                    className="flex items-center gap-2 text-sm border border-gray-900 px-4 py-2 rounded-md transition-colors duration-300 hover:bg-gray-900 hover:text-white"
                   >
                     <ShoppingBag size={16} />
                     Add
@@ -74,6 +92,12 @@ export default function FeaturedProducts() {
             </div>
           ))}
         </div>
+
+        {products.length === 0 && (
+          <p className="mt-12 text-center text-gray-500">
+            No featured products available
+          </p>
+        )}
       </div>
     </section>
   )

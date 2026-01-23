@@ -1,22 +1,45 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { createServerClient } from "@supabase/ssr"
 
-export function proxy(req: NextRequest) {
+export default async function proxy(req: NextRequest) {
   const res = NextResponse.next()
 
-  res.headers.set(
-    "Content-Security-Policy",
-    `
-    default-src 'self';
-    script-src 'self' 'unsafe-inline' https://kit.fontawesome.com https://ka-f.fontawesome.com;
-    style-src 'self' 'unsafe-inline' https://ka-f.fontawesome.com https://fonts.googleapis.com;
-    font-src 'self' https://ka-f.fontawesome.com https://fonts.gstatic.com;
-    connect-src 'self' https://ka-f.fontawesome.com;
-    img-src 'self' data: https:;
-    `
-      .replace(/\s{2,}/g, " ")
-      .trim()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll: () =>
+          req.cookies.getAll().map(c => ({
+            name: c.name,
+            value: c.value
+          })),
+        setAll: cookies =>
+          cookies.forEach(({ name, value, options }) =>
+            res.cookies.set({ name, value, ...options })
+          )
+      }
+    }
   )
+
+  const {
+    data: { user }
+  } = await supabase.auth.getUser()
+
+  // If user is NOT logged in and tries to access admin
+  if (!user && req.nextUrl.pathname.startsWith("/admin")) {
+    return NextResponse.redirect(
+      new URL("/auth/login", req.url)
+    )
+  }
+
+  // If user IS logged in and visits login page
+  if (user && req.nextUrl.pathname.startsWith("/auth/login")) {
+    return NextResponse.redirect(
+      new URL("/admin", req.url)
+    )
+  }
 
   return res
 }
