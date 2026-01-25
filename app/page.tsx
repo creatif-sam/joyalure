@@ -32,7 +32,7 @@ export default function JoyAllureComingSoon() {
   ];
 
   // Typing animation text
-  const welcomeText = "WELCOME TO JOY ALLURE";
+  const welcomeText = "WELCOME TO JOY ALURE";
   const [typedWelcome, setTypedWelcome] = useState("");
 
   useEffect(() => {
@@ -132,7 +132,7 @@ export default function JoyAllureComingSoon() {
           </motion.h2>
 
           <motion.p variants={fadeInUp} className="text-gray-400 text-lg leading-relaxed max-w-lg mb-12">
-            Joy Allure is redefining body care. We are preparing a luxurious digital experience 
+            Joy Alure is redefining body care. We are preparing a luxurious digital experience 
             dedicated to the art of skin nourishment.
           </motion.p>
 
@@ -166,7 +166,7 @@ export default function JoyAllureComingSoon() {
       </button>
 
       <div className="absolute top-8 right-8 text-xl font-serif italic tracking-tight z-50">
-        Joy Allure<span className="text-green-500">.</span>
+        Joy Alure<span className="text-green-500">.</span>
       </div>
 
       {/* Social Bar */}

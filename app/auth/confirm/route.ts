@@ -1,30 +1,26 @@
-import { createClient } from "@/lib/supabase/server";
-import { type EmailOtpType } from "@supabase/supabase-js";
-import { redirect } from "next/navigation";
-import { type NextRequest } from "next/server";
+import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { redirect } from "next/navigation"
+import { cookies } from "next/headers"
+import type { EmailOtpType } from "@supabase/supabase-js"
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const token_hash = searchParams.get("token_hash");
-  const type = searchParams.get("type") as EmailOtpType | null;
-  const next = searchParams.get("next") ?? "/";
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
 
-  if (token_hash && type) {
-    const supabase = await createClient();
+  const token_hash = searchParams.get("token_hash")
+  const type = searchParams.get("type") as EmailOtpType | null
 
-    const { error } = await supabase.auth.verifyOtp({
-      type,
-      token_hash,
-    });
-    if (!error) {
-      // redirect user to specified redirect URL or root of app
-      redirect(next);
-    } else {
-      // redirect the user to an error page with some instructions
-      redirect(`/auth/error?error=${error?.message}`);
-    }
+  if (!token_hash || !type) {
+    redirect("/auth/login")
   }
 
-  // redirect the user to an error page with some instructions
-  redirect(`/auth/error?error=No token hash or type`);
+  const supabase = createServerSupabaseClient({
+    cookies: cookies()
+  })
+
+  await supabase.auth.verifyOtp({
+    token_hash,
+    type
+  })
+
+  redirect("/client-dashboard")
 }
