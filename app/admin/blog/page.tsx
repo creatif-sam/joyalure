@@ -1,81 +1,112 @@
-import { createClient } from "@/lib/supabase/server";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Edit, Trash2 } from "lucide-react";
+"use client";
+import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { unstable_noStore } from "next/cache";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
 
-type BlogPost = {
-  id: string;
-  slug: string;
-  title: string;
-  excerpt: string;
-  image: string;
-  date: string;
-  author: string;
-};
 
-export default async function AdminBlog() {
-  unstable_noStore();
-  const supabase = await createClient();
+export default function AdminBlog() {
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-  // Fetch blog posts from database
-  const { data: blogPosts } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .order('date', { ascending: false });
+  // Fetch posts on mount
+  React.useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      const supabase = createClient();
+      const { data, error } = await supabase.from('blog_posts').select('id, title, slug, published, created_at').order('created_at', { ascending: false });
+      if (error) setError(error.message);
+      else setBlogPosts(data || []);
+      setLoading(false);
+    };
+    fetchPosts();
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this blog post?')) return;
+    const supabase = createClient();
+    const { error } = await supabase.from('blog_posts').delete().eq('id', id);
+    if (error) {
+      alert('Error deleting post: ' + error.message);
+    } else {
+      setBlogPosts(posts => posts.filter(post => post.id !== id));
+    }
+  };
+
+  if (loading) return <div className="p-8">Loading...</div>;
+  if (error) return <div className="p-8 text-red-600">Error loading blog posts: {error}</div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Blog Management</h2>
-        <Link href="/admin/blog/new">
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Blog Post
-          </Button>
-        </Link>
+    <div className="max-w-4xl mx-auto p-8">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-left">Blog Posts</h1>
+        <Link href="/admin/blog/new" className="bg-yellow-400 text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-yellow-500 transition">New Post</Link>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {blogPosts?.map((post: BlogPost) => (
-          <Card key={post.id}>
-            <CardHeader>
-              <div className="aspect-video relative mb-4">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  className="object-cover rounded-md"
-                />
-              </div>
-              <CardTitle className="text-lg">{post.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-2">{post.excerpt}</p>
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-sm text-muted-foreground">By {post.author}</span>
-                <span className="text-sm text-muted-foreground">{post.date}</span>
-              </div>
-              <div className="flex space-x-2">
-                <Link href={`/admin/blog/${post.id}/edit`}>
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit
-                  </Button>
-                </Link>
-                <Button variant="outline" size="sm">
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )) || (
-          <div className="col-span-full text-center py-8">
-            <p className="text-muted-foreground">No blog posts found</p>
-          </div>
-        )}
+      <div className="bg-white rounded-xl border overflow-hidden">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th className="px-6 py-3 text-left">Title</th>
+              <th className="text-left">Slug</th>
+              <th className="text-left">Published</th>
+              <th className="text-left">Created</th>
+              <th className="text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {blogPosts && blogPosts.length > 0 ? (
+              blogPosts.map((post: any) => (
+                <tr key={post.id}>
+                  <td className="px-6 py-4 font-medium">{post.title}</td>
+                  <td>{post.slug}</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={!!post.published}
+                      onChange={async (e) => {
+                        // Optimistic UI update
+                        const newValue = e.target.checked;
+                        setBlogPosts(posts => posts.map(p => p.id === post.id ? { ...p, published: newValue } : p));
+                        const supabase = createClient();
+                        const { error } = await supabase
+                          .from('blog_posts')
+                          .update({ published: newValue })
+                          .eq('id', post.id);
+                        if (error) {
+                          // Revert if error
+                          setBlogPosts(posts => posts.map(p => p.id === post.id ? { ...p, published: !newValue } : p));
+                          alert('Failed to update published status: ' + error.message);
+                        }
+                      }}
+                      className="w-5 h-5 accent-green-600 cursor-pointer"
+                      aria-label="Toggle published"
+                    />
+                  </td>
+                  <td>{new Date(post.created_at).toLocaleDateString()}</td>
+                  <td className="space-x-2 flex items-center">
+                    <Link href={`/admin/blog/${post.id}`} title="View">
+                      <button type="button" className="p-2 hover:bg-green-100 rounded-full text-green-700" aria-label="View"><Eye size={18} /></button>
+                    </Link>
+                    <Link href={`/admin/blog/edit/${post.id}`} title="Edit">
+                      <button type="button" className="p-2 hover:bg-blue-100 rounded-full text-blue-700" aria-label="Edit"><Pencil size={18} /></button>
+                    </Link>
+                    <button type="button" onClick={() => handleDelete(post.id)} className="p-2 hover:bg-red-100 rounded-full text-red-600" aria-label="Delete"><Trash2 size={18} /></button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
+                  No blog posts found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

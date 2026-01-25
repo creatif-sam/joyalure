@@ -1,6 +1,9 @@
 "use client"
 
-import { Search, Bell, Moon, Users } from "lucide-react"
+import { Search, Bell, Users, UserCircle, LogOut, Settings } from "lucide-react"
+import { ThemeSwitcher } from "@/components/theme-switcher"
+import Link from "next/link"
+import { useState } from "react"
 
 export default function AdminTopbar() {
   return (
@@ -21,13 +24,8 @@ export default function AdminTopbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-3">
-          {/* Theme toggle placeholder */}
-          <button
-            type="button"
-            className="h-9 w-9 flex items-center justify-center rounded-xl border hover:bg-gray-100"
-          >
-            <Moon className="h-4 w-4 text-gray-600" />
-          </button>
+          {/* Theme toggle */}
+          <ThemeSwitcher />
 
           {/* Notifications */}
           <button
@@ -46,6 +44,29 @@ export default function AdminTopbar() {
             <Users className="h-4 w-4" />
             Invite Staff
           </button>
+
+          {/* Staff profile dropdown */}
+          <div className="relative group">
+            <button
+              type="button"
+              className="h-9 w-9 flex items-center justify-center rounded-full border hover:bg-gray-100 focus:outline-none"
+              aria-label="Staff profile"
+            >
+              <UserCircle className="h-7 w-7 text-gray-600" />
+            </button>
+            <div className="absolute right-0 mt-2 w-44 bg-white border rounded-xl shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition pointer-events-none group-hover:pointer-events-auto z-50">
+              <div className="py-2">
+                <Link href="/admin/settings" className="flex items-center gap-2 px-4 py-2 hover:bg-gray-50 text-gray-700">
+                  <Settings className="h-4 w-4" />
+                  Edit Profile
+                </Link>
+                <button className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-50 text-gray-700">
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </header>

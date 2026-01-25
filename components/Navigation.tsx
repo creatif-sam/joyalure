@@ -33,6 +33,7 @@ export default function Navigation() {
           <Link href="/about">About</Link>
           <Link href="/products">Products</Link>
           <Link href="/contact">Contact</Link>
+          <Link href="/help-center">Help Center</Link>
         </div>
 
         <div className="hidden md:flex items-center gap-4">
@@ -92,6 +93,7 @@ export default function Navigation() {
           <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
           <Link href="/products" onClick={() => setMenuOpen(false)}>Products</Link>
           <Link href="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
+          <Link href="/help-center" onClick={() => setMenuOpen(false)}>Help Center</Link>
         </div>
       )}
     </nav>

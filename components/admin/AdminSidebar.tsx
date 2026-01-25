@@ -19,6 +19,7 @@ import {
   LogOut,
   ChevronLeft,
   Menu,
+  Mail,
 } from "lucide-react"
 
 const menu = [
@@ -29,7 +30,7 @@ const menu = [
       { name: "Products", href: "/admin/products", icon: Package },
       { name: "Inventory", href: "/admin/inventory", icon: Boxes },
       { name: "Orders", href: "/admin/payments", icon: CreditCard },
-      { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+      { name: "Mail", href: "/admin/mail", icon: Mail },
       { name: "Customers", href: "/admin/customers", icon: Users },
       { name: "Blogs", href: "/admin/blog", icon: FileText },
     ],

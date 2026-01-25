@@ -1,4 +1,5 @@
-import { createAdminClient } from "@/lib/supabase/server"
+import { cookies } from "next/headers";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 const PAGE_SIZE = 10
 
@@ -10,58 +11,99 @@ type PageProps = {
 }
 
 export default async function CustomersPage({ searchParams }: PageProps) {
-  const supabase = await createAdminClient()
+  const cookiesList = await cookies();
+  const supabase = createServerSupabaseClient({ cookies: cookiesList });
 
-  const params = await searchParams
-  const page = Number(params.page ?? 1)
-  const query = params.q?.trim() ?? ""
+  // Fetch unique countries for the filter dropdown
+  const { data: countryData, error: countryError } = await supabase
+    .from("customers")
+    .select("country")
+    .neq("country", null)
+    .neq("country", "")
+    .order("country", { ascending: true })
+    .limit(1000); // adjust as needed
 
-  const from = (page - 1) * PAGE_SIZE
-  const to = from + PAGE_SIZE - 1
+  const countryOptions = Array.from(
+    new Set((countryData ?? []).map((c: any) => c.country).filter(Boolean))
+  );
+
+  const params = searchParams;
+  const page = Number(params.page ?? 1);
+  const query = params.q?.trim() ?? "";
+  const country = params.country?.trim() ?? "";
+  const sort = params.sort ?? "created_at_desc";
+
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
 
   let queryBuilder = supabase
-    .from("profiles")
+    .from("customers")
     .select(
       `
       id,
       email,
       full_name,
-      role,
-      created_at
+      country,
+      created_at,
+      total_orders,
+      total_spent
     `,
       { count: "exact" }
-    )
-    .eq("role", "customer")
+    );
 
   if (query) {
     queryBuilder = queryBuilder.or(
       `email.ilike.%${query}%,full_name.ilike.%${query}%`
-    )
+    );
+  }
+  if (country) {
+    queryBuilder = queryBuilder.eq('country', country);
+  }
+
+  // Sorting
+  if (sort === "total_spent_desc") {
+    queryBuilder = queryBuilder.order("total_spent", { ascending: false });
+  } else if (sort === "total_spent_asc") {
+    queryBuilder = queryBuilder.order("total_spent", { ascending: true });
+  } else if (sort === "total_orders_desc") {
+    queryBuilder = queryBuilder.order("total_orders", { ascending: false });
+  } else if (sort === "total_orders_asc") {
+    queryBuilder = queryBuilder.order("total_orders", { ascending: true });
+  } else {
+    queryBuilder = queryBuilder.order("created_at", { ascending: false });
   }
 
   const { data, error, count } = await queryBuilder
     .order("created_at", { ascending: false })
-    .range(from, to)
+    .range(from, to);
 
   if (error) {
-    console.error("SUPABASE ERROR:", error)
-    throw new Error(error.message)
+    console.error("SUPABASE ERROR:", error);
+    throw new Error(error.message);
   }
 
   const rows =
     data?.map(c => ({
       ...c,
-      totalOrders: 0, // Placeholder until orders table is set up
-      totalSpent: 0, // Placeholder until orders table is set up
-    })) ?? []
+      totalOrders: c.total_orders ?? 0,
+      totalSpent: c.total_spent ?? 0,
+    })) ?? [];
 
-  const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE)
+  const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
 
   return (
     <div className="p-8 space-y-6">
-      <h1 className="text-2xl font-semibold">Customers</h1>
 
-      <form className="flex gap-2">
+      <div className="flex items-center justify-between mb-2">
+        <h1 className="text-2xl font-semibold text-left">Customers</h1>
+        <span className="inline-flex items-center px-5 py-2 rounded-full bg-green-100 text-green-800 text-base font-semibold border border-green-200 shadow-sm">
+          <svg className="w-6 h-6 mr-2 text-green-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6 5.87V17a4 4 0 00-3-3.87m6 5.87a4 4 0 01-3-3.87m0 0V7a4 4 0 013-3.87M9 20a4 4 0 01-3-3.87M9 20V7a4 4 0 013-3.87" /></svg>
+          {count ?? 0} customers
+        </span>
+      </div>
+      <hr className="mb-4 border-gray-200" />
+
+      <form className="flex gap-2 items-center">
         <input
           type="text"
           name="q"
@@ -69,6 +111,29 @@ export default async function CustomersPage({ searchParams }: PageProps) {
           placeholder="Search name or email"
           className="border rounded-lg px-4 py-2 text-sm"
         />
+          <select
+            name="country"
+            defaultValue={country}
+            className="border rounded-lg px-4 py-2 text-sm"
+          >
+            <option value="">All Countries</option>
+            {countryOptions.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        <select
+          name="sort"
+          defaultValue={sort}
+          className="border rounded-lg px-4 py-2 text-sm"
+        >
+          <option value="created_at_desc">Newest</option>
+          <option value="total_spent_desc">Highest Spent</option>
+          <option value="total_spent_asc">Lowest Spent</option>
+          <option value="total_orders_desc">Most Orders</option>
+          <option value="total_orders_asc">Fewest Orders</option>
+        </select>
         <button className="bg-black text-white px-4 py-2 rounded-lg text-sm">
           Search
         </button>
@@ -76,23 +141,25 @@ export default async function CustomersPage({ searchParams }: PageProps) {
 
       <div className="bg-white rounded-xl border overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-3 text-left">Customer</th>
-              <th>Email</th>
-              <th>Orders</th>
-              <th>Total Spent</th>
-              <th>Joined</th>
+              <th className="text-left">Email</th>
+              <th className="text-left">Country</th>
+              <th className="text-left">Orders</th>
+              <th className="text-left">Total Spent</th>
+              <th className="text-left">Joined</th>
             </tr>
           </thead>
 
-          <tbody>
+          <tbody className="divide-y divide-gray-100">
             {rows.map(c => (
               <tr key={c.id} className="border-t">
                 <td className="px-6 py-4 font-medium">
                   {c.full_name ?? "—"}
                 </td>
                 <td>{c.email}</td>
+                <td>{c.country ?? "—"}</td>
                 <td>{c.totalOrders}</td>
                 <td>${(c.totalSpent / 100).toFixed(2)}</td>
                 <td>

@@ -70,9 +70,14 @@ export default function Footer() {
 
       <div className="border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          
-          {/* Animated social icons */}
-          <div className="flex gap-6 text-gray-600 text-lg">
+          {/* Address and copyright on the left */}
+          <div className="flex flex-col md:flex-row md:items-center gap-2 text-xs text-gray-500 md:order-1 order-2">
+            <span>Chez Joy Gyamfi, Yes Tik, Texas, United States</span>
+            <span className="hidden md:inline mx-2">|</span>
+            <span>© 2026 Joyalure. All rights reserved.</span>
+          </div>
+          {/* Animated social icons on the right */}
+          <div className="flex gap-6 text-gray-600 text-lg md:order-2 order-1">
             <a
               href="#"
               aria-label="Facebook"
@@ -81,7 +86,6 @@ export default function Footer() {
             >
               <i className="fa-brands fa-facebook-f"></i>
             </a>
-
             <a
               href="#"
               aria-label="Instagram"
@@ -90,7 +94,6 @@ export default function Footer() {
             >
               <i className="fa-brands fa-instagram"></i>
             </a>
-
             <a
               href="#"
               aria-label="TikTok"
@@ -100,10 +103,6 @@ export default function Footer() {
               <i className="fa-brands fa-tiktok"></i>
             </a>
           </div>
-
-          <p className="text-xs text-gray-500">
-            © 2026 Joyalure. All rights reserved.
-          </p>
         </div>
       </div>
     </footer>
