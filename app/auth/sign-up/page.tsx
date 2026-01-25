@@ -1,11 +1,22 @@
-import { SignUpForm } from "@/components/sign-up-form";
+import Navigation from "@/components/Navigation"
+import { SignUpForm } from "@/components/sign-up-form"
+import Footer from "@/components/Footer"
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <SignUpForm />
-      </div>
-    </div>
-  );
+    <>
+      <Navigation />
+
+      <main className="w-full bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex justify-center pt-6 pb-10">
+            <div className="w-full max-w-md">
+              <SignUpForm />
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </>
+  )
 }

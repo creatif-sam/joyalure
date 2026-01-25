@@ -9,9 +9,17 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from("products")
-    .select("id, title, price, image_url")
+    .select(`
+      id,
+      title,
+      description,
+      price,
+      image_url,
+      is_featured,
+      is_recent,
+      created_at
+    `)
     .eq("active", true)
-    .eq("is_recent", true)
     .order("created_at", { ascending: false })
 
   if (error) {
