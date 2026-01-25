@@ -1,11 +1,17 @@
-import { NextResponse } from "next/server"
+import { NextResponse, type NextRequest } from "next/server"
 import { cookies } from "next/headers"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 
+type Params = {
+  id: string
+}
+
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  _req: NextRequest,
+  context: { params: Promise<Params> }
 ) {
+  const { id } = await context.params
+
   const supabase = createServerSupabaseClient({
     cookies: cookies()
   })
@@ -20,7 +26,7 @@ export async function GET(
       image_url,
       active
     `)
-    .eq("id", params.id)
+    .eq("id", id)
     .single()
 
   if (error || !data) {
@@ -34,9 +40,10 @@ export async function GET(
 }
 
 export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  context: { params: Promise<Params> }
 ) {
+  const { id } = await context.params
   const body = await req.json()
 
   const supabase = createServerSupabaseClient({
@@ -52,7 +59,7 @@ export async function PUT(
       image_url: body.image_url,
       active: body.active
     })
-    .eq("id", params.id)
+    .eq("id", id)
 
   if (error) {
     return NextResponse.json(
