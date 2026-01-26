@@ -13,7 +13,7 @@ export async function GET(
   const { id } = await context.params
 
   const supabase = createServerSupabaseClient({
-    cookies: cookies()
+    cookies: await cookies()
   })
 
   const { data, error } = await supabase
@@ -47,7 +47,7 @@ export async function PUT(
   const body = await req.json()
 
   const supabase = createServerSupabaseClient({
-    cookies: cookies()
+    cookies: await cookies()
   })
 
   const { error } = await supabase
