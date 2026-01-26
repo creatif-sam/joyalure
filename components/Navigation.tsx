@@ -65,7 +65,7 @@ function handleAccountClick() {
             <Link href="/public">Home</Link>
             <Link href="/public/products">Products</Link>
             <Link href="/public/about">About</Link>
-            <Link href="/contact">Contact</Link>
+            <Link href="/public/contact">Contact</Link>
           </div>
 
           {/* Actions */}
