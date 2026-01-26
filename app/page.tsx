@@ -152,7 +152,7 @@ export default function JoyAllureComingSoon() {
           </motion.h2>
 
           <motion.p variants={fadeInUp} className="text-gray-400 text-lg leading-relaxed max-w-lg mb-12">
-            Joy Allure is a sanctuary for body wellness. Our upcoming collection features 
+            Joy Alure is a sanctuary for body wellness. Our upcoming collection features 
             handcrafted essentials designed to nourish and elevate your skin.
           </motion.p>
 
@@ -188,11 +188,11 @@ export default function JoyAllureComingSoon() {
       </button>
 
       <div className="absolute top-10 right-10 text-xl font-serif italic z-40">
-        Joy Allure<span className="text-green-500">.</span>
+        Joy Alure<span className="text-green-500">.</span>
       </div>
 
       <div className="absolute bottom-10 left-10 text-[9px] tracking-[0.2em] text-white/30 uppercase">
-        © {new Date().getFullYear()} Joy Allure Studio
+        © {new Date().getFullYear()} Joy Alure Studio
       </div>
 
       {/* Full Screen Info Panel */}
@@ -210,7 +210,7 @@ export default function JoyAllureComingSoon() {
                 onClick={() => setShowInfo(false)}
                 className="absolute top-12 right-12 text-[10px] tracking-[0.3em] font-bold uppercase hover:text-green-500 transition-colors"
               >
-                [ Close ]
+                [ X Close ]
               </button>
               
               <motion.div 
