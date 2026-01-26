@@ -1,10 +1,10 @@
 import { create } from "zustand"
 
 type CartItem = {
-  id: number
+  id: string
   name: string
   price: number
-  image: string
+  image: string | null
   quantity: number
 }
 
@@ -14,9 +14,9 @@ type CartState = {
   openCart: () => void
   closeCart: () => void
   addItem: (item: CartItem) => void
-  increase: (id: number) => void
-  decrease: (id: number) => void
-  removeItem: (id: number) => void
+  increase: (id: string) => void
+  decrease: (id: string) => void
+  removeItem: (id: string) => void
   subtotal: () => number
 }
 
@@ -43,7 +43,13 @@ export const useCartStore = create<CartState>((set, get) => ({
       }
 
       return {
-        items: [...state.items, item],
+        items: [
+          ...state.items,
+          {
+            ...item,
+            quantity: item.quantity ?? 1
+          }
+        ],
         isOpen: true
       }
     }),
@@ -51,7 +57,9 @@ export const useCartStore = create<CartState>((set, get) => ({
   increase: (id) =>
     set((state) => ({
       items: state.items.map((i) =>
-        i.id === id ? { ...i, quantity: i.quantity + 1 } : i
+        i.id === id
+          ? { ...i, quantity: i.quantity + 1 }
+          : i
       )
     })),
 
@@ -68,7 +76,9 @@ export const useCartStore = create<CartState>((set, get) => ({
 
       return {
         items: state.items.map((i) =>
-          i.id === id ? { ...i, quantity: i.quantity - 1 } : i
+          i.id === id
+            ? { ...i, quantity: i.quantity - 1 }
+            : i
         )
       }
     }),
