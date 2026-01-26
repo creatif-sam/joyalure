@@ -3,26 +3,15 @@
 import { Eye, Pencil, Trash2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
+import Link from "next/link"
 import ToggleFeatured from "./toggle-featured"
 import ToggleRecent from "@/components/admin/ToggleRecent"
-import Link from "next/link"
+import type { Product } from "@/types/product"
 
 const ProductViewModal = dynamic(
   () => import("@/components/admin/ProductViewModal"),
   { ssr: false }
 )
-
-type Product = {
-  id: string
-  title?: string | null
-  name?: string | null
-  slug?: string | null
-  price: number
-  is_featured: boolean
-  is_recent: boolean
-  active: boolean
-  created_at: string | null
-}
 
 export default function AdminProductsPageWrapper() {
   const [products, setProducts] = useState<Product[]>([])
@@ -35,7 +24,6 @@ export default function AdminProductsPageWrapper() {
       const data: Product[] = await res.json()
       setProducts(data)
     }
-
     fetchProducts()
   }, [])
 
@@ -43,7 +31,6 @@ export default function AdminProductsPageWrapper() {
     <section className="p-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold">Products</h1>
-
         <Link
           href="/admin/products/new"
           className="bg-black text-white px-4 py-2 rounded"
@@ -69,10 +56,7 @@ export default function AdminProductsPageWrapper() {
           <tbody>
             {products.length === 0 && (
               <tr>
-                <td
-                  colSpan={7}
-                  className="px-4 py-6 text-center text-gray-500"
-                >
+                <td colSpan={7} className="px-4 py-6 text-center text-gray-500">
                   No products yet
                 </td>
               </tr>
@@ -81,15 +65,11 @@ export default function AdminProductsPageWrapper() {
             {products.map(product => (
               <tr key={product.id} className="border-t">
                 <td className="px-4 py-3 font-medium">
-                  {product.title || product.name}
-                  <div className="text-xs text-gray-500">
-                    {product.slug}
-                  </div>
+                  {product.title}
+                  <div className="text-xs text-gray-500">{product.slug}</div>
                 </td>
 
-                <td className="px-4 py-3">
-                  {product.price}
-                </td>
+                <td className="px-4 py-3">${product.price}</td>
 
                 <td className="px-4 py-3">
                   <ToggleFeatured
@@ -110,31 +90,25 @@ export default function AdminProductsPageWrapper() {
                 </td>
 
                 <td className="px-4 py-3">
-                  {product.created_at
-                    ? new Date(product.created_at).toLocaleDateString()
-                    : ""}
+                  {new Date(product.created_at).toLocaleDateString()}
                 </td>
 
                 <td className="px-4 py-3 text-right flex gap-2 justify-end">
                   <button
-                    title="View"
                     onClick={() => {
                       setViewProduct(product)
                       setModalOpen(true)
                     }}
                   >
-                    <Eye className="w-5 h-5 text-gray-500 hover:text-blue-600 transition" />
+                    <Eye className="w-5 h-5 text-gray-500 hover:text-blue-600" />
                   </button>
 
-                  <Link
-                    href={`/admin/products/${product.id}`}
-                    title="Edit"
-                  >
-                    <Pencil className="w-5 h-5 text-gray-500 hover:text-green-600 transition" />
+                  <Link href={`/admin/products/${product.id}`}>
+                    <Pencil className="w-5 h-5 text-gray-500 hover:text-green-600" />
                   </Link>
 
-                  <button title="Delete">
-                    <Trash2 className="w-5 h-5 text-gray-500 hover:text-red-600 transition" />
+                  <button>
+                    <Trash2 className="w-5 h-5 text-gray-500 hover:text-red-600" />
                   </button>
                 </td>
               </tr>
