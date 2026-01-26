@@ -10,7 +10,7 @@ const slides = [
   {
     id: 1,
     type: "image",
-    src: "https://images.unsplash.com/photo-1556228578-8c89e6adf883",
+    src: "images/skin-care-2.png",
     tag: "ORGANIC SKINCARE",
     title: "Radiance Without Irritation",
     cta: "Shop Now",
@@ -28,7 +28,7 @@ const slides = [
   {
     id: 3,
     type: "image",
-    src: "https://images.unsplash.com/photo-1612817159949-195b6eb9e31a",
+    src: "images/skin-care-1.jpg",
     tag: "CLEAN BEAUTY",
     title: "Vegan Formulas For Every Skin",
     cta: "Explore",

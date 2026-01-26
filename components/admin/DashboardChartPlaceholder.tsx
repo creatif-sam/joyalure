@@ -5,6 +5,15 @@ import { geoNaturalEarth1, geoPath } from "d3-geo"
 import { select } from "d3-selection"
 import { feature } from "topojson-client"
 
+// Types for our region markers
+interface Region {
+  name: string
+  coords: [number, number]
+  revenue: string
+  orders: number
+  growth: string
+}
+
 type TooltipData = {
   name: string
   revenue: string
@@ -31,26 +40,25 @@ export default function DashboardChartPlaceholder() {
       .scale(160)
       .translate([width / 2, height / 2])
 
-    const path = geoPath(projection)
+    const pathGenerator = geoPath(projection)
 
     fetch("/world-110m.json")
-      .then(res => res.json())
-      .then(world => {
-        const countries = feature(
-          world,
-          world.objects.countries
-        ).features
+      .then((res) => res.json())
+      .then((world) => {
+        // Correctly type the topojson conversion
+        const countries = (feature(world, world.objects.countries) as any).features
 
+        // Draw Map
         svg
           .selectAll("path")
           .data(countries)
           .enter()
           .append("path")
-          .attr("d", path as any)
+          .attr("d", pathGenerator as any)
           .attr("fill", "#e5e7eb")
           .attr("stroke", "#ffffff")
 
-        const regions = [
+        const regions: Region[] = [
           {
             name: "USA",
             coords: [-98, 39],
@@ -74,41 +82,46 @@ export default function DashboardChartPlaceholder() {
           },
         ]
 
+        // Draw Markers
         svg
           .selectAll("circle")
           .data(regions)
           .enter()
           .append("circle")
-          .attr("cx", d => projection(d.coords)?.[0] ?? 0)
-          .attr("cy", d => projection(d.coords)?.[1] ?? 0)
+          .attr("cx", (d) => projection(d.coords)?.[0] ?? 0)
+          .attr("cy", (d) => projection(d.coords)?.[1] ?? 0)
           .attr("r", 6)
           .attr("fill", "#16a34a")
           .style("cursor", "pointer")
           .on("mouseenter", (event, d) => {
-            const [x, y] = projection(d.coords) ?? [0, 0]
-            setTooltip({
-              name: d.name,
-              revenue: d.revenue,
-              orders: d.orders,
-              growth: d.growth,
-              x,
-              y,
-            })
+            const projected = projection(d.coords)
+            if (projected) {
+              const [x, y] = projected
+              setTooltip({
+                name: d.name,
+                revenue: d.revenue,
+                orders: d.orders,
+                growth: d.growth,
+                x,
+                y,
+              })
+            }
           })
           .on("mouseleave", () => {
             setTooltip(null)
           })
       })
+      .catch((err) => console.error("Error loading map data:", err))
   }, [])
 
   return (
     <div className="relative bg-white rounded-xl p-6">
-      <h3 className="font-semibold mb-4">Sales Analytics by Region</h3>
+      <h3 className="font-semibold mb-4 text-gray-900">Sales Analytics by Region</h3>
 
       {/* Tooltip */}
       {tooltip && (
         <div
-          className="absolute z-10 bg-white border shadow-lg rounded-lg px-4 py-3 text-sm"
+          className="absolute z-10 pointer-events-none bg-white border border-gray-200 shadow-lg rounded-lg px-4 py-3 text-sm"
           style={{
             left: tooltip.x + 20,
             top: tooltip.y + 40,
@@ -117,14 +130,14 @@ export default function DashboardChartPlaceholder() {
           <p className="font-semibold text-gray-800">{tooltip.name}</p>
           <p className="text-gray-600">Revenue: {tooltip.revenue}</p>
           <p className="text-gray-600">Orders: {tooltip.orders}</p>
-          <p className="text-green-600">Growth: {tooltip.growth}</p>
+          <p className="text-green-600 font-medium">Growth: {tooltip.growth}</p>
         </div>
       )}
 
       <svg
         ref={ref}
         viewBox="0 0 900 400"
-        className="w-full h-[360px]"
+        className="w-full h-auto max-h-[360px]"
       />
     </div>
   )
