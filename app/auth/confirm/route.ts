@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   }
 
   const supabase = createServerSupabaseClient({
-    cookies: cookies()
+    cookies:await cookies()
   })
 
   await supabase.auth.verifyOtp({
