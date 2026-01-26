@@ -29,13 +29,14 @@ export default async function CustomersPage({ searchParams }: PageProps) {
     .order("country", { ascending: true })
     .limit(1000)
 
-  const countryOptions = Array.from(
-    new Set(
-      (countryData ?? [])
-        .map((c: { country: string | null }) => c.country)
-        .filter(Boolean)
-    )
+ const countryOptions: string[] = Array.from(
+  new Set(
+    (countryData ?? [])
+      .map((c: { country: string | null }) => c.country)
+      .filter((c): c is string => Boolean(c))
   )
+)
+
 
   const page = Number(searchParams.page ?? 1)
   const query = searchParams.q?.trim() ?? ""
