@@ -18,9 +18,10 @@ type InventoryProduct = {
 export default async function AdminInventory() {
   unstable_noStore()
 
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
+
   const supabase = createServerSupabaseClient({
-    cookies: cookieStore
+    cookies: cookieStore,
   })
 
   const { data: products, error } = await supabase
