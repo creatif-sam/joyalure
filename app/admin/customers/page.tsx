@@ -14,10 +14,13 @@ type PageProps = {
   searchParams: SearchParams
 }
 
+
 export default async function CustomersPage({ searchParams }: PageProps) {
-  const cookiesList = cookies()
+
+  const cookiesList = await cookies()
+
   const supabase = createServerSupabaseClient({
-    cookies: cookiesList
+    cookies: cookiesList,
   })
 
   // Fetch unique countries for filter dropdown
