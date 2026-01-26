@@ -1,29 +1,32 @@
-
 import { createServerClient } from "@supabase/ssr"
+import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies"
 
-export function createServerSupabaseClient({ cookies } = {}) {
+type CreateServerClientParams = {
+  cookies: ReadonlyRequestCookies
+}
+
+export function createServerSupabaseClient(
+  params: CreateServerClientParams
+) {
+  const { cookies } = params
+
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         getAll() {
-          if (!cookies) return [];
-          if (typeof cookies.getAll === "function") {
-            return cookies.getAll().map(c => ({
-              name: c.name,
-              value: c.value
-            }))
-          }
-          return [];
+          return cookies.getAll().map(cookie => ({
+            name: cookie.name,
+            value: cookie.value,
+          }))
         },
         setAll(cookiesToSet) {
-          if (!cookies) return;
           cookiesToSet.forEach(({ name, value, options }) => {
             cookies.set(name, value, options)
           })
-        }
-      }
+        },
+      },
     }
   )
 }
