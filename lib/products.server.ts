@@ -1,7 +1,12 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { cookies } from "next/headers"
 
 export async function getRecentProducts(limit = 8) {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+
+  const supabase = createServerSupabaseClient({
+    cookies: cookieStore,
+  })
 
   const { data, error } = await supabase
     .from("products")
@@ -19,7 +24,11 @@ export async function getRecentProducts(limit = 8) {
 }
 
 export async function getFeaturedProducts() {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+
+  const supabase = createServerSupabaseClient({
+    cookies: cookieStore,
+  })
 
   const { data, error } = await supabase
     .from("products")

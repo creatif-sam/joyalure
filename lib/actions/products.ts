@@ -1,31 +1,41 @@
-
 "use server"
+
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
+import { cookies } from "next/headers"
 
 export async function updateProduct(formData: FormData) {
-  const supabase = createServerSupabaseClient();
-  const id = formData.get("id") as string;
-  const name = formData.get("name") as string;
-  const price = Number(formData.get("price"));
-  const description = formData.get("description") as string;
-  const image_url = formData.get("image_url") as string;
+  const cookieStore = await cookies()
+
+  const supabase = createServerSupabaseClient({
+    cookies: cookieStore,
+  })
+
+  const id = formData.get("id") as string
+  const name = formData.get("name") as string
+  const price = Number(formData.get("price"))
+  const description = formData.get("description") as string
+  const image_url = formData.get("image_url") as string
 
   const { error } = await supabase
     .from("products")
     .update({ name, price, description, image_url })
-    .eq("id", id);
+    .eq("id", id)
 
   if (error) {
-    throw new Error("Product update failed");
+    throw new Error("Product update failed")
   }
 
-  revalidatePath("/admin/products");
-  revalidatePath("/");
+  revalidatePath("/admin/products")
+  revalidatePath("/")
 }
 
 export async function createProduct(formData: FormData) {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+
+  const supabase = createServerSupabaseClient({
+    cookies: cookieStore,
+  })
 
   const name = formData.get("name") as string
   const price = Number(formData.get("price"))
@@ -41,9 +51,9 @@ export async function createProduct(formData: FormData) {
   const { error: uploadError } = await supabase.storage
     .from("product-images")
     .upload(fileName, image, {
-      contentType: image.type, // ✅ REQUIRED
+      contentType: image.type,
       cacheControl: "3600",
-      upsert: false
+      upsert: false,
     })
 
   if (uploadError) {
@@ -61,7 +71,7 @@ export async function createProduct(formData: FormData) {
       name,
       price,
       image_url: data.publicUrl,
-      is_featured: false
+      is_featured: false,
     })
 
   if (insertError) {
@@ -77,7 +87,11 @@ export async function toggleFeatured(
   productId: string,
   value: boolean
 ) {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+
+  const supabase = createServerSupabaseClient({
+    cookies: cookieStore,
+  })
 
   const { error } = await supabase
     .from("products")
