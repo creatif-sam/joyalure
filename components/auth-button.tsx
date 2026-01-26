@@ -1,27 +1,31 @@
-import Link from "next/link"
-import { Button } from "./ui/button"
+import { cookies } from "next/headers"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
-import { LogoutButton } from "./logout-button"
+import Link from "next/link"
 
 export async function AuthButton() {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+
+  const supabase = createServerSupabaseClient({
+    cookies: cookieStore,
+  })
 
   const {
-    data: { user }
+    data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
+  if (user) {
     return (
-      <Link href="/auth/login">
-        <Button>Login</Button>
-      </Link>
+      <form action="/auth/signout" method="post">
+        <button className="text-sm font-medium">
+          Sign out
+        </button>
+      </form>
     )
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm">{user.email}</span>
-      <LogoutButton />
-    </div>
+    <Link href="/auth/login" className="text-sm font-medium">
+      Sign in
+    </Link>
   )
 }
