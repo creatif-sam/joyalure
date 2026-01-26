@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import { Eye, Pencil, Trash2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
@@ -6,19 +7,35 @@ import ToggleFeatured from "./toggle-featured"
 import ToggleRecent from "@/components/admin/ToggleRecent"
 import Link from "next/link"
 
-const ProductViewModal = dynamic(() => import("@/components/admin/ProductViewModal"), { ssr: false })
+const ProductViewModal = dynamic(
+  () => import("@/components/admin/ProductViewModal"),
+  { ssr: false }
+)
 
-export default function AdminProductsPageWrapper(props) {
-  const [products, setProducts] = useState([])
-  const [viewProduct, setViewProduct] = useState(null)
+type Product = {
+  id: string
+  title?: string | null
+  name?: string | null
+  slug?: string | null
+  price: number
+  is_featured: boolean
+  is_recent: boolean
+  active: boolean
+  created_at: string | null
+}
+
+export default function AdminProductsPageWrapper() {
+  const [products, setProducts] = useState<Product[]>([])
+  const [viewProduct, setViewProduct] = useState<Product | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
     async function fetchProducts() {
       const res = await fetch("/api/products/all")
-      const data = await res.json()
+      const data: Product[] = await res.json()
       setProducts(data)
     }
+
     fetchProducts()
   }, [])
 
@@ -26,6 +43,7 @@ export default function AdminProductsPageWrapper(props) {
     <section className="p-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold">Products</h1>
+
         <Link
           href="/admin/products/new"
           className="bg-black text-white px-4 py-2 rounded"
@@ -47,35 +65,75 @@ export default function AdminProductsPageWrapper(props) {
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {products.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-4 py-6 text-center text-gray-500">No products yet</td>
+                <td
+                  colSpan={7}
+                  className="px-4 py-6 text-center text-gray-500"
+                >
+                  No products yet
+                </td>
               </tr>
             )}
+
             {products.map(product => (
               <tr key={product.id} className="border-t">
                 <td className="px-4 py-3 font-medium">
                   {product.title || product.name}
-                  <div className="text-xs text-gray-500">{product.slug}</div>
+                  <div className="text-xs text-gray-500">
+                    {product.slug}
+                  </div>
                 </td>
-                <td className="px-4 py-3">{product.price}</td>
+
                 <td className="px-4 py-3">
-                  <ToggleFeatured productId={product.id} initialValue={product.is_featured} />
+                  {product.price}
                 </td>
+
                 <td className="px-4 py-3">
-                  <ToggleRecent productId={product.id} initialValue={product.is_recent} />
+                  <ToggleFeatured
+                    productId={product.id}
+                    initialValue={product.is_featured}
+                  />
                 </td>
-                <td className="px-4 py-3">{product.active ? "Active" : "Hidden"}</td>
-                <td className="px-4 py-3">{product.created_at ? new Date(product.created_at).toLocaleDateString() : ""}</td>
+
+                <td className="px-4 py-3">
+                  <ToggleRecent
+                    productId={product.id}
+                    initialValue={product.is_recent}
+                  />
+                </td>
+
+                <td className="px-4 py-3">
+                  {product.active ? "Active" : "Hidden"}
+                </td>
+
+                <td className="px-4 py-3">
+                  {product.created_at
+                    ? new Date(product.created_at).toLocaleDateString()
+                    : ""}
+                </td>
+
                 <td className="px-4 py-3 text-right flex gap-2 justify-end">
-                  <button title="View" onClick={() => { setViewProduct(product); setModalOpen(true); }}>
+                  <button
+                    title="View"
+                    onClick={() => {
+                      setViewProduct(product)
+                      setModalOpen(true)
+                    }}
+                  >
                     <Eye className="w-5 h-5 text-gray-500 hover:text-blue-600 transition" />
                   </button>
-                  <Link href={`/admin/products/${product.id}`} title="Edit">
+
+                  <Link
+                    href={`/admin/products/${product.id}`}
+                    title="Edit"
+                  >
                     <Pencil className="w-5 h-5 text-gray-500 hover:text-green-600 transition" />
                   </Link>
-                  <button title="Delete" className="focus:outline-none">
+
+                  <button title="Delete">
                     <Trash2 className="w-5 h-5 text-gray-500 hover:text-red-600 transition" />
                   </button>
                 </td>
@@ -85,7 +143,11 @@ export default function AdminProductsPageWrapper(props) {
         </table>
       </div>
 
-      <ProductViewModal product={viewProduct} open={modalOpen} onOpenChange={setModalOpen} />
+      <ProductViewModal
+        product={viewProduct}
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+      />
     </section>
   )
 }
