@@ -42,7 +42,7 @@ export default function JoyAllureComingSoon() {
     "/images/skin-care-3.png",
   ];
 
-  const welcomeText = "WELCOME TO JOY ALLURE";
+  const welcomeText = "WELCOME TO JoyAlure";
 
   // Typing Effect
   useEffect(() => {
@@ -188,11 +188,11 @@ export default function JoyAllureComingSoon() {
       </button>
 
       <div className="absolute top-10 right-10 text-xl font-serif italic z-40">
-        Joy Alure<span className="text-green-500">.</span>
+        JoyAlure<span className="text-green-500">.</span>
       </div>
 
       <div className="absolute bottom-10 left-10 text-[9px] tracking-[0.2em] text-white/30 uppercase">
-        © {new Date().getFullYear()} Joy Alure Studio
+        © {new Date().getFullYear()} JoyAlure Studio
       </div>
 
       {/* Full Screen Info Panel */}
@@ -220,7 +220,7 @@ export default function JoyAllureComingSoon() {
               >
                 <h3 className="text-4xl md:text-6xl font-serif mb-8 text-green-500">About the Brand</h3>
                 <p className="text-gray-400 text-xl leading-relaxed max-w-2xl mb-12 font-light">
-                  Joy Allure is dedicated exclusively to body products. We believe that body care is self-care, 
+                  JoyAlure is dedicated exclusively to body products. We believe that body care is self-care, 
                   and our mission is to provide the luxury your skin deserves.
                 </p>
                 
