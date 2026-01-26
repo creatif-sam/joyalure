@@ -76,10 +76,11 @@ export default async function DashboardPage() {
           value={wishlistCount ?? 0}
         />
 
-        <StatCard
-          label="Account Email"
-          value={user.email}
-        />
+      <StatCard
+  label="Account Email"
+  value={user.email ?? null}
+/>
+
 
       </div>
     </div>
