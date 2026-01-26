@@ -46,11 +46,12 @@ export default function CartDrawer() {
                 transition={{ duration: 0.3 }}
                 className="flex gap-4 border-b pb-4 mb-4"
               >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-16 h-16 object-cover rounded-md"
-                />
+              <img
+  src={item.image ?? "/placeholder.png"}
+  alt={item.name}
+  className="w-16 h-16 object-cover rounded-md"
+/>
+
 
                 <div className="flex-1">
                   <p className="text-sm font-medium">{item.name}</p>
