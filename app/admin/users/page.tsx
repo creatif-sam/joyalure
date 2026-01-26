@@ -17,7 +17,7 @@ export default async function AdminUsers() {
   unstable_noStore()
 
   const supabase = createServerSupabaseClient({
-    cookies: cookies()
+    cookies: await cookies()
   })
 
   const { data: users, error } = await supabase
