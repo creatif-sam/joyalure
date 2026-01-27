@@ -47,7 +47,7 @@ export default function AdminProductEditPage() {
     setError(null)
 
     try {
-      const res = await fetch(`/api/products/${id}`, {
+      const res = await fetch(`/api/admin/products/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"

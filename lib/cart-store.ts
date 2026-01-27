@@ -8,12 +8,16 @@ type CartItem = {
   quantity: number
 }
 
+type AddCartItem = Omit<CartItem, "quantity"> & {
+  quantity?: number
+}
+
 type CartState = {
   items: CartItem[]
   isOpen: boolean
   openCart: () => void
   closeCart: () => void
-  addItem: (item: CartItem) => void
+  addItem: (item: AddCartItem) => void
   increase: (id: string) => void
   decrease: (id: string) => void
   removeItem: (id: string) => void
@@ -57,9 +61,7 @@ export const useCartStore = create<CartState>((set, get) => ({
   increase: (id) =>
     set((state) => ({
       items: state.items.map((i) =>
-        i.id === id
-          ? { ...i, quantity: i.quantity + 1 }
-          : i
+        i.id === id ? { ...i, quantity: i.quantity + 1 } : i
       )
     })),
 
@@ -76,9 +78,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
       return {
         items: state.items.map((i) =>
-          i.id === id
-            ? { ...i, quantity: i.quantity - 1 }
-            : i
+          i.id === id ? { ...i, quantity: i.quantity - 1 } : i
         )
       }
     }),
