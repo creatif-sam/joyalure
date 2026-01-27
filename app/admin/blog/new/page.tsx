@@ -1,16 +1,24 @@
-import dynamic from "next/dynamic";
+"use client";
+
+// 1. Rename this import to 'nextDynamic'
+import nextDynamic from "next/dynamic"; 
 import { headers } from "next/headers";
 import { Suspense } from "react";
 
-const BlogForm = dynamic(() => import("./BlogForm").then(mod => ({ default: mod.BlogForm })));
+// 2. This is the correct Next.js convention for forcing dynamic rendering
+export const dynamic = 'force-dynamic';
+
+// 3. Use the new name 'nextDynamic' here
+const BlogForm = nextDynamic(() => 
+  import("./BlogForm").then(mod => ({ default: mod.BlogForm }))
+);
 
 export default function NewBlogPost() {
-  // Make the page dynamic
   headers();
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Add New Blog Post 1</h2>
+      <h2 className="text-2xl font-bold">Add New Blog Post</h2>
       <Suspense fallback={<div>Loading...</div>}>
         <BlogForm />
       </Suspense>
