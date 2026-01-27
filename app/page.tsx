@@ -39,6 +39,7 @@ export default function JoyAllureComingSoon() {
     "/images/skin-care-1.jpg",
     "/images/skin-1.png",
     "/images/skin-care-3.png",
+    "/images/back-2.jpeg",
   ];
 
   const welcomeText = "WELCOME TO JoyAlure";
