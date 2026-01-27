@@ -148,15 +148,15 @@ export default function JoyAllureComingSoon() {
             We are crafting a <span className="italic text-green-500">premium experience</span> for your body.
           </motion.h2>
 <motion.p variants={fadeInUp} className="text-gray-400 text-base md:text-lg leading-relaxed max-w-lg mb-12">
-  At Joyalure, we believe skincare should be as **kind as it is powerful**. 
+  At Joyalure, we believe skincare should be as <strong>kind as it is powerful. </strong>
   Based in Texas and formulated in Korea, we bridge the gap between science and nature to bring you high-performance, dermatologist-tested solutions.
   
   <span className="flex flex-wrap gap-4 mt-8 text-sm font-medium tracking-wide text-gray-300 uppercase">
-    <span className="flex items-center gap-2">🌿 Vegan</span>
+    <span className="flex items-center gap-2">🌿 Vegan & Cruelty-Free</span>
     <span className="text-gray-600">|</span>
-    <span className="flex items-center gap-2">🇰🇷 K-Beauty</span>
+    <span className="flex items-center gap-2">🇰🇷 Premium K-Beauty Standards</span>
     <span className="text-gray-600">|</span>
-    <span className="flex items-center gap-2">✨ Radiant</span>
+    <span className="flex items-center gap-2">✨ Gentle, Effective, Radiant</span>
   </span>
 </motion.p>
 
