@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 
+// Add this line right here
+export const dynamic = 'force-dynamic';
+
 
 export default function AdminBlog() {
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
