@@ -149,8 +149,7 @@ export default function JoyAllureComingSoon() {
           </motion.h2>
 
           <motion.p variants={fadeInUp} className="text-gray-400 text-base md:text-lg leading-relaxed max-w-lg mb-12">
-            Joy Alure is a sanctuary for body wellness. Our upcoming collection features 
-            handcrafted essentials designed to nourish and elevate your skin.
+            At Joyalure, We believe skincare should be as kind as it is powerful. Based in Texas and formulated in Korea, we bring you high-performance, dermatologist-tested solutions for all skin types.
           </motion.p>
 
           {/* Animated Email Section */}
@@ -237,7 +236,7 @@ export default function JoyAllureComingSoon() {
                   </div>
                   <div>
                     <span className="block text-green-500 text-[10px] uppercase tracking-widest font-bold mb-2">Location</span>
-                    <p className="text-base md:text-lg">Texas, United States</p>
+                    <p className="text-base md:text-lg">Fort Worth,Texas, United States</p>
                   </div>
                 </div>
               </motion.div>
