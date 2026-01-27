@@ -10,7 +10,7 @@ export default function NewBlogPost() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Add New Blog Post</h2>
+      <h2 className="text-2xl font-bold">Add New Blog Post 1</h2>
       <Suspense fallback={<div>Loading...</div>}>
         <BlogForm />
       </Suspense>
