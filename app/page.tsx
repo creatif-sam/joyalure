@@ -225,8 +225,7 @@ export default function JoyAllureComingSoon() {
               >
                 <h3 className="text-4xl md:text-6xl font-serif mb-8 text-green-500">About the Brand</h3>
                 <p className="text-gray-400 text-lg md:text-xl leading-relaxed max-w-2xl mb-12 font-light">
-                  JoyAlure is dedicated exclusively to body products. We believe that body care is self-care, 
-                  and our mission is to provide the luxury your skin deserves.
+                  ✨ Joyalure: Your Glow, Reimagined. Dermatologist-tested, cruelty-free skincare from Korea to Fort Worth. Shop the collection today! 🧴💖
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 border-t border-white/10 pt-10">
