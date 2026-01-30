@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+// Ensure you create the actions.ts file provided below
+import { subscribeToNewsletter } from "./actions"; 
 
 // Animation Variants
 const fadeInUp: Variants = {
@@ -34,6 +36,8 @@ export default function JoyAllureComingSoon() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("");
   const [typedWelcome, setTypedWelcome] = useState("");
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isDuplicateOpen, setIsDuplicateOpen] = useState(false); // New State
 
   const slides = [
     "/images/skin-care-1.jpg",
@@ -43,6 +47,32 @@ export default function JoyAllureComingSoon() {
   ];
 
   const welcomeText = "WELCOME TO JoyAlure";
+
+  // Handle Form Submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setStatus("Sending...");
+
+    try {
+      const result = await subscribeToNewsletter(email);
+      
+      if (result.success) {
+        setIsSuccessOpen(true);
+        setStatus(""); 
+        setEmail(""); 
+      } else if (result.isDuplicate) {
+        setIsDuplicateOpen(true); // Open the duplicate popup
+        setStatus("");
+        setEmail("");
+      } else {
+        setStatus(result.error || "Something went wrong.");
+      }
+    } catch (error) {
+      setStatus("Error connecting to server.");
+    }
+  };
 
   useEffect(() => {
     let i = 0;
@@ -148,18 +178,18 @@ export default function JoyAllureComingSoon() {
           <motion.h2 variants={fadeInUp} className="text-3xl md:text-5xl lg:text-6xl font-serif leading-[1.2] lg:leading-[1.1] mb-8 max-w-2xl">
             We are crafting a <span className="italic text-green-500">premium experience</span> for your body.
           </motion.h2>
-<motion.p variants={fadeInUp} className="text-gray-400 text-base md:text-lg leading-relaxed max-w-lg mb-12">
-  At Joyalure, we believe skincare should be as <strong>kind as it is powerful. </strong>
-  Based in Texas and formulated in Korea, we bridge the gap between science and nature to bring you high-performance, dermatologist-tested solutions.
-  
-  <span className="flex flex-wrap gap-4 mt-8 text-sm font-medium tracking-wide text-gray-300 uppercase">
-    <span className="flex items-center gap-2">🌿 Vegan & Cruelty-Free</span>
-    <span className="text-gray-600">|</span>
-    <span className="flex items-center gap-2">🇰🇷 Premium K-Beauty Standards</span>
-    <span className="text-gray-600">|</span>
-    <span className="flex items-center gap-2">✨ Gentle, Effective, Radiant</span>
-  </span>
-</motion.p>
+          <motion.p variants={fadeInUp} className="text-gray-400 text-base md:text-lg leading-relaxed max-w-lg mb-12">
+            At Joyalure, we believe skincare should be as <strong>kind as it is powerful. </strong>
+            Based in Texas and formulated in Korea, we bridge the gap between science and nature to bring you high-performance, dermatologist-tested solutions.
+            
+            <span className="flex flex-wrap gap-4 mt-8 text-sm font-medium tracking-wide text-gray-300 uppercase">
+              <span className="flex items-center gap-2">🌿 Vegan & Cruelty-Free</span>
+              <span className="text-gray-600">|</span>
+              <span className="flex items-center gap-2">🇰🇷 Premium K-Beauty Standards</span>
+              <span className="text-gray-600">|</span>
+              <span className="flex items-center gap-2">✨ Gentle, Effective, Radiant</span>
+            </span>
+          </motion.p>
 
           {/* Animated Email Section */}
           <motion.div
@@ -167,15 +197,17 @@ export default function JoyAllureComingSoon() {
             whileHover={{ x: 5 }}
             className="relative max-w-md group"
           >
-            <form onSubmit={(e) => e.preventDefault()} className="relative">
+            <form onSubmit={handleSubmit} className="relative">
               <input
                 type="email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email address"
                 className="w-full bg-transparent border-b border-white/20 py-4 outline-none focus:border-green-500 transition-all duration-500 font-light text-lg pr-32"
               />
               <motion.button 
+                type="submit"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="absolute right-0 bottom-4 text-green-400 uppercase tracking-widest text-[10px] font-bold hover:text-white transition-colors"
@@ -183,7 +215,18 @@ export default function JoyAllureComingSoon() {
                 Notify Me
               </motion.button>
             </form>
-            {status && <p className="mt-4 text-xs text-green-400 uppercase tracking-widest">{status}</p>}
+            <AnimatePresence>
+              {status && (
+                <motion.p 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute mt-4 text-[10px] text-green-400 uppercase tracking-[0.2em] font-bold"
+                >
+                  {status}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </motion.div>
         </motion.div>
       </div>
@@ -208,6 +251,91 @@ export default function JoyAllureComingSoon() {
       <div className="absolute bottom-6 lg:bottom-10 left-6 lg:left-10 text-[8px] md:text-[9px] tracking-[0.2em] text-white/30 uppercase">
         © {new Date().getFullYear()} JoyAlure Studio
       </div>
+
+      {/* COOL SUCCESS POPUP */}
+      <AnimatePresence>
+        {isSuccessOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }} 
+              animate={{ scale: 1, y: 0 }} 
+              exit={{ scale: 0.9, y: 20 }}
+              className="max-w-md w-full bg-[#0a0a0a] border border-white/10 p-12 text-center relative"
+            >
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-[1px] bg-green-500" />
+              
+              <div className="mb-6 flex justify-center">
+                <div className="w-12 h-12 rounded-full border border-green-500 flex items-center justify-center text-green-500">
+                  <motion.svg 
+                    initial={{ pathLength: 0 }} 
+                    animate={{ pathLength: 1 }} 
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </motion.svg>
+                </div>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-serif mb-4 text-white">You're on the list.</h3>
+              <p className="text-gray-400 text-sm font-light mb-8 leading-relaxed">
+                Thank you for joining JoyAlure. We'll notify you as soon as we launch our premium collection.
+              </p>
+
+              <button 
+                onClick={() => setIsSuccessOpen(false)}
+                className="px-8 py-3 border border-white/20 text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-white hover:text-black transition-all"
+              >
+                Return
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* DUPLICATE/ALREADY ON LIST POPUP */}
+      <AnimatePresence>
+        {isDuplicateOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }} 
+              animate={{ scale: 1, y: 0 }} 
+              exit={{ scale: 0.9, y: 20 }}
+              className="max-w-md w-full bg-[#0a0a0a] border border-white/10 p-12 text-center relative"
+            >
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-[1px] bg-yellow-500" />
+              
+              <div className="mb-6 flex justify-center">
+                <div className="w-12 h-12 rounded-full border border-yellow-500 flex items-center justify-center text-yellow-500 font-serif italic text-2xl">
+                  !
+                </div>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-serif mb-4 text-white">We've met before!</h3>
+              <p className="text-gray-400 text-sm font-light mb-8 leading-relaxed">
+                This email is already registered for our launch notification. Stay tuned for updates in your inbox!
+              </p>
+
+              <button 
+                onClick={() => setIsDuplicateOpen(false)}
+                className="px-8 py-3 border border-white/20 text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-white hover:text-black transition-all"
+              >
+                Got it
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Full Screen Info Panel */}
       <AnimatePresence>
