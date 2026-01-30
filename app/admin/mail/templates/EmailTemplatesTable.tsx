@@ -5,7 +5,6 @@ import { FileText, Plus, Edit, Trash2, Loader2, Eye, X, Copy } from "lucide-reac
 import { motion, AnimatePresence } from "framer-motion"; 
 import { createClient } from "@/lib/supabase/client";
 import NewTemplateModal from "./NewTemplateModal";
-// Import your activated actions
 import { deleteEmailTemplate, createEmailTemplate } from "@/app/actions"; 
 
 interface Template {
@@ -43,25 +42,18 @@ export default function EmailTemplatesTable() {
     }
   };
 
-  // ACTIVATE DELETE
   const handleDelete = async (id: number) => {
     if (!confirm("Permanently delete this template? This cannot be undone.")) return;
-    
     const res = await deleteEmailTemplate(id);
-    if (res.success) {
-      fetchTemplates();
-    } else {
-      alert("Error: " + res.error);
-    }
+    if (res.success) fetchTemplates();
+    else alert("Error: " + res.error);
   };
 
-  // ACTIVATE EDIT
   const handleEditOpen = (template: Template) => {
     setSelectedTemplate(template);
     setShowModal(true);
   };
 
-  // ACTIVATE DUPLICATE (Helper)
   const handleDuplicate = async (template: Template) => {
     const res = await createEmailTemplate({
       name: `${template.name} (Copy)`,
@@ -117,7 +109,7 @@ export default function EmailTemplatesTable() {
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-gray-100">
               {templates.map((t) => (
                 <tr key={t.id} className="hover:bg-gray-50/50 transition-colors group">
                   <td className="px-6 py-4 font-bold text-gray-900">{t.name}</td>
@@ -137,34 +129,10 @@ export default function EmailTemplatesTable() {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button 
-                        onClick={() => setViewTemplate(t)}
-                        className="text-gray-400 hover:text-green-600 p-2 hover:bg-green-50 rounded-lg transition"
-                        title="View Preview"
-                      >
-                        <Eye size={16} />
-                      </button>
-                      <button 
-                        onClick={() => handleDuplicate(t)}
-                        className="text-gray-400 hover:text-orange-500 p-2 hover:bg-orange-50 rounded-lg transition"
-                        title="Duplicate Template"
-                      >
-                        <Copy size={16} />
-                      </button>
-                      <button 
-                        onClick={() => handleEditOpen(t)}
-                        className="text-gray-400 hover:text-blue-600 p-2 hover:bg-blue-50 rounded-lg transition"
-                        title="Edit Template"
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button 
-                        onClick={() => handleDelete(t.id)}
-                        className="text-gray-400 hover:text-red-600 p-2 hover:bg-red-50 rounded-lg transition"
-                        title="Delete Template"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      <button onClick={() => setViewTemplate(t)} className="p-2 hover:bg-green-50 text-gray-400 hover:text-green-600 rounded-lg transition" title="View Preview"><Eye size={16} /></button>
+                      <button onClick={() => handleDuplicate(t)} className="p-2 hover:bg-orange-50 text-gray-400 hover:text-orange-500 rounded-lg transition" title="Duplicate"><Copy size={16} /></button>
+                      <button onClick={() => handleEditOpen(t)} className="p-2 hover:bg-blue-50 text-gray-400 hover:text-blue-600 rounded-lg transition" title="Edit"><Edit size={16} /></button>
+                      <button onClick={() => handleDelete(t.id)} className="p-2 hover:bg-red-50 text-gray-400 hover:text-red-600 rounded-lg transition" title="Delete"><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>
@@ -174,33 +142,19 @@ export default function EmailTemplatesTable() {
         )}
       </div>
 
-      {/* QUICK VIEW MODAL */}
       <AnimatePresence>
         {viewTemplate && (
           <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col"
-            >
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col">
               <div className="p-4 border-b flex justify-between items-center bg-gray-50">
                 <div>
                   <h3 className="font-bold text-gray-900">{viewTemplate.name}</h3>
                   <p className="text-xs text-gray-500">Subject: {viewTemplate.subject}</p>
                 </div>
-                <button 
-                  onClick={() => setViewTemplate(null)} 
-                  className="p-2 hover:bg-gray-200 rounded-full transition"
-                >
-                  <X size={20} />
-                </button>
+                <button onClick={() => setViewTemplate(null)} className="p-2 hover:bg-gray-200 rounded-full transition"><X size={20} /></button>
               </div>
               <div className="flex-1 overflow-y-auto p-6 bg-gray-100">
-                <div 
-                  className="bg-white shadow-sm rounded-lg p-8 min-h-full prose prose-sm max-w-none mx-auto"
-                  dangerouslySetInnerHTML={{ __html: viewTemplate.body }}
-                />
+                <div className="bg-white shadow-sm rounded-lg p-8 min-h-full" dangerouslySetInnerHTML={{ __html: viewTemplate.body }} />
               </div>
             </motion.div>
           </div>

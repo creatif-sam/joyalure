@@ -1,199 +1,88 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { FileText, Plus, Edit, Trash2, Loader2, Eye, X, Mail } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { createClient } from "@/lib/supabase/client";
-import NewTemplateModal from "./NewTemplateModal";
-import { deleteEmailTemplate } from "@/app/actions";
+import { useState, useEffect } from "react";
+import { X, Eye, Code, Loader2 } from "lucide-react";
+import { createEmailTemplate, updateEmailTemplate } from "@/app/actions";
 
-interface Template {
-  id: number;
-  name: string;
-  category: string;
-  subject: string;
-  status: string;
-  body: string;
-  updated_at: string;
+const categories = ["Announcement", "Application Reception", "Reminder", "Welcome", "Promotion", "Other"];
+
+// FIX: Explicit Prop Interface to resolve IntrinsicAttributes error
+interface NewTemplateModalProps {
+  open: boolean;
+  onClose: () => void;
+  editData?: any; 
 }
 
-export default function EmailTemplatesTable() {
-  const [showModal, setShowModal] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
-  const [viewTemplate, setViewTemplate] = useState<Template | null>(null);
-  const [templates, setTemplates] = useState<Template[]>([]);
-  const [loading, setLoading] = useState(true);
-  
-  const supabase = createClient();
-
-  const fetchTemplates = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from("email_templates")
-        .select("*")
-        .order("updated_at", { ascending: false });
-      
-      if (!error) setTemplates(data || []);
-    } catch (err) {
-      console.error("Fetch error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    if (!confirm("Are you sure you want to permanently delete this template?")) return;
-    const res = await deleteEmailTemplate(id);
-    if (res.success) fetchTemplates();
-    else alert(res.error);
-  };
-
-  const handleEditOpen = (template: Template) => {
-    setSelectedTemplate(template);
-    setShowModal(true);
-  };
+export default function NewTemplateModal({ open, onClose, editData }: NewTemplateModalProps) {
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("Other");
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [previewMode, setPreviewMode] = useState(false);
 
   useEffect(() => {
-    fetchTemplates();
-  }, []);
+    if (editData && open) {
+      setName(editData.name || "");
+      setCategory(editData.category || "Other");
+      setSubject(editData.subject || "");
+      setBody(editData.body || "");
+    } else if (open) {
+      setName(""); setCategory("Other"); setSubject(""); setBody("");
+    }
+  }, [editData, open]);
+
+  if (!open) return null;
+
+  const handleSubmit = async () => {
+    if (!name || !subject || !body) return alert("Please fill in required fields");
+    setIsSubmitting(true);
+    const payload = { name, category, subject, body };
+    const result = editData?.id 
+      ? await updateEmailTemplate(editData.id, payload)
+      : await createEmailTemplate(payload);
+
+    if (result.success) onClose();
+    else alert("Error: " + result.error);
+    setIsSubmitting(false);
+  };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-      {/* Header Area */}
-      <div className="flex items-center justify-between px-6 py-6 border-b border-gray-50 bg-white">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-50 rounded-lg">
-            <FileText className="h-5 w-5 text-blue-600" />
-          </div>
-          <div>
-            <span className="font-bold text-lg text-gray-900 block leading-none">Email Templates</span>
-            <span className="text-xs text-gray-400 font-medium">{templates.length} saved layouts</span>
+    <div className="fixed inset-0 z-[130] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-black">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl flex flex-col max-h-[90vh] overflow-hidden">
+        <div className="p-6 border-b flex items-center justify-between bg-gray-50/50">
+          <h2 className="text-xl font-bold">{editData ? "Edit Template" : "New Template"}</h2>
+          <div className="flex items-center gap-4">
+            <div className="flex bg-gray-200 p-1 rounded-lg">
+              <button onClick={() => setPreviewMode(false)} className={`px-3 py-1.5 rounded-md text-xs font-bold ${!previewMode ? "bg-white shadow-sm" : "text-gray-500"}`}>Editor</button>
+              <button onClick={() => setPreviewMode(true)} className={`px-3 py-1.5 rounded-md text-xs font-bold ${previewMode ? "bg-white shadow-sm" : "text-gray-500"}`}>Preview</button>
+            </div>
+            <button onClick={onClose} className="text-gray-400 hover:text-black"><X size={24} /></button>
           </div>
         </div>
-        <button
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-yellow-400 text-black font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
-          onClick={() => {
-            setSelectedTemplate(null);
-            setShowModal(true);
-          }}
-        >
-          <Plus className="h-4 w-4" /> New Template
-        </button>
-      </div>
-
-      {/* Table Body */}
-      <div className="overflow-x-auto">
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <Loader2 className="h-8 w-8 animate-spin text-green-500" />
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Accessing Database...</span>
+        <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
+          <div className={`flex-1 p-8 overflow-y-auto border-r ${previewMode ? 'hidden md:block' : 'block'}`}>
+            <div className="space-y-4">
+              <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Template Name" className="w-full border rounded-xl px-4 py-2 bg-gray-50 outline-none focus:ring-2 focus:ring-green-500" />
+              <select value={category} onChange={e => setCategory(e.target.value)} className="w-full border rounded-xl px-4 py-2 bg-gray-50 outline-none focus:ring-2 focus:ring-green-500">
+                {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+              </select>
+              <input type="text" value={subject} onChange={e => setSubject(e.target.value)} placeholder="Email Subject" className="w-full border rounded-xl px-4 py-2 bg-gray-50 outline-none focus:ring-2 focus:ring-green-500" />
+              <textarea value={body} onChange={e => setBody(e.target.value)} placeholder="HTML content here..." className="w-full border rounded-xl px-4 py-2 bg-gray-50 outline-none focus:ring-2 focus:ring-green-500 h-64 font-mono" />
+            </div>
           </div>
-        ) : (
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50/50 text-gray-400">
-              <tr className="text-[10px] uppercase tracking-widest font-bold text-left">
-                <th className="px-6 py-4">Template Name</th>
-                <th className="px-6 py-4">Category</th>
-                <th className="px-6 py-4">Subject</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">Updated</th>
-                <th className="px-6 py-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {templates.length > 0 ? (
-                templates.map((t) => (
-                  <tr key={t.id} className="hover:bg-gray-50/50 transition-colors group">
-                    <td className="px-6 py-4 font-bold text-gray-900">{t.name}</td>
-                    <td className="px-6 py-4">
-                      <span className="inline-block px-2.5 py-1 rounded-lg bg-purple-50 text-purple-600 text-[10px] font-bold uppercase tracking-tight">
-                        {t.category}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-gray-500 max-w-[200px] truncate">{t.subject}</td>
-                    <td className="px-6 py-4">
-                      <span className="inline-block px-2 py-1 rounded-md bg-green-50 text-green-700 text-[10px] font-bold uppercase">
-                        {t.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-gray-400 italic">
-                      {new Date(t.updated_at).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => setViewTemplate(t)} className="p-2 hover:bg-green-50 text-gray-400 hover:text-green-600 rounded-lg transition" title="Quick View">
-                          <Eye size={16} />
-                        </button>
-                        <button onClick={() => handleEditOpen(t)} className="p-2 hover:bg-blue-50 text-gray-400 hover:text-blue-600 rounded-lg transition" title="Edit Template">
-                          <Edit size={16} />
-                        </button>
-                        <button onClick={() => handleDelete(t.id)} className="p-2 hover:bg-red-50 text-gray-400 hover:text-red-600 rounded-lg transition" title="Delete Permanent">
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={6} className="px-6 py-20 text-center text-gray-400 italic">
-                    No templates found. Click "New Template" to begin.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        )}
-      </div>
-
-      {/* QUICK VIEW MODAL */}
-      <AnimatePresence>
-        {viewTemplate && (
-          <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
-            >
-              <div className="p-5 border-b flex justify-between items-center bg-gray-50/50">
-                <div className="flex items-center gap-3">
-                   <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                      <Mail size={20} />
-                   </div>
-                   <div>
-                      <h3 className="font-bold text-gray-900 leading-none">{viewTemplate.name}</h3>
-                      <p className="text-[10px] text-gray-500 mt-1 uppercase tracking-widest font-bold">Inbox Preview</p>
-                   </div>
-                </div>
-                <button onClick={() => setViewTemplate(null)} className="p-2 hover:bg-gray-200 rounded-full transition text-gray-400 hover:text-black">
-                  <X size={20} />
-                </button>
-              </div>
-              <div className="flex-1 overflow-y-auto p-8 bg-gray-100">
-                <div className="mb-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm text-sm">
-                   <span className="text-gray-400 font-medium">Subject:</span> <span className="text-gray-900 font-bold ml-2">{viewTemplate.subject}</span>
-                </div>
-                <div 
-                  className="bg-white shadow-xl rounded-xl p-10 min-h-full border border-gray-200"
-                  dangerouslySetInnerHTML={{ __html: viewTemplate.body }}
-                />
-              </div>
-            </motion.div>
+          <div className={`flex-1 bg-gray-100 p-8 overflow-y-auto ${!previewMode ? 'hidden md:block' : 'block'}`}>
+            <div className="bg-white rounded-xl shadow-sm border p-6 min-h-full" dangerouslySetInnerHTML={{ __html: body || '<p class="text-gray-300 italic">Live preview...</p>' }} />
           </div>
-        )}
-      </AnimatePresence>
-
-      <NewTemplateModal 
-        open={showModal} 
-        editData={selectedTemplate} 
-        onClose={() => { 
-          setShowModal(false); 
-          setSelectedTemplate(null); 
-          fetchTemplates(); 
-        }} 
-      />
+        </div>
+        <div className="p-6 border-t bg-gray-50/50 flex justify-end gap-3">
+          <button onClick={onClose} className="px-6 py-2 border rounded-xl hover:bg-gray-50">Cancel</button>
+          <button onClick={handleSubmit} disabled={isSubmitting} className="px-8 py-2 bg-gradient-to-r from-green-500 to-yellow-400 font-bold rounded-xl shadow-lg flex items-center gap-2">
+            {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
+            {editData ? "Update" : "Create"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
