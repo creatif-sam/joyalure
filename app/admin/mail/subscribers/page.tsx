@@ -13,7 +13,8 @@ import {
   Calendar
 } from "lucide-react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase/client";
+// FIX: Import createClient instead of a static supabase object
+import { createClient } from "@/lib/supabase/client";
 
 interface Subscriber {
   id: string;
@@ -22,6 +23,9 @@ interface Subscriber {
 }
 
 export default function SubscribersPage() {
+  // Initialize the client inside the component
+  const supabase = createClient();
+
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,13 +33,19 @@ export default function SubscribersPage() {
   // Fetch data
   const fetchSubscribers = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("newsletter_subscribers")
-      .select("*")
-      .order("created_at", { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from("newsletter_subscribers")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-    if (!error) setSubscribers(data || []);
-    setLoading(false);
+      if (error) throw error;
+      setSubscribers(data || []);
+    } catch (err) {
+      console.error("Error fetching subscribers:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -46,13 +56,18 @@ export default function SubscribersPage() {
   const deleteSubscriber = async (id: string) => {
     if (!confirm("Are you sure you want to remove this subscriber?")) return;
     
-    const { error } = await supabase
-      .from("newsletter_subscribers")
-      .delete()
-      .eq("id", id);
+    try {
+      const { error } = await supabase
+        .from("newsletter_subscribers")
+        .delete()
+        .eq("id", id);
 
-    if (!error) {
-      setSubscribers(subscribers.filter(sub => sub.id !== id));
+      if (error) throw error;
+      
+      setSubscribers(prev => prev.filter(sub => sub.id !== id));
+    } catch (err) {
+      console.error("Error deleting subscriber:", err);
+      alert("Failed to delete subscriber.");
     }
   };
 
@@ -66,6 +81,7 @@ export default function SubscribersPage() {
     link.setAttribute("download", "joyallure_subscribers.csv");
     document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   };
 
   const filteredSubscribers = subscribers.filter(sub => 
@@ -77,7 +93,7 @@ export default function SubscribersPage() {
       <div className="max-w-6xl mx-auto">
         
         {/* Breadcrumbs & Header */}
-        <div className="mb-8">
+        <div className="mb-8 text-black">
           <Link href="/admin/mail" className="flex items-center gap-2 text-sm text-gray-500 hover:text-black mb-4 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Back to Mail Dashboard
           </Link>
@@ -90,7 +106,7 @@ export default function SubscribersPage() {
             </div>
             <button 
               onClick={exportCSV}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold shadow-sm hover:bg-gray-50 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold shadow-sm hover:bg-gray-50 transition text-black"
             >
               <Download className="h-4 w-4" /> Export CSV
             </button>
@@ -98,7 +114,7 @@ export default function SubscribersPage() {
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-black">
           <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
             <p className="text-sm text-gray-500 uppercase tracking-wider font-semibold">Total Audience</p>
             <p className="text-3xl font-bold mt-2">{subscribers.length}</p>
@@ -116,7 +132,7 @@ export default function SubscribersPage() {
         </div>
 
         {/* Main Table Card */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden text-black">
           
           {/* Table Header / Search */}
           <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-white">
