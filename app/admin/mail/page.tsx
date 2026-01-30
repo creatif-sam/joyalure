@@ -4,19 +4,21 @@ import { useEffect, useState } from "react";
 import { Mail, Send, Trash2, Users, FileText, Plus, Loader2, Download } from "lucide-react";
 import NewCampaignModal from "@/app/admin/mail/campaigns/NewCampaignModal";
 import EmailTemplatesTable from "@/app/admin/mail/templates/EmailTemplatesTable";
-
-// IMPORT: This must point to your browser/client supabase file
 import { createClient } from "@/lib/supabase/client"; 
 
-// Interface for type safety
 interface Subscriber {
   id: string;
   email: string;
   created_at: string;
 }
 
+interface Campaign {
+  id: string;
+  status: 'draft' | 'sent';
+  // Add other fields as per your schema
+}
+
 export default function AdminMail() {
-  // INITIALIZE SUPABASE CLIENT
   const supabase = createClient();
 
   const [tab, setTab] = useState("campaigns");
@@ -25,49 +27,47 @@ export default function AdminMail() {
   
   // Real Data States
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [templatesCount, setTemplatesCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Fetch Subscribers from Supabase
-  const fetchSubscribers = async () => {
+  const fetchAllData = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("newsletter_subscribers")
-        .select("*")
-        .order("created_at", { ascending: false });
+      // Parallel fetching for performance
+      const [subsRes, campRes, tempRes] = await Promise.all([
+        supabase.from("newsletter_subscribers").select("*").order("created_at", { ascending: false }),
+        supabase.from("email_campaigns").select("id, status"), // Adjust table name if different
+        supabase.from("email_templates").select("id", { count: 'exact' })
+      ]);
 
-      if (error) throw error;
-      setSubscribers(data || []);
+      if (subsRes.error) throw subsRes.error;
+      
+      setSubscribers(subsRes.data || []);
+      setCampaigns(campRes.data || []);
+      setTemplatesCount(tempRes.count || 0);
     } catch (err) {
-      console.error("Error fetching subscribers:", err);
+      console.error("Error fetching dashboard data:", err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchSubscribers();
+    fetchAllData();
   }, []);
 
-  // Delete Subscriber Function
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to remove this subscriber?")) return;
-
     try {
-      const { error } = await supabase
-        .from("newsletter_subscribers")
-        .delete()
-        .eq("id", id);
-
+      const { error } = await supabase.from("newsletter_subscribers").delete().eq("id", id);
       if (error) throw error;
       setSubscribers(subscribers.filter(sub => sub.id !== id));
     } catch (err) {
-      console.error("Delete error:", err);
       alert("Failed to delete subscriber");
     }
   };
 
-  // Export to CSV Function
   const exportCSV = () => {
     const headers = "Email,Date Joined\n";
     const rows = subscribers.map(s => `${s.email},${new Date(s.created_at).toLocaleDateString()}`).join("\n");
@@ -79,37 +79,42 @@ export default function AdminMail() {
     a.click();
   };
 
-  // Dynamic stats
+  // Logic for Dynamic Stats
+  const totalCampaigns = campaigns.length;
+  const draftCampaigns = campaigns.filter(c => c.status === 'draft').length;
+  const sentCampaigns = campaigns.filter(c => c.status === 'sent').length;
+
   const statCards = [
-    { label: "Total Campaigns", value: 49, icon: "mail-blue" },
+    { label: "Total Campaigns", value: totalCampaigns, icon: "mail-blue" },
+    { label: "Drafts", value: draftCampaigns, icon: "filetext-gray" },
+    { label: "Sent Campaigns", value: sentCampaigns, icon: "send-green" },
     { label: "Total Subscribers", value: subscribers.length, icon: "users-green" },
-    { label: "Sent Campaigns", value: 38, icon: "send-green" },
-    { label: "Total Emails Sent", value: 2539, icon: "mail-darkblue" },
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-8">
-      {/* Header UI */}
+    <div className="max-w-6xl mx-auto p-8 text-black">
       <div className="mb-6 p-6 bg-blue-50 border border-blue-100 rounded-xl">
         <h2 className="text-xl font-bold mb-1 flex items-center gap-2 text-blue-900">
           <Mail className="h-6 w-6 text-blue-600" /> Email Campaign Management
         </h2>
         <p className="text-gray-700 text-sm">
-          Create and send email campaigns. <span className="text-blue-700 font-semibold">Live connection to newsletter_subscribers.</span>
+          Create and send email campaigns to your subscribers, conference participants, or club members. Use templates for quick composition, save drafts, and track delivery status. Powered by Resend (3,000 emails/month free).
         </p>
       </div>
 
-      {/* Stat cards */}
+      {/* Dynamic Stat cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {statCards.map(card => (
           <div key={card.label} className="bg-white rounded-xl border p-4 flex flex-col items-center shadow-sm">
             <div className="mb-2">
               {card.icon === "mail-blue" && <Mail className="h-5 w-5 text-blue-500" />}
+              {card.icon === "filetext-gray" && <FileText className="h-5 w-5 text-gray-400" />}
               {card.icon === "users-green" && <Users className="h-5 w-5 text-green-500" />}
               {card.icon === "send-green" && <Send className="h-5 w-5 text-green-500" />}
-              {card.icon === "mail-darkblue" && <Mail className="h-5 w-5 text-blue-700" />}
             </div>
-            <div className="text-2xl font-bold text-blue-900">{card.value}</div>
+            <div className="text-2xl font-bold text-blue-900">
+              {loading ? <Loader2 className="h-5 w-5 animate-spin inline" /> : card.value}
+            </div>
             <div className="text-xs text-gray-500 mt-1 text-center">{card.label}</div>
           </div>
         ))}
@@ -121,10 +126,10 @@ export default function AdminMail() {
           Email Campaigns
         </button>
         <button onClick={() => setTab("templates")} className={`px-4 py-2 rounded-t-lg font-medium border-b-2 transition ${tab === "templates" ? "border-yellow-400 text-black bg-white" : "border-transparent text-gray-500 bg-gray-50"}`}>
-          Email Templates
+          Templates ({templatesCount})
         </button>
         <button onClick={() => setTab("subscribers")} className={`px-4 py-2 rounded-t-lg font-medium border-b-2 transition ${tab === "subscribers" ? "border-black text-black bg-white" : "border-transparent text-gray-500 bg-gray-50"}`}>
-          Subscribers <span className="ml-1 text-xs text-gray-400">({subscribers.length})</span>
+          Subscribers ({subscribers.length})
         </button>
       </div>
 
@@ -143,8 +148,9 @@ export default function AdminMail() {
               <Plus className="h-4 w-4" /> New Campaign
             </button>
           </div>
+          {/* Dynamically list campaigns here if you want a table, or show empty state */}
           <div className="text-center py-10 text-gray-400 border-2 border-dashed border-gray-100 rounded-xl">
-             <p>No active campaigns found. Start your first draft.</p>
+              <p>{totalCampaigns > 0 ? `Showing ${totalCampaigns} campaigns.` : "No active campaigns found. Start your first draft."}</p>
           </div>
         </div>
       )}
@@ -173,7 +179,7 @@ export default function AdminMail() {
                     <th className="px-6 py-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50">
+                <tbody className="divide-y divide-gray-100">
                   {subscribers.length > 0 ? (
                     subscribers.map((sub) => (
                       <tr key={sub.id} className="group hover:bg-gray-50 transition">
