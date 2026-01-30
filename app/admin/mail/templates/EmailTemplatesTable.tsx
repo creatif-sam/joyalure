@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 import NewTemplateModal from "./NewTemplateModal";
 // Import your activated actions
-import { deleteEmailTemplate, createEmailTemplate } from "../actions"; 
+import { deleteEmailTemplate, createEmailTemplate } from "@/app/actions"; 
 
 interface Template {
   id: number;
