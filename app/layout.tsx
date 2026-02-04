@@ -11,6 +11,7 @@ export default function RootLayout({
       <body className="bg-gray-50 min-h-screen">
         <SpeedInsights />
         {children}
+        <SpeedInsights />
       </body>
     </html>
   )
