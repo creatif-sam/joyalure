@@ -1,6 +1,6 @@
 "use client"
 
-import { Avatar } from "@/components/ui/avatar"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import Link from "next/link"
 import {
   ShoppingCart,
@@ -18,8 +18,6 @@ import { useCartStore } from "@/lib/cart-store"
 import { useUser } from "@/hooks/use-user"
 import { useShopStore } from "@/lib/shop-store"
 import { createClient } from "@/lib/supabase/client"
-
-// NEW: Import the standalone SearchBar component
 import SearchBar from "@/components/navigation/SearchBar"
 
 export default function Navigation() {
@@ -109,7 +107,15 @@ export default function Navigation() {
                 >
                   {user ? (
                     <>
-                      <Avatar src={user.avatar_url} name={user.displayName} className="h-8 w-8" />
+                      {/* FIXED: Wrapped Avatar in a div for sizing to avoid Type Error */}
+                      <div className="h-8 w-8 overflow-hidden rounded-full border">
+                        <Avatar>
+                          <AvatarImage src={user.avatar_url || ""} alt={user.displayName || "User"} />
+                          <AvatarFallback className="bg-green-50 text-green-700 text-xs">
+                            {user.displayName?.charAt(0) || "U"}
+                          </AvatarFallback>
+                        </Avatar>
+                      </div>
                       <span className="text-sm font-medium">{user.displayName}</span>
                     </>
                   ) : (
@@ -135,34 +141,7 @@ export default function Navigation() {
         </div>
       </nav>
 
-      {/* DESKTOP SEARCH OVERLAY */}
-      {searchOpen && (
-        <div className="hidden md:block border-b bg-white animate-in slide-in-from-top duration-300 shadow-sm">
-          <div className="max-w-3xl mx-auto px-6 py-4">
-            <SearchBar onClose={() => setSearchOpen(false)} />
-          </div>
-        </div>
-      )}
-
-      {/* MOBILE HEADER */}
-      <nav className="md:hidden sticky top-0 z-50 bg-white border-b">
-        <div className="px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-green-600">Joyalure</Link>
-          <button 
-            onClick={() => setSearchOpen(v => !v)} 
-            className={`p-2 rounded-full ${searchOpen ? 'text-green-600' : ''}`}
-          >
-            {searchOpen ? <X size={22} /> : <Search size={22} />}
-          </button>
-        </div>
-        {searchOpen && (
-          <div className="px-4 py-3 bg-white border-b">
-            <SearchBar onClose={() => setSearchOpen(false)} />
-          </div>
-        )}
-      </nav>
-
-      {/* MOBILE BOTTOM NAV */}
+      {/* MOBILE BOTTOM NAV FIX */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t md:hidden pb-safe">
         <div className="flex justify-around items-center h-16">
           <Link href="/public" className="flex flex-col items-center text-[10px] font-medium text-gray-600">
@@ -190,7 +169,15 @@ export default function Navigation() {
           <button onClick={handleAccountClick} className="flex flex-col items-center text-[10px] font-medium text-gray-600">
             {user ? (
               <>
-                <Avatar src={user.avatar_url} name={user.displayName} className="h-5 w-5" />
+                {/* FIXED: Applied same sizing div for mobile */}
+                <div className="h-6 w-6 overflow-hidden rounded-full border">
+                   <Avatar>
+                    <AvatarImage src={user.avatar_url || ""} />
+                    <AvatarFallback className="text-[8px]">
+                      {user.displayName?.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
                 <span className="mt-1 truncate max-w-[50px] font-semibold">{user.displayName}</span>
               </>
             ) : (
