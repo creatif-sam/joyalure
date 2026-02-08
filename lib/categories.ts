@@ -3,9 +3,11 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function getHomeCategories() {
   const cookieStore = await cookies();
-  const supabase = createServerSupabaseClient(cookieStore);
+  
+  // FIXED: Pass an object with the cookies property, not just the store itself
+  const supabase = createServerSupabaseClient({ cookies: cookieStore });
 
-  // Institutional Fix: Fetching the real product count via a join
+  // Fetching the real product count via a join
   const { data, error } = await supabase
     .from('categories')
     .select(`
@@ -21,7 +23,7 @@ export async function getHomeCategories() {
     return [];
   }
 
-  // Format the count data because Supabase returns it as an array of counts: [{count: 5}]
+  // Format the count data to flatten the array return
   return data?.map(cat => ({
     ...cat,
     count: Array.isArray(cat.count) ? cat.count[0]?.count : 0
