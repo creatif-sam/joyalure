@@ -1,6 +1,7 @@
 "use client"
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+// FIXED: Removed AvatarImage and AvatarFallback since they don't exist in your UI file
+import { Avatar } from "@/components/ui/avatar"
 import Link from "next/link"
 import {
   ShoppingCart,
@@ -107,14 +108,15 @@ export default function Navigation() {
                 >
                   {user ? (
                     <>
-                      {/* FIXED: Wrapped Avatar in a div for sizing to avoid Type Error */}
-                      <div className="h-8 w-8 overflow-hidden rounded-full border">
-                        <Avatar>
-                          <AvatarImage src={user.avatar_url || ""} alt={user.displayName || "User"} />
-                          <AvatarFallback className="bg-green-50 text-green-700 text-xs">
+                      {/* FIXED: Using a plain img tag or the base Avatar component if it supports 'src' */}
+                      <div className="h-8 w-8 overflow-hidden rounded-full border bg-gray-100 flex items-center justify-center">
+                        {user.avatar_url ? (
+                          <img src={user.avatar_url} alt="" className="h-full w-full object-cover" />
+                        ) : (
+                          <span className="text-[10px] font-bold text-gray-500">
                             {user.displayName?.charAt(0) || "U"}
-                          </AvatarFallback>
-                        </Avatar>
+                          </span>
+                        )}
                       </div>
                       <span className="text-sm font-medium">{user.displayName}</span>
                     </>
@@ -141,7 +143,7 @@ export default function Navigation() {
         </div>
       </nav>
 
-      {/* MOBILE BOTTOM NAV FIX */}
+      {/* MOBILE BOTTOM NAV */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t md:hidden pb-safe">
         <div className="flex justify-around items-center h-16">
           <Link href="/public" className="flex flex-col items-center text-[10px] font-medium text-gray-600">
@@ -168,18 +170,13 @@ export default function Navigation() {
 
           <button onClick={handleAccountClick} className="flex flex-col items-center text-[10px] font-medium text-gray-600">
             {user ? (
-              <>
-                {/* FIXED: Applied same sizing div for mobile */}
-                <div className="h-6 w-6 overflow-hidden rounded-full border">
-                   <Avatar>
-                    <AvatarImage src={user.avatar_url || ""} />
-                    <AvatarFallback className="text-[8px]">
-                      {user.displayName?.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                </div>
-                <span className="mt-1 truncate max-w-[50px] font-semibold">{user.displayName}</span>
-              </>
+              <div className="h-6 w-6 overflow-hidden rounded-full border bg-gray-100 flex items-center justify-center">
+                {user.avatar_url ? (
+                   <img src={user.avatar_url} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <span className="text-[10px] font-bold">{user.displayName?.charAt(0)}</span>
+                )}
+              </div>
             ) : (
               <>
                 <User size={20} />
