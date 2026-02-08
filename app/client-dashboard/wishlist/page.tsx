@@ -1,114 +1,58 @@
-export const dynamic = "force-dynamic"
+"use client"
 
-import { redirect } from "next/navigation"
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
-import RemoveWishlistButton from "./remove-button"
+import { useEffect, useState } from "react"
+import { useShopStore } from "@/lib/shop-store"
+import ProductCard from "@/components/product-card"
+import Link from "next/link"
+import { Heart } from "lucide-react"
 
-export default async function WishlistPage() {
-  const cookieStore = await cookies()
+export default function WishlistPage() {
+  const [mounted, setMounted] = useState(false)
+  const wishlist = useShopStore((s) => s.wishlist)
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll: () => cookieStore.getAll(),
-        setAll: () => {}
-      }
-    }
-  )
+  // Ensure client-side data is ready
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-  const {
-    data: { user }
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect("/auth/login")
+  if (!mounted) {
+    return (
+      <main className="max-w-7xl mx-auto px-4 py-20 text-center text-gray-400 italic">
+        Loading your favorites...
+      </main>
+    )
   }
 
-  const { data: wishlist } = await supabase
-    .from("wishlist")
-    .select(`
-      id,
-      products (
-        id,
-        name,
-        price,
-        image_url,
-        slug
-      )
-    `)
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false })
-
   return (
-    <div className="space-y-6">
-
-      <div>
-        <h1 className="text-2xl font-semibold text-green-700">
-          Wishlist
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Products you have saved for later.
+    <main className="max-w-7xl mx-auto px-4 py-20 min-h-[60vh]">
+      <header className="mb-12">
+        <h1 className="text-3xl font-semibold text-gray-900">My Wishlist</h1>
+        <p className="text-gray-500 mt-2">
+          {wishlist.length} {wishlist.length === 1 ? "item" : "items"} saved for later.
         </p>
-      </div>
+      </header>
 
-      {!wishlist || wishlist.length === 0 && (
-        <EmptyWishlist />
-      )}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {wishlist?.map(item => (
-          <WishlistCard key={item.id} item={item} />
-        ))}
-      </div>
-
-    </div>
-  )
-}
-
-function WishlistCard({ item }: { item: any }) {
-  const product = item.products
-
-  return (
-    <div className="bg-white border border-green-100 rounded-lg overflow-hidden">
-      <img
-        src={product.image_url}
-        alt={product.name}
-        className="h-40 w-full object-cover"
-      />
-
-      <div className="p-4 space-y-2">
-        <h3 className="font-medium text-green-700">
-          {product.name}
-        </h3>
-
-        <p className="text-sm text-gray-600">
-          ${product.price}
-        </p>
-
-        <div className="flex justify-between items-center">
-          <a
-            href={`/products/${product.slug}`}
-            className="text-sm text-green-700 hover:underline"
+      {wishlist.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24 border-2 border-dashed border-gray-100 rounded-3xl bg-white">
+          <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 text-gray-300">
+            <Heart size={32} />
+          </div>
+          <h2 className="text-lg font-medium text-gray-900">Your wishlist is empty</h2>
+          <p className="text-gray-500 mt-1 mb-8">Save items you love to find them easily later.</p>
+          <Link 
+            href="/products" 
+            className="px-8 py-3 bg-green-600 text-white font-bold uppercase tracking-widest text-xs rounded-xl hover:bg-green-700 transition-all shadow-lg shadow-green-600/20"
           >
-            View product
-          </a>
-
-          <RemoveWishlistButton wishlistId={item.id} />
+            Explore Products
+          </Link>
         </div>
-      </div>
-    </div>
-  )
-}
-
-function EmptyWishlist() {
-  return (
-    <div className="bg-white border border-green-100 rounded-lg p-6 text-center">
-      <p className="text-sm text-gray-500">
-        Your wishlist is empty.
-      </p>
-    </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
+          {wishlist.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      )}
+    </main>
   )
 }

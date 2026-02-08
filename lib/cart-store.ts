@@ -1,10 +1,12 @@
 import { create } from "zustand"
+import { persist, createJSONStorage } from "zustand/middleware"
 
+// Standardized types for Joyalure
 type CartItem = {
   id: string
-  name: string
+  title: string
   price: number
-  image: string | null
+  image_url: string | null
   quantity: number
 }
 
@@ -24,73 +26,81 @@ type CartState = {
   subtotal: () => number
 }
 
-export const useCartStore = create<CartState>((set, get) => ({
-  items: [],
-  isOpen: false,
+export const useCartStore = create<CartState>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      isOpen: false,
 
-  openCart: () => set({ isOpen: true }),
-  closeCart: () => set({ isOpen: false }),
+      openCart: () => set({ isOpen: true }),
+      closeCart: () => set({ isOpen: false }),
 
-  addItem: (item) =>
-    set((state) => {
-      const existing = state.items.find((i) => i.id === item.id)
+      addItem: (item) =>
+        set((state) => {
+          const existing = state.items.find((i) => i.id === item.id)
 
-      if (existing) {
-        return {
-          items: state.items.map((i) =>
-            i.id === item.id
-              ? { ...i, quantity: i.quantity + 1 }
-              : i
-          ),
-          isOpen: true
-        }
-      }
-
-      return {
-        items: [
-          ...state.items,
-          {
-            ...item,
-            quantity: item.quantity ?? 1
+          if (existing) {
+            return {
+              items: state.items.map((i) =>
+                i.id === item.id
+                  ? { ...i, quantity: i.quantity + 1 }
+                  : i
+              ),
+              // Institutional Fix: Removed isOpen: true to prevent popup
+            }
           }
-        ],
-        isOpen: true
-      }
-    }),
 
-  increase: (id) =>
-    set((state) => ({
-      items: state.items.map((i) =>
-        i.id === id ? { ...i, quantity: i.quantity + 1 } : i
-      )
-    })),
+          return {
+            items: [
+              ...state.items,
+              {
+                ...item,
+                quantity: item.quantity ?? 1
+              }
+            ],
+            // Institutional Fix: Removed isOpen: true to prevent popup
+          }
+        }),
 
-  decrease: (id) =>
-    set((state) => {
-      const item = state.items.find((i) => i.id === id)
-      if (!item) return state
+      increase: (id) =>
+        set((state) => ({
+          items: state.items.map((i) =>
+            i.id === id ? { ...i, quantity: i.quantity + 1 } : i
+          )
+        })),
 
-      if (item.quantity === 1) {
-        return {
+      decrease: (id) =>
+        set((state) => {
+          const item = state.items.find((i) => i.id === id)
+          if (!item) return state
+
+          if (item.quantity === 1) {
+            return {
+              items: state.items.filter((i) => i.id !== id)
+            }
+          }
+
+          return {
+            items: state.items.map((i) =>
+              i.id === id ? { ...i, quantity: i.quantity - 1 } : i
+            )
+          }
+        }),
+
+      removeItem: (id) =>
+        set((state) => ({
           items: state.items.filter((i) => i.id !== id)
-        }
-      }
+        })),
 
-      return {
-        items: state.items.map((i) =>
-          i.id === id ? { ...i, quantity: i.quantity - 1 } : i
+      subtotal: () =>
+        get().items.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
         )
-      }
     }),
-
-  removeItem: (id) =>
-    set((state) => ({
-      items: state.items.filter((i) => i.id !== id)
-    })),
-
-  subtotal: () =>
-    get().items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    )
-}))
+    {
+      name: "joyalure-cart-storage",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+)

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import Navigation from "@/components/Navigation"
+import Navigation from "@/components/navigation/Navigation"
 import Footer from "@/components/Footer"
 import CartDrawer from "@/components/cart-drawer"
 import CurrencySwitcher from "@/components/CurrencySwitcher"

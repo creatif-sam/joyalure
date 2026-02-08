@@ -1,4 +1,4 @@
-import Navigation from "@/components/Navigation"
+import Navigation from "@/components/navigation/Navigation"
 import { SignUpForm } from "@/components/sign-up-form"
 import Footer from "@/components/Footer"
 

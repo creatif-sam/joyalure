@@ -1,43 +1,51 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Heart, ShoppingCart } from "lucide-react"
-import { useCartStore } from "@/lib/cart-store"
+import { useEffect, useState, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
+import ProductCard from "@/components/product-card" // Updated path
 
 type Product = {
   id: string
   title: string
-  description: string | null
   price: number
   image_url: string | null
   is_featured: boolean
   is_recent: boolean
+  category?: { name: string } | null
 }
 
-export default function ProductsPage() {
+function ProductsContent() {
+  const searchParams = useSearchParams()
+  const urlQuery = searchParams.get("q") || "" // Get search term from URL
+  
   const [products, setProducts] = useState<Product[]>([])
-  const [query, setQuery] = useState("")
+  const [localQuery, setLocalQuery] = useState("") // For the on-page search input
   const [loading, setLoading] = useState(true)
-
   const [filter, setFilter] = useState<"all" | "recent" | "featured">("all")
 
-  const addToCart = useCartStore(s => s.addItem)
+  // Sync local input with URL search
+  useEffect(() => {
+    setLocalQuery(urlQuery)
+  }, [urlQuery])
 
   useEffect(() => {
     async function loadProducts() {
-      const res = await fetch("/api/products")
-      const data = await res.json()
-      setProducts(data)
-      setLoading(false)
+      try {
+        const res = await fetch("/api/products")
+        const data = await res.json()
+        setProducts(data)
+      } catch (error) {
+        console.error("Failed to load products", error)
+      } finally {
+        setLoading(false)
+      }
     }
-
     loadProducts()
   }, [])
 
+  // Institutionalized Filtering Logic: Handles both URL query and UI filters
   const filtered = products
-    .filter(p =>
-      p.title.toLowerCase().includes(query.toLowerCase())
-    )
+    .filter(p => p.title.toLowerCase().includes(localQuery.toLowerCase()))
     .filter(p => {
       if (filter === "recent") return p.is_recent
       if (filter === "featured") return p.is_featured
@@ -46,137 +54,81 @@ export default function ProductsPage() {
 
   if (loading) {
     return (
-      <main className="py-20 text-center text-gray-500">
-        Loading products…
+      <main className="py-20 text-center text-gray-400 italic">
+        Searching the Joyalure collection...
       </main>
     )
   }
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-20">
-      <h1 className="text-4xl font-bold mb-10 text-center">
-        Our Products
-      </h1>
+      <header className="text-center mb-16">
+        <h1 className="text-4xl font-semibold text-gray-900 mb-4">
+          {urlQuery ? `Results for "${urlQuery}"` : "Our Products"}
+        </h1>
+        <p className="text-gray-500 max-w-lg mx-auto">
+          {filtered.length} premium skincare solutions found.
+        </p>
+      </header>
 
       {/* FILTER BAR */}
-      <div className="flex flex-wrap gap-4 justify-center mb-10">
-        <button
-          onClick={() => setFilter("all")}
-          className={`px-5 py-2 rounded-full border ${
-            filter === "all"
-              ? "bg-green-700 text-white"
-              : "bg-white"
-          }`}
-        >
-          All products
-        </button>
-
-        <button
-          onClick={() => setFilter("recent")}
-          className={`px-5 py-2 rounded-full border ${
-            filter === "recent"
-              ? "bg-green-700 text-white"
-              : "bg-white"
-          }`}
-        >
-          New
-        </button>
-
-        <button
-          onClick={() => setFilter("featured")}
-          className={`px-5 py-2 rounded-full border ${
-            filter === "featured"
-              ? "bg-green-700 text-white"
-              : "bg-white"
-          }`}
-        >
-          Featured
-        </button>
+      <div className="flex flex-wrap gap-3 justify-center mb-8">
+        {(["all", "recent", "featured"] as const).map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition-all ${
+              filter === f
+                ? "bg-gray-900 text-white border-gray-900 shadow-lg shadow-gray-900/10"
+                : "bg-white text-gray-500 border-gray-200 hover:border-gray-900"
+            }`}
+          >
+            {f === "all" ? "All Products" : f === "recent" ? "New Arrivals" : "Featured"}
+          </button>
+        ))}
       </div>
 
-      {/* SEARCH */}
-      <input
-        value={query}
-        onChange={e => setQuery(e.target.value)}
-        placeholder="Search products"
-        className="w-full max-w-md mx-auto block mb-12 px-6 py-3 rounded-full border focus:outline-none focus:border-green-600"
-      />
+      {/* ON-PAGE SEARCH (Synchronized with URL) */}
+      <div className="max-w-md mx-auto mb-16">
+        <input
+          value={localQuery}
+          onChange={e => setLocalQuery(e.target.value)}
+          placeholder="Refine your search..."
+          className="w-full px-6 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-4 focus:ring-green-500/5 focus:border-green-600 transition-all bg-gray-50/50"
+        />
+      </div>
 
       {/* PRODUCTS GRID */}
       {filtered.length === 0 ? (
-        <p className="text-center text-gray-500">
-          No products found
-        </p>
+        <div className="text-center py-20 border-2 border-dashed border-gray-100 rounded-3xl">
+          <p className="text-gray-400 italic">No products match your search or filter.</p>
+          <button 
+            onClick={() => {setLocalQuery(""); setFilter("all")}}
+            className="mt-4 text-sm font-bold text-green-600 underline"
+          >
+            Clear all filters
+          </button>
+        </div>
       ) : (
-       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
           {filtered.map(p => (
-            <div
-              key={p.id}
-              className="bg-white rounded-xl shadow-sm p-5 relative group"
-            >
-              {/* IMAGE */}
-              <div className="relative">
-                <img
-                  src={p.image_url ?? "/placeholder.png"}
-                  alt={p.title}
-                  className="h-56 w-full object-cover rounded-lg"
-                />
-
-                {/* RECENT TAG */}
-                {p.is_recent && (
-                  <span className="absolute top-3 left-3 bg-green-700 text-white text-xs px-3 py-1 rounded-full">
-                    New
-                  </span>
-                )}
-
-                {/* WISHLIST */}
-                <button
-                  className="absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:text-green-600"
-                  aria-label="Add to wishlist"
-                >
-                  <Heart size={18} />
-                </button>
-              </div>
-
-              {/* INFO */}
-              <h3 className="font-semibold text-lg mt-4">
-                {p.title}
-              </h3>
-
-              {p.description && (
-                <p className="text-gray-600 text-sm mb-2">
-                  {p.description}
-                </p>
-              )}
-
-              <div className="flex items-center justify-between mt-4">
-                <span className="text-green-700 font-bold text-lg">
-                  ${p.price}
-                </span>
-
-                {/* ADD TO CART */}
-                <button
-                  onClick={() =>
-                 addToCart({
-  id: p.id,
-  name: p.title,
-  price: p.price,
-  image: p.image_url,
-  quantity: 1
-})
-
-                  }
-                  className="flex items-center gap-2 px-4 py-2 bg-green-700 text-white rounded-full hover:bg-green-800"
-                >
-                  <ShoppingCart size={16} />
-                  Add
-                </button>
-              </div>
-            </div>
+            <ProductCard 
+              key={p.id} 
+              product={p} 
+              priority={filtered.indexOf(p) < 4} 
+            />
           ))}
         </div>
       )}
     </main>
+  )
+}
+
+// Institutional Safety: Next.js requires Suspense when using useSearchParams
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div className="py-20 text-center text-gray-400">Loading collection...</div>}>
+      <ProductsContent />
+    </Suspense>
   )
 }
