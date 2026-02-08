@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link";
 import Image from "next/image";
 import { getHomeCategories } from "@/lib/categories";
@@ -18,7 +20,7 @@ export default async function HomeCategories() {
             <p className="text-gray-500 text-sm italic">Tailored skincare for your unique glow.</p>
           </div>
           <Link 
-            href="/products" 
+            href="/public/products" 
             className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-green-700 transition-colors flex items-center gap-2"
           >
             Browse All <ArrowRight size={14} />
@@ -33,9 +35,9 @@ export default async function HomeCategories() {
               href={`/public/products?category=${category.slug}`}
               className="group relative rounded-2xl overflow-hidden bg-gray-100 aspect-[4/3]"
             >
-              {/* IMAGE */}
+              {/* IMAGE - FIXED: Changed .image to .image_url to match Supabase schema */}
               <Image
-                src={category.image || "/placeholder-cat.jpg"}
+                src={category.image_url || "/placeholder-cat.jpg"}
                 alt={category.name}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -54,7 +56,7 @@ export default async function HomeCategories() {
                   
                   <div className="flex items-center gap-2 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <span className="text-white/80 text-[10px] font-bold uppercase tracking-widest">
-                      {category.count} Essentials
+                      {category.count || 0} Essentials
                     </span>
                     <div className="h-[1px] flex-1 bg-white/30" />
                   </div>
