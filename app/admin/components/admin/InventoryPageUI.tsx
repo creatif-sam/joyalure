@@ -192,7 +192,20 @@ export default function InventoryPageUI({ products }: { products: InventoryProdu
       </Card>
 
       {/* MODAL SECTION - Accessible & Dark-mode ready */}
-      <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) { setEditMode(false); setSelectedProduct(""); setStock(0); } }}>
+    // app/admin/components/admin/InventoryPageUI.tsx
+
+
+<Dialog 
+  open={open} 
+  onOpenChange={(v: boolean) => { 
+    setOpen(v); 
+    if (!v) { 
+      setEditMode(false); 
+      setSelectedProduct(""); 
+      setStock(0); 
+    } 
+  }}
+>
         <DialogContent className="sm:max-w-md dark:bg-zinc-950 dark:border-zinc-800 rounded-3xl border shadow-2xl">
           <DialogHeader className="text-left">
             {/* Required DialogTitle for accessibility */}
