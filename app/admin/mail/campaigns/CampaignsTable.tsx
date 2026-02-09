@@ -3,11 +3,11 @@
 import { useEffect, useState, useCallback } from "react";
 import { 
   Mail, Users, Star, User, ShoppingCart, 
-  MoreHorizontal, Eye, Trash2, Send, Clock, CheckCircle,FileText,
+  MoreHorizontal, Eye, Trash2, Send, Clock, CheckCircle, FileText,
   Loader2, AlertCircle
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { sendCampaignAction } from "../actions"; // Import our aligned server action
+import { sendCampaignAction } from "../actions"; 
 import { toast } from "sonner";
 
 const RecipientIcon = ({ type }: { type: string }) => {
@@ -24,7 +24,7 @@ export default function CampaignsTable() {
   const supabase = createClient();
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sendingId, setSendingId] = useState<string | null>(null); // Track specific row sending
+  const [sendingId, setSendingId] = useState<string | null>(null);
 
   const fetchCampaigns = useCallback(async () => {
     try {
@@ -54,18 +54,19 @@ export default function CampaignsTable() {
     return () => { supabase.removeChannel(channel); };
   }, [fetchCampaigns, supabase]);
 
-  // NEW: Handle triggering Resend from the Table
+  // FIXED: Removed extra arguments. The action now only requires camp.id.
   const handleActivateResend = async (camp: any) => {
     if (camp.status === 'sent') return toast.error("Already broadcasted.");
     if (!confirm(`Confirm broadcast: "${camp.subject}" to ${camp.recipient_type}?`)) return;
 
     setSendingId(camp.id);
     try {
-      const result = await sendCampaignAction(camp.id, camp.recipient_type, camp.emails);
+      // Logic: The server-side action will fetch recipient_type and emails itself
+      const result = await sendCampaignAction(camp.id);
       
       if (result.success) {
         toast.success("Broadcast Successful", { description: result.message });
-        fetchCampaigns(); // Refresh to show 'sent' status
+        fetchCampaigns(); 
       } else {
         throw new Error(result.error);
       }
@@ -132,7 +133,6 @@ export default function CampaignsTable() {
 
                   <td className="px-8 py-5 text-right">
                     <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0 duration-300">
-                        {/* ACTIVATE RESEND BUTTON */}
                         {camp.status === 'draft' && (
                           <button 
                             onClick={() => handleActivateResend(camp)}
