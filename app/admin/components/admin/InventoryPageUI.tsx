@@ -20,6 +20,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 
+// Institutional Types
 interface InventoryProduct {
   id: string;
   title: string;
@@ -28,7 +29,13 @@ interface InventoryProduct {
   inventory: { stock: number | null }[] | { stock: number | null } | null;
 }
 
-export default function InventoryPageUI({ products }: { products: InventoryProduct[] }) {
+// FIXED: Added lowStockProducts to the props interface to match your Page component
+interface InventoryPageUIProps {
+  products: InventoryProduct[];
+  lowStockProducts: InventoryProduct[];
+}
+
+export default function InventoryPageUI({ products, lowStockProducts }: InventoryPageUIProps) {
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState("");
   const [stock, setStock] = useState(0);
@@ -38,7 +45,6 @@ export default function InventoryPageUI({ products }: { products: InventoryProdu
   const [search, setSearch] = useState("");
   const [stockFilter, setStockFilter] = useState("all");
 
-  // Institutional Helper: Safely handles both Array and Object responses from Supabase
   const getStockCount = (product: any): number => {
     if (!product.inventory) return 0;
     if (Array.isArray(product.inventory)) {
@@ -60,7 +66,6 @@ export default function InventoryPageUI({ products }: { products: InventoryProdu
 
       if (!res.ok) throw new Error("Database update failed");
 
-      // Institutional Toast Feedback
       toast.success(editMode ? "Stock level adjusted" : "Stock entry created", {
         description: "The warehouse records have been updated successfully.",
         icon: <PackageCheck className="h-4 w-4 text-green-500" />
@@ -92,12 +97,12 @@ export default function InventoryPageUI({ products }: { products: InventoryProdu
       {/* HEADER SECTION */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black tracking-tight text-gray-900 dark:text-gray-100">Warehouse Control</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Institutional stock management for Joyalure.</p>
+          <h1 className="text-3xl font-black tracking-tight text-gray-900 dark:text-gray-100 italic uppercase">Warehouse Control</h1>
+          <p className="text-sm text-gray-500 dark:text-zinc-400 font-medium">Institutional stock management for Joyalure.</p>
         </div>
         <Button 
           onClick={() => { setEditMode(false); setOpen(true); }}
-          className="bg-green-600 hover:bg-green-700 text-white rounded-xl px-6 shadow-lg shadow-green-600/20 active:scale-95 transition-all"
+          className="bg-green-600 hover:bg-green-700 text-white rounded-xl px-6 shadow-lg shadow-green-600/20 active:scale-95 transition-all font-bold uppercase text-[10px] tracking-widest"
         >
           <PackageOpen className="mr-2 h-4 w-4" />
           Update Inventory
@@ -111,7 +116,7 @@ export default function InventoryPageUI({ products }: { products: InventoryProdu
           <input
             type="text"
             placeholder="Search collections..."
-            className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100"
+            className="w-full pl-10 pr-4 py-3 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100"
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
@@ -119,7 +124,7 @@ export default function InventoryPageUI({ products }: { products: InventoryProdu
         <div className="flex items-center gap-2 px-3 bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl">
           <Filter size={14} className="text-gray-400" />
           <select
-            className="py-2.5 text-sm bg-transparent outline-none cursor-pointer dark:text-gray-100 pr-2"
+            className="py-3 text-[10px] font-black uppercase tracking-widest bg-transparent outline-none cursor-pointer dark:text-gray-100 pr-2"
             value={stockFilter}
             onChange={e => setStockFilter(e.target.value)}
           >
@@ -131,49 +136,52 @@ export default function InventoryPageUI({ products }: { products: InventoryProdu
         </div>
       </div>
 
-      {/* INVENTORY CARD */}
-      <Card className="border dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm rounded-2xl overflow-hidden">
+      {/* INVENTORY LISTING */}
+      <Card className="border dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm rounded-3xl overflow-hidden">
         <CardHeader className="border-b dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-950/50">
-          <CardTitle className="text-xs font-black uppercase tracking-widest text-gray-400 flex items-center gap-2">
-            <TrendingUp size={14} />
-            Live Inventory Tracking
+          <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-2">
+            <TrendingUp size={14} className="text-green-500" />
+            Live Inventory Tracking ({filteredProducts.length})
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <div className="divide-y dark:divide-zinc-800">
             {filteredProducts.length === 0 ? (
-               <div className="p-16 text-center text-gray-400 italic text-sm">No inventory matches your search.</div>
+               <div className="p-16 text-center text-gray-400 italic text-sm">No inventory matches your search criteria.</div>
             ) : filteredProducts.map((product) => {
               const currentStock = getStockCount(product);
               const isLow = currentStock > 0 && currentStock < 10;
               const isOut = currentStock === 0;
 
               return (
-                <div key={product.id} className="group flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-zinc-800/40 transition-colors">
-                  <div className="flex items-center space-x-4">
-                    <div className="h-12 w-12 rounded-xl overflow-hidden border dark:border-zinc-800 bg-gray-100 dark:bg-zinc-950">
+                <div key={product.id} className="group flex items-center justify-between p-6 hover:bg-gray-50 dark:hover:bg-zinc-800/40 transition-colors">
+                  <div className="flex items-center space-x-5">
+                    <div className="h-14 w-14 rounded-2xl overflow-hidden border dark:border-zinc-800 bg-gray-100 dark:bg-zinc-950">
                       <img src={product.image_url || "/placeholder.jpg"} alt="" className="object-cover h-full w-full" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">{product.title}</h3>
-                      <p className="text-[10px] font-mono text-gray-400 tracking-widest uppercase">Base Stock Item</p>
+                      <h3 className="text-sm font-black text-gray-900 dark:text-gray-100 italic">{product.title}</h3>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest">Base Stock Item</span>
+                        {isLow && <span className="bg-yellow-500/10 text-yellow-500 text-[8px] font-black uppercase px-2 py-0.5 rounded-full border border-yellow-500/20">Critical Low</span>}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-8">
+                  <div className="flex items-center gap-10">
                     <div className="text-right">
-                      <div className="flex items-center justify-end gap-1.5">
+                      <div className="flex items-center justify-end gap-2">
                         {isLow && <AlertCircle size={14} className="text-yellow-500 animate-pulse" />}
-                        <p className={`text-xl font-black tracking-tighter ${isOut ? 'text-red-500' : isLow ? 'text-yellow-500' : 'text-green-500'}`}>
+                        <p className={`text-2xl font-black tracking-tighter ${isOut ? 'text-red-500' : isLow ? 'text-yellow-500' : 'text-green-600'}`}>
                           {currentStock}
                         </p>
                       </div>
-                      <p className="text-[9px] font-black uppercase tracking-widest text-gray-400">Units on hand</p>
+                      <p className="text-[9px] font-black uppercase tracking-widest text-gray-400">On Hand</p>
                     </div>
                     <Button
                       variant="ghost"
-                      size="sm"
-                      className="rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-800 transition-colors"
+                      size="icon"
+                      className="rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all active:scale-90"
                       onClick={() => {
                         setEditMode(true);
                         setSelectedProduct(product.id);
@@ -181,7 +189,7 @@ export default function InventoryPageUI({ products }: { products: InventoryProdu
                         setOpen(true);
                       }}
                     >
-                      <Edit className="h-4 w-4 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100" />
+                      <Edit className="h-4 w-4 text-zinc-400 group-hover:text-green-600 transition-colors" />
                     </Button>
                   </div>
                 </div>
@@ -191,43 +199,39 @@ export default function InventoryPageUI({ products }: { products: InventoryProdu
         </CardContent>
       </Card>
 
-      {/* MODAL SECTION - Accessible & Dark-mode ready */}
-    // app/admin/components/admin/InventoryPageUI.tsx
-
-
-<Dialog 
-  open={open} 
-  onOpenChange={(v: boolean) => { 
-    setOpen(v); 
-    if (!v) { 
-      setEditMode(false); 
-      setSelectedProduct(""); 
-      setStock(0); 
-    } 
-  }}
->
-        <DialogContent className="sm:max-w-md dark:bg-zinc-950 dark:border-zinc-800 rounded-3xl border shadow-2xl">
+      {/* MODAL SECTION */}
+      <Dialog 
+        open={open} 
+        onOpenChange={(v: boolean) => { 
+          setOpen(v); 
+          if (!v) { 
+            setEditMode(false); 
+            setSelectedProduct(""); 
+            setStock(0); 
+          } 
+        }}
+      >
+        <DialogContent className="sm:max-w-md dark:bg-zinc-950 dark:border-zinc-800 rounded-[2rem] border shadow-2xl">
           <DialogHeader className="text-left">
-            {/* Required DialogTitle for accessibility */}
-            <DialogTitle className="text-xl font-bold dark:text-gray-100">
-              {editMode ? "Adjust Stock" : "New Inventory Entry"}
+            <DialogTitle className="text-xl font-black uppercase italic dark:text-gray-100">
+              {editMode ? "Adjust Stock" : "New Entry"}
             </DialogTitle>
-            <p className="text-xs text-gray-500 mt-1">
-              {editMode ? "Modify the existing count for this skincare product." : "Create a new entry for a product in the warehouse."}
+            <p className="text-xs text-zinc-500 font-medium mt-1 uppercase tracking-tight">
+              {editMode ? "Modifying warehouse count for existing product." : "Registering new unit quantity in system."}
             </p>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-5 pt-4">
+          <form onSubmit={handleSubmit} className="space-y-6 pt-4">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Select Product</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Product Identity</label>
               <select
-                className="w-full bg-gray-50 dark:bg-zinc-900 border dark:border-zinc-800 rounded-xl p-3 text-sm outline-none dark:text-gray-100 focus:ring-2 focus:ring-green-600 transition"
+                className="w-full bg-zinc-50 dark:bg-zinc-900 border dark:border-zinc-800 rounded-xl p-4 text-sm font-bold outline-none dark:text-gray-100 focus:ring-2 focus:ring-green-600 transition appearance-none"
                 value={selectedProduct}
                 onChange={e => setSelectedProduct(e.target.value)}
                 required
                 disabled={editMode}
               >
-                <option value="">Choose item...</option>
+                <option value="">Select archived item...</option>
                 {products.map((p) => (
                   <option key={p.id} value={p.id}>{p.title}</option>
                 ))}
@@ -235,10 +239,10 @@ export default function InventoryPageUI({ products }: { products: InventoryProdu
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Unit Quantity</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Unit Quantity</label>
               <input
                 type="number"
-                className="w-full bg-gray-50 dark:bg-zinc-900 border dark:border-zinc-800 rounded-xl p-3 text-sm font-bold dark:text-gray-100 outline-none focus:ring-2 focus:ring-green-600 transition"
+                className="w-full bg-zinc-50 dark:bg-zinc-900 border dark:border-zinc-800 rounded-xl p-4 text-sm font-black dark:text-gray-100 outline-none focus:ring-2 focus:ring-green-600 transition"
                 value={stock}
                 onChange={e => setStock(Number(e.target.value))}
                 min={0}
@@ -247,11 +251,11 @@ export default function InventoryPageUI({ products }: { products: InventoryProdu
             </div>
 
             <div className="flex justify-end gap-3 pt-4">
-              <Button type="button" variant="ghost" onClick={() => setOpen(false)} className="dark:text-gray-400">
+              <Button type="button" variant="ghost" onClick={() => setOpen(false)} className="text-[10px] font-black uppercase tracking-widest dark:text-zinc-500">
                 Cancel
               </Button>
-              <Button type="submit" disabled={submitting} className="bg-green-600 text-white rounded-xl px-10 hover:bg-green-700 shadow-lg shadow-green-600/20 transition-all active:scale-95">
-                {submitting ? "Saving..." : "Save Entry"}
+              <Button type="submit" disabled={submitting} className="bg-green-600 text-white rounded-xl px-10 font-black uppercase text-[10px] tracking-widest hover:bg-green-700 shadow-lg shadow-green-600/20 transition-all active:scale-95">
+                {submitting ? "Syncing..." : "Commit Entry"}
               </Button>
             </div>
           </form>
