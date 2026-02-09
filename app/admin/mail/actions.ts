@@ -44,7 +44,7 @@ export async function sendCampaignAction(campaignId: string) {
 
     // 3. Execute Resend Broadcast
     const { data, error: resendError } = await resend.emails.send({
-      from: 'Joyalure <editorial@gen116.com>', 
+      from: 'Joyalure <hello@joyalure.com>', 
       to: recipients,
       subject: campaign.subject,
       html: campaign.body,
