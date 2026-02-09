@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Mail, Send, Trash2, Users, FileText, Plus, Loader2, Download } from "lucide-react";
 import NewCampaignModal from "@/app/admin/mail/campaigns/NewCampaignModal";
 import EmailTemplatesTable from "@/app/admin/mail/templates/EmailTemplatesTable";
+import CampaignsTable from "@/app/admin/mail/campaigns/CampaignsTable"; // ADDED IMPORT
 import { createClient } from "@/lib/supabase/client"; 
 
 interface Subscriber {
@@ -15,7 +16,6 @@ interface Subscriber {
 interface Campaign {
   id: string;
   status: 'draft' | 'sent';
-  // Add other fields as per your schema
 }
 
 export default function AdminMail() {
@@ -37,7 +37,7 @@ export default function AdminMail() {
       // Parallel fetching for performance
       const [subsRes, campRes, tempRes] = await Promise.all([
         supabase.from("newsletter_subscribers").select("*").order("created_at", { ascending: false }),
-        supabase.from("email_campaigns").select("id, status"), // Adjust table name if different
+        supabase.from("campaigns").select("id, status"), // Corrected to match your table name
         supabase.from("email_templates").select("id", { count: 'exact' })
       ]);
 
@@ -148,10 +148,9 @@ export default function AdminMail() {
               <Plus className="h-4 w-4" /> New Campaign
             </button>
           </div>
-          {/* Dynamically list campaigns here if you want a table, or show empty state */}
-          <div className="text-center py-10 text-gray-400 border-2 border-dashed border-gray-100 rounded-xl">
-              <p>{totalCampaigns > 0 ? `Showing ${totalCampaigns} campaigns.` : "No active campaigns found. Start your first draft."}</p>
-          </div>
+          
+          {/* REPLACED PLACEHOLDER WITH CAMPAIGNS TABLE */}
+          <CampaignsTable />
         </div>
       )}
 
@@ -211,7 +210,13 @@ export default function AdminMail() {
         </div>
       )}
       
-      <NewCampaignModal open={showNewCampaign} onClose={() => setShowNewCampaign(false)} />
+      <NewCampaignModal 
+        open={showNewCampaign} 
+        onClose={() => {
+            setShowNewCampaign(false);
+            fetchAllData(); // Auto-refresh data when modal closes
+        }} 
+      />
     </div>
   );
 }

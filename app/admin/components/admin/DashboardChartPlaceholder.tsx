@@ -3,11 +3,9 @@
 import { useEffect, useRef, useState } from "react"
 import { geoNaturalEarth1, geoPath } from "d3-geo"
 import { select } from "d3-selection"
-// @ts-ignore - Some versions of topojson-client have conflicting type exports
+// @ts-ignore
 import { feature } from "topojson-client"
 
-/** * TypeScript Interfaces to satisfy the compiler 
- */
 interface Region {
   name: string
   coords: [number, number]
@@ -21,7 +19,6 @@ interface TooltipData extends Omit<Region, 'coords'> {
   y: number
 }
 
-// Define the shape of the TopoJSON object specifically
 interface WorldTopoData {
   type: "Topology"
   objects: {
@@ -31,7 +28,6 @@ interface WorldTopoData {
     }
   }
   arcs: number[][][]
-  transform?: any
 }
 
 export default function DashboardChartPlaceholder() {
@@ -43,7 +39,6 @@ export default function DashboardChartPlaceholder() {
 
     const width = 900
     const height = 400
-
     const svg = select(ref.current)
     svg.selectAll("*").remove()
 
@@ -53,35 +48,29 @@ export default function DashboardChartPlaceholder() {
 
     const pathGenerator = geoPath(projection)
 
-    // Ensure the JSON path matches your public folder
     fetch("/world-110m.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("Network response was not ok")
-        return res.json()
-      })
+      .then((res) => res.json())
       .then((worldData: WorldTopoData) => {
-        // Convert TopoJSON to GeoJSON Features
-        // We use 'any' casting here to bypass the library's internal type conflicts
         const countries = (feature(worldData, worldData.objects.countries) as any).features
 
         // Draw Map Background
+        // Institutional Fix: We use 'currentColor' to allow the CSS to drive the theme
         svg
           .selectAll("path")
           .data(countries)
           .enter()
           .append("path")
           .attr("d", pathGenerator as any)
-          .attr("fill", "#f3f4f6")
-          .attr("stroke", "#ffffff")
+          .attr("class", "fill-gray-200 dark:fill-zinc-800 stroke-white dark:stroke-zinc-950")
           .attr("stroke-width", 0.5)
 
         const regions: Region[] = [
           { name: "USA", coords: [-98, 39], revenue: "$45,200", orders: 820, growth: "+8%" },
           { name: "UK", coords: [-2, 54], revenue: "$27,800", orders: 510, growth: "+5%" },
           { name: "Ghana", coords: [-1, 7.9], revenue: "$12,400", orders: 330, growth: "+12%" },
+          { name: "Morocco", coords: [-7, 31.7], revenue: "$8,900", orders: 210, growth: "+15%" },
         ]
 
-        // Draw Data Points
         const dots = svg
           .selectAll("circle")
           .data(regions)
@@ -90,74 +79,64 @@ export default function DashboardChartPlaceholder() {
           .attr("cx", (d) => projection(d.coords)?.[0] ?? 0)
           .attr("cy", (d) => projection(d.coords)?.[1] ?? 0)
           .attr("r", 6)
-          .attr("fill", "#16a34a")
-          .style("cursor", "pointer")
-          .style("transition", "all 0.2s ease")
+          .attr("class", "fill-green-600 dark:fill-green-500 cursor-pointer transition-all duration-200")
 
         dots.on("mouseenter", (event: MouseEvent, d: Region) => {
           const projected = projection(d.coords)
           if (projected) {
-            const [x, y] = projected
-            setTooltip({
-              name: d.name,
-              revenue: d.revenue,
-              orders: d.orders,
-              growth: d.growth,
-              x,
-              y,
-            })
+            setTooltip({ ...d, x: projected[0], y: projected[1] })
           }
           select(event.currentTarget as SVGCircleElement)
             .attr("r", 8)
-            .attr("fill", "#15803d")
+            .attr("class", "fill-green-700 dark:fill-green-400")
         })
 
         dots.on("mouseleave", (event: MouseEvent) => {
           setTooltip(null)
           select(event.currentTarget as SVGCircleElement)
             .attr("r", 6)
-            .attr("fill", "#16a34a")
+            .attr("class", "fill-green-600 dark:fill-green-500")
         })
       })
       .catch((err) => console.error("D3 Mapping Error:", err))
   }, [])
 
   return (
-    <div className="relative bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+    <div className="relative bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-gray-100 dark:border-zinc-800 shadow-sm transition-colors duration-300">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="font-semibold text-gray-900">Global Sales Analytics</h3>
-        <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">Real-time Map</span>
+        <h3 className="font-bold text-gray-900 dark:text-gray-100">Global Sales Analytics</h3>
+        <span className="text-[10px] text-gray-400 uppercase tracking-widest font-black">Real-time Map</span>
       </div>
 
       {/* Tooltip Component */}
       {tooltip && (
         <div
-          className="absolute z-20 pointer-events-none bg-white border border-gray-200 shadow-xl rounded-lg px-4 py-3 text-sm animate-in fade-in zoom-in duration-150"
+          className="absolute z-20 pointer-events-none bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 shadow-xl rounded-xl px-4 py-3 text-sm animate-in fade-in zoom-in duration-150"
           style={{ 
             left: `${tooltip.x + 20}px`, 
             top: `${tooltip.y + 20}px`,
             transform: 'translate(-50%, -100%)' 
           }}
         >
-          <p className="font-bold text-gray-900 border-b border-gray-100 pb-1 mb-2">{tooltip.name}</p>
-          <div className="space-y-1">
-            <div className="flex justify-between gap-4">
-              <span className="text-gray-500">Revenue:</span>
-              <span className="font-medium">{tooltip.revenue}</span>
+          <p className="font-bold text-gray-900 dark:text-gray-100 border-b dark:border-zinc-800 pb-1 mb-2">{tooltip.name}</p>
+          <div className="space-y-1 text-xs">
+            <div className="flex justify-between gap-6">
+              <span className="text-gray-500 dark:text-gray-400">Revenue:</span>
+              <span className="font-bold text-gray-900 dark:text-gray-100">{tooltip.revenue}</span>
             </div>
-            <div className="flex justify-between gap-4">
-              <span className="text-gray-500">Orders:</span>
-              <span className="font-medium">{tooltip.orders}</span>
+            <div className="flex justify-between gap-6">
+              <span className="text-gray-500 dark:text-gray-400">Orders:</span>
+              <span className="font-bold text-gray-900 dark:text-gray-100">{tooltip.orders}</span>
             </div>
-            <div className="flex justify-between gap-4">
-              <span className="text-gray-500">Growth:</span>
-              <span className="text-green-600 font-bold">{tooltip.growth}</span>
+            <div className="flex justify-between gap-6 pt-1 border-t dark:border-zinc-800 mt-1">
+              <span className="text-gray-500 dark:text-gray-400">Growth:</span>
+              <span className="text-green-600 dark:text-green-400 font-black">{tooltip.growth}</span>
             </div>
           </div>
         </div>
       )}
 
-      <div className="bg-gray-50 rounded-lg overflow-hidden">
+      <div className="bg-gray-50 dark:bg-zinc-950/50 rounded-xl overflow-hidden border dark:border-zinc-800/50">
         <svg
           ref={ref}
           viewBox="0 0 900 400"
