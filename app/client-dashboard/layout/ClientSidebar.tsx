@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
 import { useState } from "react"
+import Link from "next/link"
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -20,22 +20,21 @@ export default function ClientSidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-0 pt-16 min-h-screen bg-white border-r border-green-100 transition-all duration-300 ${
+      className={`fixed left-0 top-0 pt-16 min-h-screen bg-white dark:bg-zinc-950 border-r border-green-100 dark:border-zinc-800 transition-all duration-300 z-40 ${
         collapsed ? "w-20" : "w-64"
       }`}
     >
       <div className="flex justify-end px-3 py-3">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="text-green-700"
+          className="text-green-700 dark:text-green-500 hover:bg-green-50 dark:hover:bg-zinc-900 p-1 rounded-lg transition-colors"
           aria-label="Toggle sidebar"
         >
           {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </button>
       </div>
 
-      <nav className="flex flex-col px-3 py-2 text-sm text-gray-600 gap-1">
-
+      <nav className="flex flex-col px-3 py-2 text-sm text-gray-600 dark:text-zinc-400 gap-1">
         <SidebarLink
           href="/client-dashboard"
           icon={<LayoutDashboard size={18} />}
@@ -86,7 +85,7 @@ export default function ClientSidebar() {
           collapsed={collapsed}
         />
 
-        <div className="mt-6 pt-4 border-t border-green-100">
+        <div className="mt-6 pt-4 border-t border-green-100 dark:border-zinc-800">
           <SidebarLink
             href="/client-dashboard/help-center"
             icon={<LifeBuoy size={18} />}
@@ -94,7 +93,6 @@ export default function ClientSidebar() {
             collapsed={collapsed}
           />
         </div>
-
       </nav>
     </aside>
   )
@@ -116,14 +114,16 @@ function SidebarLink({
   return (
     <Link
       href={href}
-      className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
+      className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-200 ${
         active
-          ? "bg-green-50 text-green-700 font-medium"
-          : "hover:bg-green-50 hover:text-green-700"
+          ? "bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400 font-bold"
+          : "hover:bg-green-50 dark:hover:bg-zinc-900 hover:text-green-700 dark:hover:text-green-400"
       }`}
     >
-      {icon}
-      {!collapsed && <span>{label}</span>}
+      <div className={`shrink-0 ${active ? "text-green-600 dark:text-green-400" : ""}`}>
+        {icon}
+      </div>
+      {!collapsed && <span className="truncate">{label}</span>}
     </Link>
   )
 }

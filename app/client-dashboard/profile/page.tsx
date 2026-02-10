@@ -36,24 +36,24 @@ export default async function ProfilePage() {
     .single()
 
   return (
-    <div className="space-y-6 max-w-2xl">
+    <div className="space-y-6 max-w-2xl transition-colors duration-300">
 
       <div>
-        <h1 className="text-2xl font-semibold text-green-700">
+        <h1 className="text-2xl font-black tracking-tight text-green-700 dark:text-green-500">
           My Profile
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-gray-500 dark:text-zinc-400 mt-1">
           Manage your personal information.
         </p>
       </div>
 
-      <div className="bg-white border border-green-100 rounded-lg p-6 space-y-6">
+      <div className="bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded-2xl p-6 space-y-6 shadow-sm">
 
-      <AvatarUploader
-  userId={user.id}
-  avatarUrl={profile?.avatar_url}
-  role="customer"
-/>
+        <AvatarUploader
+          userId={user.id}
+          avatarUrl={profile?.avatar_url}
+          role="customer"
+        />
 
 
         <ProfileForm
@@ -61,24 +61,26 @@ export default async function ProfilePage() {
           initialName={profile?.full_name}
         />
 
-        <ProfileRow
-          label="Email Address"
-          value={user.email}
-        />
+        <div className="space-y-4">
+          <ProfileRow
+            label="Email Address"
+            value={user.email}
+          />
 
-        <ProfileRow
-          label="Account Type"
-          value={profile?.role || "customer"}
-        />
+          <ProfileRow
+            label="Account Type"
+            value={profile?.role || "customer"}
+          />
 
-        <ProfileRow
-          label="Member Since"
-          value={
-            profile?.created_at
-              ? new Date(profile.created_at).toLocaleDateString()
-              : "—"
-          }
-        />
+          <ProfileRow
+            label="Member Since"
+            value={
+              profile?.created_at
+                ? new Date(profile.created_at).toLocaleDateString()
+                : "—"
+            }
+          />
+        </div>
 
       </div>
 
@@ -94,11 +96,11 @@ function ProfileRow({
   value?: string | null
 }) {
   return (
-    <div className="flex justify-between items-center border-t border-gray-100 pt-4">
-      <span className="text-gray-500 text-sm">
+    <div className="flex justify-between items-center border-t border-gray-100 dark:border-zinc-800 pt-4">
+      <span className="text-gray-500 dark:text-zinc-400 text-sm font-medium">
         {label}
       </span>
-      <span className="text-green-700 font-medium text-sm">
+      <span className="text-green-700 dark:text-green-400 font-bold text-sm">
         {value}
       </span>
     </div>

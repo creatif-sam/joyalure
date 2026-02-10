@@ -2,8 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { supabaseBrowser } from "@/lib/supabase/browser"
+import { usePathname } from "next/navigation"
 
 import {
   LayoutDashboard,
@@ -13,8 +12,6 @@ import {
   Users,
   FileText,
   Settings,
-  LifeBuoy,
-  LogOut,
   ChevronLeft,
   Menu,
   Mail,
@@ -38,7 +35,7 @@ const menu = [
     section: "Others",
     items: [
       { name: "Settings", href: "/admin/settings", icon: Settings },
-      { name: "Help Center", href: "/admin/help", icon: LifeBuoy },
+      // Help Center removed
     ],
   },
 ]
@@ -47,12 +44,6 @@ export default function AdminSidebar() {
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const router = useRouter()
-
-  async function handleLogout() {
-    await supabaseBrowser.auth.signOut()
-    router.replace("/auth/login")
-  }
 
   return (
     <>
@@ -75,7 +66,7 @@ export default function AdminSidebar() {
       {/* Sidebar */}
       <aside
         className={`
-          z-40 bg-white dark:bg-zinc-950 border-r dark:border-zinc-800 flex flex-col justify-between
+          z-40 bg-white dark:bg-zinc-950 border-r dark:border-zinc-800 flex flex-col
           transition-all duration-300
           h-screen
           ${collapsed ? "w-20" : "w-72"}
@@ -149,18 +140,8 @@ export default function AdminSidebar() {
             ))}
           </nav>
         </div>
-
-        {/* Bottom Section */}
-        <div className="border-t dark:border-zinc-800 px-4 py-4">
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="flex items-center gap-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 w-full px-4 py-2.5 rounded-xl transition-all"
-          >
-            <LogOut className="h-5 w-5 shrink-0" />
-            {!collapsed && "Logout"}
-          </button>
-        </div>
+        
+        {/* Removed Footer Section with Logout */}
       </aside>
     </>
   )
