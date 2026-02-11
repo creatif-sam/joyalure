@@ -25,7 +25,7 @@ const testimonials: Testimonial[] = [
   {
     name: "Michelle R.",
     country: "United Kingdom",
-    flag: "https://flagcdn.com/w20/us.png",
+    flag: "https://flagcdn.com/w20/gb.png",
     avatar: "https://randomuser.me/api/portraits/women/68.jpg",
     rating: 5,
     review:
@@ -80,14 +80,14 @@ export default function TestimonialsCarousel() {
   const testimonial = testimonials[index]
 
   return (
-    <section className="bg-white py-24 px-4 overflow-hidden">
+    <section className="bg-white dark:bg-zinc-950 py-24 px-4 overflow-hidden transition-colors duration-500">
       <div className="max-w-5xl mx-auto text-center">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl font-semibold text-gray-900 mb-12"
+          className="text-3xl font-black tracking-tighter text-gray-900 dark:text-zinc-100 mb-12 uppercase italic"
         >
           Loved By Customers Worldwide
         </motion.h2>
@@ -104,17 +104,17 @@ export default function TestimonialsCarousel() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -40 }}
               transition={{ duration: 0.4 }}
-              className="bg-gray-50 rounded-2xl p-10 shadow-sm max-w-xl mx-auto"
+              className="bg-zinc-50 dark:bg-zinc-900 rounded-[2rem] p-10 shadow-sm border border-zinc-100 dark:border-zinc-800 max-w-xl mx-auto"
             >
               {/* Stars */}
-              <div className="flex justify-center mb-4">
+              <div className="flex justify-center mb-6">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <span
                     key={i}
                     className={`text-lg ${
                       i < testimonial.rating
                         ? "text-yellow-400"
-                        : "text-gray-300"
+                        : "text-zinc-200 dark:text-zinc-700"
                     }`}
                   >
                     ★
@@ -122,7 +122,7 @@ export default function TestimonialsCarousel() {
                 ))}
               </div>
 
-              <p className="text-gray-700 leading-relaxed mb-8">
+              <p className="text-gray-700 dark:text-zinc-300 leading-relaxed mb-8 text-lg italic">
                 “{testimonial.review}”
               </p>
 
@@ -130,21 +130,21 @@ export default function TestimonialsCarousel() {
                 <img
                   src={testimonial.avatar}
                   alt={testimonial.name}
-                  className="w-12 h-12 rounded-full object-cover border border-gray-200 shadow-sm"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-zinc-800 shadow-sm"
                 />
 
                 <div className="text-left">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-black uppercase tracking-widest text-gray-900 dark:text-zinc-100">
                       {testimonial.name}
                     </p>
                     <img
                       src={testimonial.flag}
                       alt={testimonial.country}
-                      className="w-4 h-4 rounded-sm"
+                      className="w-4 h-3 rounded-sm object-cover"
                     />
                   </div>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-zinc-500">
                     {testimonial.country}
                   </p>
                 </div>
@@ -153,15 +153,15 @@ export default function TestimonialsCarousel() {
           </AnimatePresence>
 
           {/* Dots */}
-          <div className="flex justify-center gap-2 mt-8">
+          <div className="flex justify-center gap-3 mt-10">
             {testimonials.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setIndex(i)}
-                className={`w-2.5 h-2.5 rounded-full transition ${
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                   i === index
-                    ? "bg-green-600"
-                    : "bg-gray-300 hover:bg-gray-400"
+                    ? "bg-green-600 w-8"
+                    : "bg-zinc-300 dark:bg-zinc-800 hover:bg-zinc-400 dark:hover:bg-zinc-700"
                 }`}
                 aria-label={`Go to testimonial ${i + 1}`}
               />
