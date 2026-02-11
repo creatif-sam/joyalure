@@ -59,7 +59,7 @@ export default async function ViewBlogPost({
           />
         ) : (
           <div className="flex flex-col items-center justify-center h-full gap-4 text-zinc-300 dark:text-zinc-700">
-            <ImageIcon size={48} md:size={64} strokeWidth={1} />
+            <ImageIcon strokeWidth={1} className="h-12 w-12 md:h-16 md:w-16" />
             <p className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">No Featured Visual</p>
           </div>
         )}
