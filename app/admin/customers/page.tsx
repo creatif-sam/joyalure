@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
-import { Search, Users, Filter, ArrowUpDown, ShoppingCart, Heart, Eye } from "lucide-react"
+import { Search, Users, Filter, ArrowUpDown, ShoppingCart, Heart, Eye, MapPin } from "lucide-react"
 import Link from "next/link"
 import { 
   Dialog, 
@@ -18,11 +18,11 @@ type SearchParams = {
   q?: string
   country?: string
   sort?: string
-  view?: string // The customer ID to view
+  view?: string 
 }
 
 type PageProps = {
-  searchParams: Promise<SearchParams> // Next.js 15/16 requires searchParams to be awaited
+  searchParams: Promise<SearchParams>
 }
 
 export default async function CustomersPage({ searchParams }: PageProps) {
@@ -36,7 +36,7 @@ export default async function CustomersPage({ searchParams }: PageProps) {
   const sort = params.sort ?? "created_at_desc"
   const viewId = params.view
 
-  // 1. Fetch unique countries (same as before)
+  // 1. Fetch unique countries
   const { data: countryData } = await supabase
     .from("customers")
     .select("country")
@@ -74,23 +74,37 @@ export default async function CustomersPage({ searchParams }: PageProps) {
   const rows = data ?? []
   const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE)
 
+  // URL Helper for clean links
+  const getBaseUrl = (newParams: Record<string, string | number | undefined>) => {
+    const nextParams = new URLSearchParams({
+      page: page.toString(),
+      q: query,
+      country,
+      sort,
+      ...Object.fromEntries(Object.entries(newParams).filter(([_, v]) => v !== undefined))
+    })
+    return `/admin/customers?${nextParams.toString()}`
+  }
+
   return (
-    <div className="space-y-8 animate-in fade-in duration-700">
-      {/* DIALOG FOR WISHLIST/CART */}
+    <div className="space-y-6 animate-in fade-in duration-700 p-4 md:p-0">
+      {/* MODAL - Mobile optimized width */}
       {viewId && (
         <Dialog open={true}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="w-[95vw] max-w-2xl rounded-2xl overflow-hidden">
             <DialogHeader>
               <DialogTitle>Customer Engagement</DialogTitle>
               <DialogDescription>
                 Viewing active shopping cart and wishlist items.
               </DialogDescription>
             </DialogHeader>
-            <CustomerListDetails customerId={viewId} />
+            <div className="max-h-[60vh] overflow-y-auto">
+                <CustomerListDetails customerId={viewId} />
+            </div>
             <div className="mt-4 flex justify-end">
               <Link 
-                href={`/admin/customers?page=${page}&q=${query}&country=${country}&sort=${sort}`}
-                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-bold transition"
+                href={getBaseUrl({ view: undefined })}
+                className="w-full md:w-auto text-center px-4 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-bold transition"
               >
                 Close
               </Link>
@@ -99,13 +113,13 @@ export default async function CustomersPage({ searchParams }: PageProps) {
         </Dialog>
       )}
 
-      {/* HEADER SECTION */}
+      {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-black tracking-tight text-gray-900 dark:text-gray-100">Customer Base</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Manage and segment your Joyalure community.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Manage and segment your community.</p>
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-50 dark:bg-green-500/10 border border-green-100 dark:border-green-500/20">
+        <div className="flex items-center self-start md:self-center gap-2 px-4 py-2 rounded-xl bg-green-50 dark:bg-green-500/10 border border-green-100 dark:border-green-500/20">
           <Users className="h-4 w-4 text-green-600 dark:text-green-400" />
           <span className="text-sm font-black text-green-700 dark:text-green-400">
             {count ?? 0} total
@@ -113,8 +127,8 @@ export default async function CustomersPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      {/* FILTER FORM (Keep existing) */}
-      <form className="grid grid-cols-1 md:grid-cols-4 gap-3 p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-2xl shadow-sm">
+      {/* FILTER FORM - Grid adjustments for mobile */}
+      <form className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-2xl shadow-sm">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
@@ -125,15 +139,38 @@ export default async function CustomersPage({ searchParams }: PageProps) {
             className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100"
           />
         </div>
-        {/* ... (Country and Sort selects same as before) */}
+
+        <select 
+          name="country" 
+          defaultValue={country}
+          className="w-full px-4 py-2.5 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100 appearance-none"
+        >
+          <option value="">All Countries</option>
+          {countryOptions.map(c => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
+
+        <select 
+          name="sort" 
+          defaultValue={sort}
+          className="w-full px-4 py-2.5 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100 appearance-none"
+        >
+          <option value="created_at_desc">Newest First</option>
+          <option value="total_spent_desc">Highest Spent</option>
+          <option value="total_orders_desc">Most Orders</option>
+        </select>
+
         <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl transition-all shadow-lg shadow-green-600/20 active:scale-95">
           Apply Filters
         </button>
       </form>
 
-      {/* CUSTOMER TABLE */}
+      {/* DATA VIEW */}
       <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
+        
+        {/* DESKTOP TABLE */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm text-left border-collapse">
             <thead className="bg-gray-50 dark:bg-zinc-950 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 border-b dark:border-zinc-800">
               <tr>
@@ -151,16 +188,14 @@ export default async function CustomersPage({ searchParams }: PageProps) {
                     <div className="font-bold text-gray-900 dark:text-gray-100">{c.full_name ?? "Unregistered"}</div>
                     <div className="text-xs text-gray-400 dark:text-zinc-500">{c.email}</div>
                   </td>
-                  <td className="px-4 py-4">
-                    <div className="flex justify-center gap-2">
-                      <Link 
-                        href={`/admin/customers?page=${page}&q=${query}&country=${country}&sort=${sort}&view=${c.id}`}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-green-600 hover:text-white dark:hover:bg-green-600 rounded-lg text-xs font-bold transition-all"
-                      >
-                        <Eye className="h-3.5 w-3.5" />
-                        View Lists
-                      </Link>
-                    </div>
+                  <td className="px-4 py-4 text-center">
+                    <Link 
+                      href={getBaseUrl({ view: c.id })}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-green-600 hover:text-white dark:hover:bg-green-600 rounded-lg text-xs font-bold transition-all"
+                    >
+                      <Eye className="h-3.5 w-3.5" />
+                      View Lists
+                    </Link>
                   </td>
                   <td className="px-4 py-4 text-center">
                      <span className="bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded font-bold text-[10px] dark:text-gray-300">
@@ -170,7 +205,7 @@ export default async function CustomersPage({ searchParams }: PageProps) {
                   <td className="px-4 py-4 font-mono font-bold text-gray-900 dark:text-gray-100">
                     ${((c.total_spent ?? 0) / 100).toFixed(2)}
                   </td>
-                  <td className="px-4 py-4 text-gray-500 dark:text-zinc-500">
+                  <td className="px-4 py-4 text-gray-500 dark:text-zinc-500 uppercase text-[10px] font-bold">
                     {new Date(c.created_at).toLocaleDateString()}
                   </td>
                 </tr>
@@ -178,9 +213,72 @@ export default async function CustomersPage({ searchParams }: PageProps) {
             </tbody>
           </table>
         </div>
+
+        {/* MOBILE CARDS */}
+        <div className="md:hidden divide-y dark:divide-zinc-800">
+          {rows.map(c => (
+            <div key={c.id} className="p-4 space-y-3">
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="font-bold text-gray-900 dark:text-gray-100 leading-tight">{c.full_name ?? "Unregistered"}</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-500 mb-1">{c.email}</div>
+                  {c.country && (
+                    <div className="flex items-center gap-1 text-[10px] text-gray-400 uppercase font-bold tracking-tight">
+                        <MapPin className="h-2.5 w-2.5" />
+                        {c.country}
+                    </div>
+                  )}
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-mono font-black text-green-600 dark:text-green-400">
+                    ${((c.total_spent ?? 0) / 100).toFixed(2)}
+                  </div>
+                  <div className="text-[10px] font-bold text-gray-400 uppercase">
+                    {c.total_orders ?? 0} Orders
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between gap-2 pt-2">
+                 <div className="text-[10px] text-gray-400 font-bold uppercase">
+                    Joined: {new Date(c.created_at).toLocaleDateString()}
+                 </div>
+                 <Link 
+                    href={getBaseUrl({ view: c.id })}
+                    className="flex-1 max-w-[140px] text-center px-3 py-2 bg-zinc-100 dark:bg-zinc-800 active:bg-green-600 active:text-white rounded-xl text-xs font-black transition-all"
+                  >
+                    View Details
+                  </Link>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* PAGINATION (Keep same) */}
+      {/* PAGINATION */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between gap-4 px-2">
+          <Link
+            href={getBaseUrl({ page: Math.max(1, page - 1) })}
+            className={`px-4 py-2 text-sm font-bold rounded-xl transition ${
+              page <= 1 ? "pointer-events-none opacity-50 bg-gray-100" : "bg-white dark:bg-zinc-900 border dark:border-zinc-800 hover:bg-gray-50"
+            }`}
+          >
+            Prev
+          </Link>
+          <span className="text-xs font-black text-gray-400 uppercase">
+            Page {page} of {totalPages}
+          </span>
+          <Link
+            href={getBaseUrl({ page: Math.min(totalPages, page + 1) })}
+            className={`px-4 py-2 text-sm font-bold rounded-xl transition ${
+              page >= totalPages ? "pointer-events-none opacity-50 bg-gray-100" : "bg-white dark:bg-zinc-900 border dark:border-zinc-800 hover:bg-gray-50"
+            }`}
+          >
+            Next
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
