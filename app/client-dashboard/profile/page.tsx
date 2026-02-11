@@ -6,7 +6,6 @@ import ProfileForm from "./ProfileForm"
 
 export const dynamic = "force-dynamic"
 
-
 export default async function ProfilePage() {
   const cookieStore = await cookies()
 
@@ -36,7 +35,8 @@ export default async function ProfilePage() {
     .single()
 
   return (
-    <div className="space-y-6 max-w-2xl transition-colors duration-300">
+    /* Added px-4 for mobile and centered with mx-auto */
+    <div className="space-y-6 max-w-2xl mx-auto px-4 md:px-0 transition-colors duration-300">
 
       <div>
         <h1 className="text-2xl font-black tracking-tight text-green-700 dark:text-green-500">
@@ -47,21 +47,23 @@ export default async function ProfilePage() {
         </p>
       </div>
 
-      <div className="bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded-2xl p-6 space-y-6 shadow-sm">
+      {/* Adjusted padding for mobile (p-5) vs desktop (p-8) */}
+      <div className="bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded-2xl p-5 md:p-8 space-y-8 shadow-sm">
 
-        <AvatarUploader
-          userId={user.id}
-          avatarUrl={profile?.avatar_url}
-          role="customer"
-        />
-
+        <div className="flex justify-center md:justify-start">
+          <AvatarUploader
+            userId={user.id}
+            avatarUrl={profile?.avatar_url}
+            role="customer"
+          />
+        </div>
 
         <ProfileForm
           userId={user.id}
           initialName={profile?.full_name}
         />
 
-        <div className="space-y-4">
+        <div className="space-y-1">
           <ProfileRow
             label="Email Address"
             value={user.email}
@@ -96,11 +98,12 @@ function ProfileRow({
   value?: string | null
 }) {
   return (
-    <div className="flex justify-between items-center border-t border-gray-100 dark:border-zinc-800 pt-4">
-      <span className="text-gray-500 dark:text-zinc-400 text-sm font-medium">
+    /* Changed to flex-col on very small screens to prevent text overlap */
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 sm:gap-4 border-t border-gray-100 dark:border-zinc-800 py-4">
+      <span className="text-gray-500 dark:text-zinc-400 text-xs sm:text-sm font-medium">
         {label}
       </span>
-      <span className="text-green-700 dark:text-green-400 font-bold text-sm">
+      <span className="text-green-700 dark:text-green-400 font-bold text-sm break-all sm:break-normal">
         {value}
       </span>
     </div>

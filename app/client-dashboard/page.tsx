@@ -54,25 +54,26 @@ export default async function DashboardPage() {
     ])
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-700 transition-colors">
+    /* Added px-4 for mobile breathing room and max-width for desktop centering */
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 animate-in fade-in duration-700 transition-colors">
 
       {/* Welcome Section */}
       <div className="flex items-center gap-3">
-        <div className="h-12 w-12 rounded-2xl bg-green-100 dark:bg-green-500/10 flex items-center justify-center text-green-700 dark:text-green-500">
+        <div className="h-12 w-12 shrink-0 rounded-2xl bg-green-100 dark:bg-green-500/10 flex items-center justify-center text-green-700 dark:text-green-500">
           <Sparkles size={24} />
         </div>
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-gray-900 dark:text-zinc-100">
+          <h1 className="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-zinc-100">
             Welcome, <span className="text-green-700 dark:text-green-500">{name}</span>
           </h1>
-          <p className="text-sm text-gray-500 dark:text-zinc-400 font-medium">
+          <p className="text-xs md:text-sm text-gray-500 dark:text-zinc-400 font-medium">
             Manage your Joyalure experience from one place.
           </p>
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Stats Grid - 1 col on mobile, 2 on small tablets, 3 on desktop */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <StatCard
           label="Orders"
           value={ordersCount ?? 0}
@@ -91,8 +92,6 @@ export default async function DashboardPage() {
           icon={<Mail size={18} />}
         />
       </div>
-      
-      {/* Quick Tips or Next Steps could go here */}
     </div>
   )
 }
@@ -116,7 +115,7 @@ function StatCard({
           {icon}
         </div>
       </div>
-      <p className="text-xl font-bold text-gray-900 dark:text-zinc-100 truncate">
+      <p className="text-lg md:text-xl font-bold text-gray-900 dark:text-zinc-100 truncate">
         {value}
       </p>
     </div>

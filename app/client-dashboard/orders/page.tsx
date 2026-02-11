@@ -45,7 +45,8 @@ export default async function OrdersPage() {
     .order("created_at", { ascending: false })
 
   return (
-    <div className="space-y-8 transition-colors duration-300">
+    /* Added px-4 for mobile breathing room and max-w for desktop centering */
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-8 transition-colors duration-300">
 
       <div>
         <h1 className="text-2xl font-black tracking-tight text-green-700 dark:text-green-500">
@@ -72,24 +73,28 @@ export default async function OrdersPage() {
 
 function OrderCard({ order }: { order: any }) {
   return (
-    <div className="bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded-2xl p-6 space-y-5 shadow-sm hover:shadow-md transition-all group">
+    /* Adjusted p-4 for mobile to maximize content space */
+    <div className="bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded-2xl p-4 md:p-6 space-y-5 shadow-sm hover:shadow-md transition-all group">
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-row justify-between items-start gap-4">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gray-50 dark:bg-zinc-900 flex items-center justify-center text-gray-400 dark:text-zinc-500">
+          <div className="h-10 w-10 shrink-0 rounded-xl bg-gray-50 dark:bg-zinc-900 flex items-center justify-center text-gray-400 dark:text-zinc-500">
             <Package size={20} />
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">
               Order Reference
             </p>
-            <p className="font-mono text-sm font-bold text-green-700 dark:text-green-500">
+            <p className="font-mono text-sm font-bold text-green-700 dark:text-green-500 truncate">
               #{order.id.split('-')[0].toUpperCase()}
             </p>
           </div>
         </div>
 
-        <OrderStatus status={order.status} />
+        {/* Status now stays in line or wraps cleanly */}
+        <div className="shrink-0">
+          <OrderStatus status={order.status} />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4 py-4 border-y border-gray-50 dark:border-zinc-900">
@@ -109,17 +114,17 @@ function OrderCard({ order }: { order: any }) {
 
       <div className="space-y-3">
         {order.order_items.map((item: any) => (
-          <div key={item.id} className="flex justify-between items-center text-sm">
-            <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-              <span className="text-gray-700 dark:text-zinc-300 font-medium">
+          <div key={item.id} className="flex justify-between items-center text-sm gap-4">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-green-500" />
+              <span className="text-gray-700 dark:text-zinc-300 font-medium truncate">
                 {item.product_name}
               </span>
-              <span className="text-[10px] font-black text-gray-400 dark:text-zinc-600">
+              <span className="text-[10px] font-black text-gray-400 dark:text-zinc-600 shrink-0">
                 ×{item.quantity}
               </span>
             </div>
-            <span className="font-mono text-xs text-gray-500 dark:text-zinc-500">
+            <span className="font-mono text-xs text-gray-500 dark:text-zinc-500 shrink-0">
               ${(item.price / 1).toFixed(2)}
             </span>
           </div>
@@ -141,7 +146,7 @@ function OrderStatus({ status }: { status: string }) {
 
   return (
     <span
-      className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${
+      className={`px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest border whitespace-nowrap ${
         styles[status] || "bg-gray-100 text-gray-600 border-gray-200"
       }`}
     >
@@ -152,7 +157,7 @@ function OrderStatus({ status }: { status: string }) {
 
 function EmptyOrders() {
   return (
-    <div className="bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded-2xl p-12 text-center shadow-sm">
+    <div className="bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded-2xl p-8 md:p-12 text-center shadow-sm mx-4">
       <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-50 dark:bg-zinc-900 text-gray-400 mb-4">
         <Package size={20} />
       </div>
