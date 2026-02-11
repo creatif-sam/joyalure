@@ -6,7 +6,7 @@ import { Bell, LogOut, User, Settings } from "lucide-react"
 import { useUser } from "@/hooks/use-user"
 import { Avatar } from "@/components/ui/avatar"
 import { ThemeSwitcher } from "@/components/theme-switcher"
-import { createClient } from "@/lib/supabase/client" 
+import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
 export default function ClientTopBar() {
@@ -19,7 +19,7 @@ export default function ClientTopBar() {
     try {
       await supabase.auth.signOut()
       router.push("/auth/login")
-      router.refresh() 
+      router.refresh()
     } catch (error) {
       console.error("Error logging out:", error)
     }
@@ -27,7 +27,6 @@ export default function ClientTopBar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-zinc-950 border-b border-green-100 dark:border-zinc-800 z-50 transition-colors duration-300">
-      {/* Mobile Fix: Adjusted px-4 for small screens, px-6 for desktop */}
       <div className="flex items-center justify-between h-full px-4 md:px-6">
         {/* Logo */}
         <Link
@@ -38,7 +37,6 @@ export default function ClientTopBar() {
         </Link>
 
         {/* Actions */}
-        {/* Mobile Fix: Reduced gap-5 to gap-3 for mobile to prevent crowding */}
         <div className="flex items-center gap-3 md:gap-5 relative">
           
           <ThemeSwitcher />
@@ -55,16 +53,18 @@ export default function ClientTopBar() {
           {/* Profile Trigger */}
           <button
             onClick={() => setOpen(v => !v)}
-            className="flex items-center gap-2 focus:outline-none group"
+            className="flex items-center gap-2 focus:outline-none group active:scale-95 transition-transform"
             aria-label="Account menu"
           >
             <div className={`rounded-full p-0.5 transition-all ${open ? 'ring-2 ring-green-600' : 'group-hover:ring-2 group-hover:ring-green-600/30'}`}>
               {user && (
-                <Avatar
-                  src={user.avatar_url}
-                  name={user.displayName}
-                  className="w-8 h-8" // Mobile Fix: Explicit size for avatar
-                />
+                /* FIX: Wrapper div handles sizing to bypass 'className' prop error on Avatar component */
+                <div className="w-8 h-8 rounded-full overflow-hidden">
+                  <Avatar
+                    src={user.avatar_url}
+                    name={user.displayName || "User"}
+                  />
+                </div>
               )}
             </div>
           </button>
@@ -72,12 +72,12 @@ export default function ClientTopBar() {
           {/* Dropdown Menu */}
           {open && (
             <>
+              {/* Invisible backdrop to close menu on outside click */}
               <div 
                 className="fixed inset-0 z-[-1]" 
                 onClick={() => setOpen(false)} 
               />
               
-              {/* Mobile Fix: Adjusted right-0 to right-2 on tiny screens, w-56 is standard */}
               <div className="absolute right-0 top-14 w-56 bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                 <div className="px-4 py-3 border-b dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/20">
                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Client Account</p>
