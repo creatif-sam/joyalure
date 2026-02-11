@@ -16,7 +16,13 @@ const recipientTypes = [
   { key: "partners", label: "Partners", icon: ShoppingCart },
 ];
 
-export default function NewCampaignModal({ open, onClose }: { open: boolean, onClose: () => void }) {
+interface NewCampaignModalProps {
+  open: boolean;
+  onClose: () => void;
+  initialRecipient?: string | null; // Added for the Reply functionality
+}
+
+export default function NewCampaignModal({ open, onClose, initialRecipient }: NewCampaignModalProps) {
   // UI States
   const [templates, setTemplates] = useState<any[]>([]);
   const [loadingTemplates, setLoadingTemplates] = useState(false);
@@ -31,7 +37,16 @@ export default function NewCampaignModal({ open, onClose }: { open: boolean, onC
   const [body, setBody] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
-  // 1. Fetch Dynamic Templates
+  // 1. Sync with initialRecipient if provided
+  useEffect(() => {
+    if (open && initialRecipient) {
+      setRecipient("custom");
+      setEmails(initialRecipient);
+      toast.success(`Replying to: ${initialRecipient}`);
+    }
+  }, [open, initialRecipient]);
+
+  // 2. Fetch Dynamic Templates
   useEffect(() => {
     if (open) {
       const fetchTemplates = async () => {
@@ -52,7 +67,7 @@ export default function NewCampaignModal({ open, onClose }: { open: boolean, onC
     }
   }, [open]);
 
-  // 2. Load Template Data
+  // 3. Load Template Data
   const handleTemplateSelect = (template: any) => {
     setSelectedTemplateId(template.id);
     setSubject(template.subject);
@@ -60,7 +75,7 @@ export default function NewCampaignModal({ open, onClose }: { open: boolean, onC
     toast.info(`Loaded Template: ${template.name}`);
   };
 
-  // 3. FIXED: Save to public.campaigns table with the emails column
+  // 4. Save to public.campaigns
   const handleSaveDraft = async () => {
     if (!subject || !body) {
       return toast.error("Content Required", { description: "Subject and body cannot be empty." });
@@ -74,7 +89,6 @@ export default function NewCampaignModal({ open, onClose }: { open: boolean, onC
     const supabase = createClient();
 
     try {
-      // Institutional Cleanup: Sanitize the email list string
       const sanitizedEmails = emails
         .split(',')
         .map(e => e.trim())
@@ -87,7 +101,6 @@ export default function NewCampaignModal({ open, onClose }: { open: boolean, onC
         recipient_type: recipient,
         status: 'draft',
         template_id: selectedTemplateId,
-        // FIX: Map the local state to the DB column we just added
         emails: recipient === 'custom' ? sanitizedEmails : null,
         created_at: new Date().toISOString(),
       };
@@ -98,18 +111,14 @@ export default function NewCampaignModal({ open, onClose }: { open: boolean, onC
 
       if (error) throw error;
 
-      toast.success("Editorial Draft Archived", {
-        description: `Campaign saved for targeting: ${recipient}`
-      });
+      toast.success("Editorial Draft Archived");
       
-      // Clear local form state
+      // Reset State
       setSubject("");
       setBody("");
       setEmails("");
-      
       onClose();
     } catch (error: any) {
-      console.error("Supabase Save Error:", error);
       toast.error("Database Error", { description: error.message });
     } finally {
       setIsSaving(false);
@@ -119,11 +128,11 @@ export default function NewCampaignModal({ open, onClose }: { open: boolean, onC
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className={`bg-white dark:bg-zinc-900 rounded-[2.5rem] shadow-2xl w-full relative overflow-hidden flex flex-col transition-all duration-500 border dark:border-zinc-800 ${isPreview ? 'max-w-5xl h-[85vh]' : 'max-w-2xl max-h-[90vh]'}`}>
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+      <div className={`bg-white dark:bg-zinc-950 rounded-[2.5rem] shadow-2xl w-full relative overflow-hidden flex flex-col transition-all duration-500 border dark:border-zinc-800 ${isPreview ? 'max-w-5xl h-[85vh]' : 'max-w-2xl max-h-[90vh]'}`}>
         
         {/* HEADER */}
-        <div className="p-6 border-b dark:border-zinc-800 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-950/50">
+        <div className="p-6 border-b dark:border-zinc-800 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-900/50">
           <div>
             <h2 className="text-xl font-black tracking-tighter dark:text-gray-100 uppercase italic">
               {isPreview ? "System Preview" : "Campaign Architect"}
@@ -143,25 +152,58 @@ export default function NewCampaignModal({ open, onClose }: { open: boolean, onC
         </div>
 
         {/* CONTENT */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto bg-white dark:bg-zinc-950">
           {isPreview ? (
-            <div className="p-8 bg-zinc-100 dark:bg-zinc-950 flex justify-center min-h-full">
-              <div className={`bg-white text-black transition-all duration-500 shadow-2xl relative flex flex-col ${previewDevice === 'mobile' ? 'w-[375px] rounded-[3rem] border-[12px] border-zinc-900 h-[700px] mb-10' : 'w-full rounded-2xl min-h-[500px]'}`}>
-                 <div className="p-5 border-b bg-zinc-50 flex flex-col gap-1">
-                    <p className="text-[10px] font-black uppercase text-zinc-400 tracking-widest">Subject: <span className="text-zinc-900 normal-case font-bold">{subject || "No Subject"}</span></p>
-                    <p className="text-[10px] font-black uppercase text-zinc-400 tracking-widest">Target: <span className="text-green-600">{recipient}</span></p>
-                 </div>
-                 <div className="p-10 prose prose-zinc prose-sm max-w-none overflow-x-hidden flex-1" dangerouslySetInnerHTML={{ __html: body || "<p class='text-zinc-400 italic text-center mt-20'>No content detected for preview.</p>" }} />
+            /* PREVIEW MODE */
+            <div className="p-8 bg-zinc-100 dark:bg-zinc-900/50 flex justify-center min-h-full">
+              <div className={`bg-white text-black transition-all duration-500 shadow-2xl relative flex flex-col ${previewDevice === 'mobile' ? 'w-[375px] rounded-[3rem] border-[12px] border-zinc-950 h-[700px] mb-10' : 'w-full rounded-2xl min-h-[500px]'}`}>
+                  <div className="p-5 border-b bg-zinc-50 flex flex-col gap-1">
+                     <p className="text-[10px] font-black uppercase text-zinc-400 tracking-widest">Subject: <span className="text-zinc-900 normal-case font-bold">{subject || "No Subject"}</span></p>
+                     <p className="text-[10px] font-black uppercase text-zinc-400 tracking-widest">Target: <span className="text-green-600">{recipient}</span></p>
+                  </div>
+                  <div className="p-10 prose prose-zinc prose-sm max-w-none overflow-x-hidden flex-1" dangerouslySetInnerHTML={{ __html: body || "<p class='text-zinc-400 italic text-center mt-20'>No content detected for preview.</p>" }} />
               </div>
             </div>
           ) : (
+            /* EDIT MODE */
             <div className="p-8 space-y-10 animate-in fade-in slide-in-from-bottom-3 duration-500">
-              {/* Templates */}
+              
+              {/* Audience Selection */}
               <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 flex items-center gap-2"><div className="h-1 w-1 rounded-full bg-green-500" /> Source Template</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 flex items-center gap-2">
+                  <div className="h-1.5 w-1.5 rounded-full bg-green-500" /> Target Audience
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                  {recipientTypes.map(r => (
+                    <button 
+                      key={r.key} 
+                      type="button" 
+                      onClick={() => setRecipient(r.key)} 
+                      className={`flex flex-col items-center justify-center gap-2 rounded-2xl border py-4 transition-all ${recipient === r.key ? "border-green-600 bg-green-50 dark:bg-green-600/10 text-green-600 dark:text-green-400" : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-400"}`}
+                    >
+                      <r.icon className="h-5 w-5" />
+                      <span className="text-[9px] font-black uppercase tracking-tight">{r.label}</span>
+                    </button>
+                  ))}
+                </div>
+                {recipient === "custom" && (
+                  <textarea 
+                    value={emails} 
+                    onChange={e => setEmails(e.target.value)} 
+                    placeholder="Recipient email(s) separated by commas..." 
+                    className="w-full border dark:border-zinc-800 rounded-2xl px-4 py-4 text-sm bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-green-600 outline-none transition dark:text-zinc-200 min-h-[100px] font-bold" 
+                  />
+                )}
+              </div>
+
+              {/* Template Selection */}
+              <div className="space-y-4">
+                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 flex items-center gap-2">
+                  <div className="h-1.5 w-1.5 rounded-full bg-yellow-500" /> Source Template
+                </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {templates.map(t => (
-                    <button key={t.id} type="button" onClick={() => handleTemplateSelect(t)} className={`rounded-2xl border p-4 text-left transition-all ${selectedTemplateId === t.id ? "border-green-500 bg-green-50/30 ring-1 ring-green-500" : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-green-500/50"}`}>
+                    <button key={t.id} type="button" onClick={() => handleTemplateSelect(t)} className={`rounded-2xl border p-4 text-left transition-all ${selectedTemplateId === t.id ? "border-green-500 bg-green-50/30 dark:bg-green-600/10 ring-1 ring-green-500" : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-green-500/50"}`}>
                       <div className="font-bold text-sm dark:text-zinc-200">{t.name}</div>
                       <div className="text-[9px] uppercase font-black tracking-tighter text-zinc-400 mt-1">{t.category}</div>
                     </button>
@@ -169,30 +211,15 @@ export default function NewCampaignModal({ open, onClose }: { open: boolean, onC
                 </div>
               </div>
 
-              {/* Recipient Group */}
-              <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 flex items-center gap-2"><div className="h-1 w-1 rounded-full bg-green-500" /> Target Audience</label>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                  {recipientTypes.map(r => (
-                    <button key={r.key} type="button" onClick={() => setRecipient(r.key)} className={`flex flex-col items-center justify-center gap-2 rounded-2xl border py-4 transition-all ${recipient === r.key ? "border-green-600 bg-green-50 dark:bg-green-600/10 text-green-600 dark:text-green-400" : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-400"}`}>
-                      <r.icon className="h-5 w-5" /><span className="text-[9px] font-black uppercase tracking-tight">{r.label}</span>
-                    </button>
-                  ))}
-                </div>
-                {recipient === "custom" && (
-                  <textarea value={emails} onChange={e => setEmails(e.target.value)} placeholder="email1@example.com, email2@example.com..." className="w-full border dark:border-zinc-800 rounded-2xl px-4 py-4 text-sm bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-green-600 outline-none transition dark:text-zinc-200 min-h-[100px]" />
-                )}
-              </div>
-
-              {/* Subject & Body */}
+              {/* Editorial Content */}
               <div className="space-y-6">
                 <div className="space-y-3">
                   <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Editorial Headline</label>
-                  <input type="text" value={subject} onChange={e => setSubject(e.target.value)} placeholder="Subject..." className="w-full border dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-green-600 outline-none font-bold transition" />
+                  <input type="text" value={subject} onChange={e => setSubject(e.target.value)} placeholder="Subject line..." className="w-full border dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-green-600 outline-none font-bold transition dark:text-zinc-100" />
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Message Body (HTML)</label>
-                  <textarea value={body} onChange={e => setBody(e.target.value)} placeholder="HTML Content..." className="w-full border dark:border-zinc-800 rounded-[2rem] px-6 py-6 text-sm bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-green-600 outline-none transition min-h-[220px] font-mono" />
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Message Body (HTML Source)</label>
+                  <textarea value={body} onChange={e => setBody(e.target.value)} placeholder="Enter HTML content..." className="w-full border dark:border-zinc-800 rounded-[2rem] px-6 py-6 text-sm bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-green-600 outline-none transition min-h-[220px] font-mono dark:text-zinc-200" />
                 </div>
               </div>
             </div>
@@ -200,13 +227,13 @@ export default function NewCampaignModal({ open, onClose }: { open: boolean, onC
         </div>
 
         {/* FOOTER */}
-        <div className="p-6 border-t dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/50 flex justify-between items-center gap-4">
+        <div className="p-6 border-t dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 flex justify-between items-center gap-4">
           {isPreview ? (
-            <button onClick={() => setIsPreview(false)} className="flex items-center gap-2 font-black text-[10px] uppercase text-zinc-500 hover:text-green-600 transition-colors px-4"><ArrowLeft size={16}/> Edit</button>
+            <button onClick={() => setIsPreview(false)} className="flex items-center gap-2 font-black text-[10px] uppercase text-zinc-500 hover:text-green-600 transition-colors px-4"><ArrowLeft size={16}/> Back to Editor</button>
           ) : <div />}
           <div className="flex gap-3">
             {!isPreview && (
-              <button onClick={() => setIsPreview(true)} className="px-6 py-4 rounded-2xl font-black text-[10px] uppercase bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 flex items-center gap-2 transition-all"><Eye size={16} /> Run Preview</button>
+              <button onClick={() => setIsPreview(true)} className="px-6 py-4 rounded-2xl font-black text-[10px] uppercase bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 flex items-center gap-2 transition-all hover:scale-105 active:scale-95"><Eye size={16} /> Run Preview</button>
             )}
             <button onClick={handleSaveDraft} disabled={isSaving} className="px-10 py-4 rounded-2xl font-black text-[10px] uppercase bg-green-600 text-white shadow-xl shadow-green-600/30 flex items-center gap-2 hover:bg-green-700 active:scale-95 transition-all disabled:opacity-50">
               {isSaving ? <Loader2 className="animate-spin h-4 w-4" /> : <Save size={16} />} Archive Campaign

@@ -2,56 +2,56 @@ import Link from "next/link"
 
 export default function Footer() {
   return (
-    <footer className="relative bg-gradient-to-b from-white via-green-50 to-green-100 border-t border-gray-200 text-gray-700">
+    <footer className="relative bg-gradient-to-b from-white via-green-50 to-green-100 dark:from-zinc-950 dark:via-zinc-900/50 dark:to-zinc-900 border-t border-gray-200 dark:border-zinc-800 text-gray-700 dark:text-zinc-400 transition-colors duration-300">
       
       {/* Subtle top glow */}
-      <div className="absolute top-0 left-0 w-full h-6 bg-gradient-to-b from-green-200/40 to-transparent pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-6 bg-gradient-to-b from-green-200/40 dark:from-green-500/10 to-transparent pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-12">
         
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-6 uppercase tracking-wide">
+          <h4 className="text-sm font-semibold text-gray-900 dark:text-zinc-100 mb-6 uppercase tracking-wide">
             Company
           </h4>
           <ul className="space-y-4 text-sm">
-            <li><Link href="/about" className="hover:text-green-700 transition">About Us</Link></li>
-            <li><Link href="/subscribe" className="hover:text-green-700 transition">Subscribe Us</Link></li>
-            <li><Link href="/contact" className="hover:text-green-700 transition">Contact Us</Link></li>
-            <li><Link href="/adverse-events" className="hover:text-green-700 transition">Adverse events</Link></li>
+            <li><Link href="/about" className="hover:text-green-700 dark:hover:text-green-500 transition">About Us</Link></li>
+            <li><Link href="/subscribe" className="hover:text-green-700 dark:hover:text-green-500 transition">Subscribe Us</Link></li>
+            <li><Link href="/contact" className="hover:text-green-700 dark:hover:text-green-500 transition">Contact Us</Link></li>
+            <li><Link href="/adverse-events" className="hover:text-green-700 dark:hover:text-green-500 transition">Adverse events</Link></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-6 uppercase tracking-wide">
+          <h4 className="text-sm font-semibold text-gray-900 dark:text-zinc-100 mb-6 uppercase tracking-wide">
             Shop
           </h4>
           <ul className="space-y-4 text-sm">
-            <li><Link href="/products" className="hover:text-green-700 transition">All</Link></li>
-            <li><Link href="/products?filter=bestsellers" className="hover:text-green-700 transition">Bestsellers</Link></li>
-            <li><Link href="/products?filter=category" className="hover:text-green-700 transition">By Category</Link></li>
-            <li><Link href="/products?filter=concern" className="hover:text-green-700 transition">By Skin Concern</Link></li>
-            <li><Link href="/products?filter=ingredients" className="hover:text-green-700 transition">By Ingredients</Link></li>
+            <li><Link href="/products" className="hover:text-green-700 dark:hover:text-green-500 transition">All</Link></li>
+            <li><Link href="/products?filter=bestsellers" className="hover:text-green-700 dark:hover:text-green-500 transition">Bestsellers</Link></li>
+            <li><Link href="/products?filter=category" className="hover:text-green-700 dark:hover:text-green-500 transition">By Category</Link></li>
+            <li><Link href="/products?filter=concern" className="hover:text-green-700 dark:hover:text-green-500 transition">By Skin Concern</Link></li>
+            <li><Link href="/products?filter=ingredients" className="hover:text-green-700 dark:hover:text-green-500 transition">By Ingredients</Link></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-6 uppercase tracking-wide">
+          <h4 className="text-sm font-semibold text-gray-900 dark:text-zinc-100 mb-6 uppercase tracking-wide">
             Customer Care
           </h4>
           <ul className="space-y-4 text-sm">
-            <li><Link href="/faq" className="hover:text-green-700 transition">FAQ</Link></li>
-            <li><Link href="/shipping-policy" className="hover:text-green-700 transition">Shipping Policy</Link></li>
-            <li><Link href="/return-policy" className="hover:text-green-700 transition">Return Policy</Link></li>
-            <li><Link href="/privacy-policy" className="hover:text-green-700 transition">Privacy Policy</Link></li>
-            <li><Link href="/privacy-choice" className="hover:text-green-700 transition">Your Privacy Choice</Link></li>
-            <li><Link href="/terms" className="hover:text-green-700 transition">Terms of Service</Link></li>
+            <li><Link href="/faq" className="hover:text-green-700 dark:hover:text-green-500 transition">FAQ</Link></li>
+            <li><Link href="/shipping-policy" className="hover:text-green-700 dark:hover:text-green-500 transition">Shipping Policy</Link></li>
+            <li><Link href="/return-policy" className="hover:text-green-700 dark:hover:text-green-500 transition">Return Policy</Link></li>
+            <li><Link href="/privacy-policy" className="hover:text-green-700 dark:hover:text-green-500 transition">Privacy Policy</Link></li>
+            <li><Link href="/privacy-choice" className="hover:text-green-700 dark:hover:text-green-500 transition">Your Privacy Choice</Link></li>
+            <li><Link href="/terms" className="hover:text-green-700 dark:hover:text-green-500 transition">Terms of Service</Link></li>
           </ul>
         </div>
 
         <div className="space-y-6">
           <div>
-            <p className="text-sm font-semibold text-gray-900">Joyalure.</p>
-            <p className="text-sm text-gray-600 leading-relaxed mt-2">
+            <p className="text-sm font-semibold text-gray-900 dark:text-zinc-100">Joyalure.</p>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 leading-relaxed mt-2">
               Chez Joy Gyamfi<br />
               Yes Tik, Texas<br />
               United States
@@ -60,7 +60,7 @@ export default function Footer() {
 
           <button
             type="button"
-            className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition"
+            className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-green-600 text-white text-sm font-medium hover:bg-green-700 dark:hover:bg-green-500 transition"
           >
             <span className="text-lg">♡</span>
             Follow on Shop
@@ -68,20 +68,20 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-gray-200">
+      <div className="border-t border-gray-200 dark:border-zinc-800">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Address and copyright on the left */}
-          <div className="flex flex-col md:flex-row md:items-center gap-2 text-xs text-gray-500 md:order-1 order-2">
+          <div className="flex flex-col md:flex-row md:items-center gap-2 text-xs text-gray-500 dark:text-zinc-500 md:order-1 order-2">
             <span>Chez Joy Gyamfi, Yes Tik, Texas, United States</span>
-            <span className="hidden md:inline mx-2">|</span>
+            <span className="hidden md:inline mx-2 text-gray-300 dark:text-zinc-800">|</span>
             <span>© 2026 Joyalure. All rights reserved.</span>
           </div>
           {/* Animated social icons on the right */}
-          <div className="flex gap-6 text-gray-600 text-lg md:order-2 order-1">
+          <div className="flex gap-6 text-gray-600 dark:text-zinc-400 text-lg md:order-2 order-1">
             <a
               href="#"
               aria-label="Facebook"
-              className="transition transform hover:text-green-700 hover:-translate-y-1 hover:scale-110"
+              className="transition transform hover:text-green-700 dark:hover:text-green-500 hover:-translate-y-1 hover:scale-110"
               rel="noopener noreferrer"
             >
               <i className="fa-brands fa-facebook-f"></i>
@@ -89,7 +89,7 @@ export default function Footer() {
             <a
               href="#"
               aria-label="Instagram"
-              className="transition transform hover:text-green-700 hover:-translate-y-1 hover:scale-110"
+              className="transition transform hover:text-green-700 dark:hover:text-green-500 hover:-translate-y-1 hover:scale-110"
               rel="noopener noreferrer"
             >
               <i className="fa-brands fa-instagram"></i>
@@ -97,7 +97,7 @@ export default function Footer() {
             <a
               href="#"
               aria-label="TikTok"
-              className="transition transform hover:text-green-700 hover:-translate-y-1 hover:scale-110"
+              className="transition transform hover:text-green-700 dark:hover:text-green-500 hover:-translate-y-1 hover:scale-110"
               rel="noopener noreferrer"
             >
               <i className="fa-brands fa-tiktok"></i>
