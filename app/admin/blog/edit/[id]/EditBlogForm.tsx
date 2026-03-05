@@ -49,7 +49,7 @@ export default function EditBlogForm({ initialData }: { initialData: any }) {
             name="title"
             defaultValue={initialData.title}
             required
-            className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100"
+            className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded px-4 py-3 text-sm focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100"
           />
         </div>
 
@@ -60,14 +60,14 @@ export default function EditBlogForm({ initialData }: { initialData: any }) {
             name="slug"
             defaultValue={initialData.slug}
             required
-            className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl px-4 py-3 text-sm font-mono focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100"
+            className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded px-4 py-3 text-sm font-mono focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100"
           />
         </div>
 
         {/* VISIBILITY */}
         <div className="space-y-2">
           <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Visibility Status</label>
-          <div className="flex items-center gap-4 h-[46px] bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl px-4">
+          <div className="flex items-center gap-4 h-[46px] bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded px-4">
             <input 
               type="checkbox" 
               name="published" 
@@ -87,7 +87,7 @@ export default function EditBlogForm({ initialData }: { initialData: any }) {
             name="content"
             defaultValue={initialData.content}
             rows={15}
-            className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-2xl p-4 text-sm leading-relaxed focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100 font-sans"
+            className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded p-4 text-sm leading-relaxed focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100 font-sans"
             placeholder="Write your Joyalure editorial here..."
           />
         </div>
@@ -97,7 +97,7 @@ export default function EditBlogForm({ initialData }: { initialData: any }) {
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-all shadow-lg shadow-green-600/20 active:scale-95 disabled:opacity-50"
+          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-3 rounded transition-all shadow-lg shadow-green-600/20 active:scale-95 disabled:opacity-50"
         >
           <Save size={18} />
           {loading ? "Saving Changes..." : "Deploy Updates"}

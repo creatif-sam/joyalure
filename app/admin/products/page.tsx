@@ -36,7 +36,7 @@ export default function AdminProductsPageWrapper() {
       {/* HEADER: Stacked on mobile, row on desktop */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black italic uppercase tracking-tighter text-gray-900 dark:text-gray-100">
+          <h1 className="text-2xl font-black uppercase tracking-tighter text-gray-900 dark:text-gray-100">
             Products
           </h1>
           <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-medium uppercase tracking-widest">
@@ -45,7 +45,7 @@ export default function AdminProductsPageWrapper() {
         </div>
         <Link
           href="/admin/products/new"
-          className="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3.5 rounded-2xl text-[10px] uppercase font-black tracking-widest transition-all shadow-xl shadow-green-600/20 active:scale-95"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3.5 rounded text-[10px] uppercase font-black tracking-widest transition-all shadow-xl shadow-green-600/20 active:scale-95"
         >
           <Plus size={16} />
           New Product
@@ -70,7 +70,7 @@ export default function AdminProductsPageWrapper() {
               {products.map(product => (
                 <tr key={product.id} className="group hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-all">
                   <td className="px-6 py-5">
-                    <div className="font-bold text-gray-900 dark:text-gray-100 italic">{product.title}</div>
+                    <div className="font-bold text-gray-900 dark:text-gray-100">{product.title}</div>
                     <div className="text-[10px] text-zinc-400 uppercase tracking-tighter">/{product.slug}</div>
                   </td>
                   <td className="px-4 py-5 font-black text-zinc-700 dark:text-zinc-300">${product.price}</td>
@@ -103,7 +103,7 @@ export default function AdminProductsPageWrapper() {
             <div key={product.id} className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] p-5 shadow-sm space-y-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-black italic uppercase text-zinc-900 dark:text-zinc-100">{product.title}</h3>
+                  <h3 className="font-black uppercase text-zinc-900 dark:text-zinc-100">{product.title}</h3>
                   <p className="text-[10px] text-zinc-400 tracking-tighter uppercase">Ref: {product.id.slice(0,8)}</p>
                 </div>
                 <StatusBadge active={product.active} />

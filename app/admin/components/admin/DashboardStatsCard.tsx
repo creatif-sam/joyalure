@@ -25,14 +25,14 @@ export default function DashboardStatCard({
 
       {delta && (
         <div className="flex items-center gap-1 mt-2">
-          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+          <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
             isNegative 
               ? "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400" 
               : "bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400"
           }`}>
             {delta}
           </span>
-          <span className="text-[10px] text-gray-400 font-medium italic">vs last month</span>
+          <span className="text-[10px] text-gray-400 font-medium">vs last month</span>
         </div>
       )}
     </div>

@@ -104,7 +104,7 @@ export default function NewCampaignModal({ open, onClose, initialRecipient }: Ne
         {/* HEADER */}
         <div className="sticky top-0 z-10 p-4 md:p-6 border-b dark:border-zinc-800 flex items-center justify-between bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl">
           <div>
-            <h2 className="text-lg md:text-xl font-black tracking-tighter dark:text-gray-100 uppercase italic">
+            <h2 className="text-lg md:text-xl font-black tracking-tighter dark:text-gray-100 uppercase">
               {isPreview ? "System Preview" : "Architect"}
             </h2>
             <p className="hidden xs:block text-[9px] text-zinc-500 font-black uppercase tracking-widest mt-0.5">Joyalure Editorial Desk</p>
@@ -112,12 +112,12 @@ export default function NewCampaignModal({ open, onClose, initialRecipient }: Ne
           
           <div className="flex items-center gap-2">
              {isPreview && (
-               <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl">
-                 <button onClick={() => setPreviewDevice('desktop')} className={`p-2 rounded-lg transition-all ${previewDevice === 'desktop' ? 'bg-white dark:bg-zinc-700 shadow-sm text-green-600' : 'text-zinc-400'}`}><Monitor size={14}/></button>
-                 <button onClick={() => setPreviewDevice('mobile')} className={`p-2 rounded-lg transition-all ${previewDevice === 'mobile' ? 'bg-white dark:bg-zinc-700 shadow-sm text-green-600' : 'text-zinc-400'}`}><Smartphone size={14}/></button>
+               <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded">
+                 <button onClick={() => setPreviewDevice('desktop')} className={`p-2 rounded transition-all ${previewDevice === 'desktop' ? 'bg-white dark:bg-zinc-700 shadow-sm text-green-600' : 'text-zinc-400'}`}><Monitor size={14}/></button>
+                 <button onClick={() => setPreviewDevice('mobile')} className={`p-2 rounded transition-all ${previewDevice === 'mobile' ? 'bg-white dark:bg-zinc-700 shadow-sm text-green-600' : 'text-zinc-400'}`}><Smartphone size={14}/></button>
                </div>
              )}
-             <button onClick={onClose} className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors"><X size={20} className="dark:text-zinc-400" /></button>
+             <button onClick={onClose} className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded transition-colors"><X size={20} className="dark:text-zinc-400" /></button>
           </div>
         </div>
 
@@ -150,7 +150,7 @@ export default function NewCampaignModal({ open, onClose, initialRecipient }: Ne
                     <button 
                       key={r.key} 
                       onClick={() => setRecipient(r.key)} 
-                      className={`flex flex-col items-center justify-center gap-1.5 rounded-xl border py-3 transition-all ${recipient === r.key ? "border-green-600 bg-green-50 dark:bg-green-600/10 text-green-600" : "border-zinc-100 dark:border-zinc-800 text-zinc-400"}`}
+                      className={`flex flex-col items-center justify-center gap-1.5 rounded border py-3 transition-all ${recipient === r.key ? "border-green-600 bg-green-50 dark:bg-green-600/10 text-green-600" : "border-zinc-100 dark:border-zinc-800 text-zinc-400"}`}
                     >
                       <r.icon className="h-4 w-4" />
                       <span className="text-[8px] font-black uppercase truncate w-full px-1">{r.label}</span>
@@ -173,7 +173,7 @@ export default function NewCampaignModal({ open, onClose, initialRecipient }: Ne
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {templates.slice(0, 4).map(t => (
-                    <button key={t.id} onClick={() => handleTemplateSelect(t)} className={`rounded-xl border p-3 text-left transition-all ${selectedTemplateId === t.id ? "border-green-500 bg-green-50/10" : "border-zinc-100 dark:border-zinc-800 text-zinc-400"}`}>
+                    <button key={t.id} onClick={() => handleTemplateSelect(t)} className={`rounded border p-3 text-left transition-all ${selectedTemplateId === t.id ? "border-green-500 bg-green-50/10" : "border-zinc-100 dark:border-zinc-800 text-zinc-400"}`}>
                       <div className="font-bold text-xs dark:text-zinc-200 truncate">{t.name}</div>
                     </button>
                   ))}
@@ -197,7 +197,7 @@ export default function NewCampaignModal({ open, onClose, initialRecipient }: Ne
         {/* FOOTER - Docked to bottom on mobile */}
         <div className="p-4 md:p-6 border-t dark:border-zinc-800 bg-white dark:bg-zinc-950 flex items-center gap-3">
           {isPreview ? (
-            <button onClick={() => setIsPreview(false)} className="flex-1 flex items-center justify-center gap-2 font-black text-[9px] uppercase text-zinc-500 h-12 border dark:border-zinc-800 rounded-xl"><ArrowLeft size={14}/> Back</button>
+            <button onClick={() => setIsPreview(false)} className="flex-1 flex items-center justify-center gap-2 font-black text-[9px] uppercase text-zinc-500 h-12 border dark:border-zinc-800 rounded"><ArrowLeft size={14}/> Back</button>
           ) : (
             <button onClick={() => setIsPreview(true)} className="flex-1 md:flex-none md:px-6 h-12 rounded-xl font-black text-[9px] uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-100 flex items-center justify-center gap-2"><Eye size={14} /> Preview</button>
           )}

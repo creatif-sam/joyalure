@@ -42,15 +42,12 @@ export default function ContactRequestsTable() {
   useEffect(() => { fetchRequests() }, [])
 
   const handleDelete = async (id: string) => {
-    // Custom Joyalure-style confirm could be a modal, but standard confirm is safe here
-    if (!confirm("Permanently purge this inquiry from archive?")) return
-    
     const { error } = await supabase.from("contact_requests").delete().eq("id", id)
     if (error) {
-      toast.error("Purge failed")
+      toast.error("Delete failed")
     } else {
       setRequests(prev => prev.filter(r => r.id !== id))
-      toast.success("Inquiry Purged", { description: "Record removed from database." })
+      toast.success("Inquiry deleted successfully")
     }
   }
 
@@ -81,11 +78,11 @@ export default function ContactRequestsTable() {
         <table className="w-full text-sm text-left">
           <thead className="bg-zinc-50/50 dark:bg-zinc-900/50 border-b dark:border-zinc-800">
             <tr className="text-[10px] uppercase tracking-[0.15em] text-zinc-400 font-black">
-              <th className="px-8 py-6 w-16 text-center italic">Ref</th>
+              <th className="px-8 py-6 w-16 text-center">Ref</th>
               <th className="px-6 py-6 font-black">Identity</th>
               <th className="px-6 py-6 font-black">Narrative</th>
               <th className="px-6 py-6 font-black">Timestamp</th>
-              <th className="px-8 py-6 text-right font-black italic">Control</th>
+              <th className="px-8 py-6 text-right font-black">Control</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-50 dark:divide-zinc-900">
@@ -96,7 +93,7 @@ export default function ContactRequestsTable() {
                     {String(index + 1).padStart(2, '0')}
                   </td>
                   <td className="px-6 py-5">
-                    <p className="font-black text-zinc-900 dark:text-zinc-100 tracking-tight italic">{req.full_name}</p>
+                    <p className="font-black text-zinc-900 dark:text-zinc-100 tracking-tight">{req.full_name}</p>
                     <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{req.email}</p>
                   </td>
                   <td className="px-6 py-5 max-w-md">
@@ -114,13 +111,13 @@ export default function ContactRequestsTable() {
                     <div className="flex justify-end items-center gap-2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
                       <button 
                         onClick={() => handleReply(req.email)}
-                        className="p-2.5 rounded-xl bg-green-600 text-white shadow-lg shadow-green-600/20 hover:scale-110 active:scale-95 transition-all"
+                        className="p-2.5 rounded bg-green-600 text-white shadow-lg shadow-green-600/20 hover:scale-110 active:scale-95 transition-all"
                       >
                         <Send size={14} />
                       </button>
                       <button 
                         onClick={() => handleDelete(req.id)} 
-                        className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 transition-all"
+                        className="p-2.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 transition-all"
                       >
                         <Trash2 size={14} />
                       </button>
@@ -129,7 +126,7 @@ export default function ContactRequestsTable() {
                 </tr>
               ))
             ) : (
-              <tr><td colSpan={5} className="p-32 text-center text-zinc-400 italic font-medium tracking-widest text-[10px] uppercase">Archive Clear</td></tr>
+              <tr><td colSpan={5} className="p-32 text-center text-zinc-400 font-medium tracking-widest text-[10px] uppercase">Archive Clear</td></tr>
             )}
           </tbody>
         </table>
@@ -141,11 +138,11 @@ export default function ContactRequestsTable() {
           <div key={req.id} className="bg-white dark:bg-zinc-900 p-6 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-5 animate-in slide-in-from-bottom-2 duration-500">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-2xl bg-green-50 dark:bg-green-500/10 flex items-center justify-center text-green-600">
-                  <User size={18} />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-black text-zinc-900 dark:text-zinc-100 leading-tight italic truncate">{req.full_name}</h3>
+                  <div className="h-10 w-10 rounded bg-green-50 dark:bg-green-500/10 flex items-center justify-center text-green-600">
+                    <User size={18} />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-black text-zinc-900 dark:text-zinc-100 leading-tight truncate">{req.full_name}</h3>
                   <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest truncate">{req.email}</p>
                 </div>
               </div>

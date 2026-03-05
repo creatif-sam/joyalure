@@ -42,7 +42,7 @@ export default async function ViewBlogPost({
         </Link>
         <Link 
           href={`/admin/blog/edit/${post.id}`}
-          className="flex items-center gap-2 bg-green-600 text-white px-4 md:px-5 py-2.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest hover:bg-green-700 transition-all shadow-lg shadow-green-600/20 active:scale-95"
+          className="flex items-center gap-2 bg-green-600 text-white px-4 md:px-5 py-2.5 rounded text-[10px] md:text-xs font-black uppercase tracking-widest hover:bg-green-700 transition-all shadow-lg shadow-green-600/20 active:scale-95"
         >
           <Pencil size={14} />
           Edit <span className="hidden sm:inline">Article</span>
@@ -79,7 +79,7 @@ export default async function ViewBlogPost({
               </span>
             )}
           </div>
-          <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-gray-900 dark:text-gray-100 leading-[1.1] italic uppercase">
+          <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-gray-900 dark:text-gray-100 leading-[1.1] uppercase">
             {post.title}
           </h1>
         </div>
@@ -107,12 +107,12 @@ export default async function ViewBlogPost({
 
       {/* ARTICLE CONTENT - Mobile Typography Refinement */}
       <article className="prose prose-zinc prose-sm md:prose-base lg:prose-xl dark:prose-invert max-w-none pb-20 md:pb-32
-        prose-headings:font-black prose-headings:tracking-tighter prose-headings:uppercase prose-headings:italic
+        prose-headings:font-black prose-headings:tracking-tighter prose-headings:uppercase
         prose-p:text-gray-600 dark:prose-p:text-zinc-400 prose-p:leading-relaxed
         prose-strong:text-zinc-900 dark:prose-strong:text-zinc-100
         prose-img:rounded-3xl prose-img:shadow-lg">
         <div 
-          dangerouslySetInnerHTML={{ __html: post.content || '<p className="italic">No content provided.</p>' }} 
+          dangerouslySetInnerHTML={{ __html: post.content || '<p className="">No content provided.</p>' }} 
         />
       </article>
     </div>

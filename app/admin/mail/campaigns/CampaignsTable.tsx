@@ -115,34 +115,34 @@ export default function CampaignsTable() {
       {/* MOBILE VIEW: Card List (Hidden on Desktop) */}
       <div className="grid grid-cols-1 gap-4 md:hidden">
         {campaigns.map((camp) => (
-          <div key={camp.id} className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-3xl p-5 shadow-sm space-y-4">
+          <div key={camp.id} className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] p-5 shadow-sm space-y-4">
             <div className="flex justify-between items-start">
               <div className="max-w-[70%]">
-                <h3 className="font-black text-zinc-900 dark:text-zinc-100 italic tracking-tight leading-tight">{camp.subject}</h3>
+                <h3 className="font-black text-zinc-900 dark:text-zinc-100 tracking-tight leading-tight">{camp.subject}</h3>
                 <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mt-1">REF: {camp.id.slice(0, 8)}</p>
               </div>
               <StatusBadge status={camp.status} />
             </div>
 
             <div className="flex items-center justify-between border-y dark:border-zinc-800 py-3">
-              <div className="flex items-center gap-2 font-black uppercase text-[9px] tracking-tight text-zinc-500 italic">
+              <div className="flex items-center gap-2 font-black uppercase text-[9px] tracking-tight text-zinc-500">
                 <RecipientIcon type={camp.recipient_type} /> {camp.recipient_type}
               </div>
-              <div className="text-[9px] font-black uppercase italic text-zinc-400">
+              <div className="text-[9px] font-black uppercase text-zinc-400">
                 {camp.sent_at ? new Date(camp.sent_at).toLocaleDateString() : "Draft"}
               </div>
             </div>
 
             <div className="flex gap-2">
               {camp.status === 'draft' && (
-                <button onClick={() => setConfirmSend(camp)} className="flex-1 flex items-center justify-center gap-2 py-3 bg-green-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 shadow-lg shadow-green-600/20">
+                <button onClick={() => setConfirmSend(camp)} className="flex-1 flex items-center justify-center gap-2 py-3 bg-green-600 text-white rounded font-black text-[10px] uppercase tracking-widest active:scale-95 shadow-lg shadow-green-600/20">
                   <Send size={14} /> Send
                 </button>
               )}
-              <button onClick={() => setViewCampaign(camp)} className="flex-1 flex items-center justify-center gap-2 py-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-zinc-500 font-black text-[10px] uppercase tracking-widest active:scale-95">
+              <button onClick={() => setViewCampaign(camp)} className="flex-1 flex items-center justify-center gap-2 py-3 bg-zinc-100 dark:bg-zinc-800 rounded text-zinc-500 font-black text-[10px] uppercase tracking-widest active:scale-95">
                 <Eye size={14} /> View
               </button>
-              <button onClick={() => setDeleteId(camp.id)} className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-zinc-400 hover:text-red-500 active:scale-95">
+              <button onClick={() => setDeleteId(camp.id)} className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded text-zinc-400 hover:text-red-500 active:scale-95">
                 <Trash2 size={14} />
               </button>
             </div>
@@ -156,7 +156,7 @@ export default function CampaignsTable() {
           <table className="w-full text-sm text-left border-collapse">
             <thead className="bg-zinc-50/50 dark:bg-zinc-950/50 text-[10px] font-black uppercase tracking-[0.15em] text-zinc-400 border-b dark:border-zinc-800">
               <tr>
-                <th className="px-8 py-6 italic font-black">Identity</th>
+                <th className="px-8 py-6 font-black">Identity</th>
                 <th className="px-4 py-6">Targeting</th>
                 <th className="px-4 py-6 text-center">Lifecycle</th>
                 <th className="px-4 py-6">Timestamp</th>
@@ -167,27 +167,27 @@ export default function CampaignsTable() {
               {campaigns.map((camp) => (
                 <tr key={camp.id} className="group hover:bg-zinc-50/80 dark:hover:bg-zinc-800/30 transition-all">
                   <td className="px-8 py-5">
-                    <div className="font-black text-zinc-900 dark:text-zinc-100 italic tracking-tight text-base">{camp.subject}</div>
+                    <div className="font-black text-zinc-900 dark:text-zinc-100 tracking-tight text-base">{camp.subject}</div>
                     <div className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mt-0.5">REF: {camp.id.slice(0, 8)}</div>
                   </td>
                   <td className="px-4 py-5 font-black uppercase text-[10px] tracking-tight text-zinc-500">
-                    <div className="flex items-center gap-2 italic">
+                    <div className="flex items-center gap-2">
                       <RecipientIcon type={camp.recipient_type} /> {camp.recipient_type}
                     </div>
                   </td>
                   <td className="px-4 py-5 text-center"><StatusBadge status={camp.status} /></td>
-                  <td className="px-4 py-5 text-[10px] font-black uppercase italic text-zinc-500">
+                  <td className="px-4 py-5 text-[10px] font-black uppercase text-zinc-500">
                     {camp.sent_at ? new Date(camp.sent_at).toLocaleDateString() : "Draft Archive"}
                   </td>
                   <td className="px-8 py-5 text-right">
                     <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
                       {camp.status === 'draft' && (
-                        <button onClick={() => setConfirmSend(camp)} className="p-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all active:scale-95 shadow-lg shadow-green-600/20">
+                        <button onClick={() => setConfirmSend(camp)} className="p-2.5 bg-green-600 text-white rounded hover:bg-green-700 transition-all active:scale-95 shadow-lg shadow-green-600/20">
                           <Send size={16} />
                         </button>
                       )}
-                      <button onClick={() => setViewCampaign(camp)} className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-zinc-500 hover:text-green-600 transition-all"><Eye size={16} /></button>
-                      <button onClick={() => setDeleteId(camp.id)} className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-zinc-500 hover:text-red-500 transition-all"><Trash2 size={16} /></button>
+                      <button onClick={() => setViewCampaign(camp)} className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded text-zinc-500 hover:text-green-600 transition-all"><Eye size={16} /></button>
+                      <button onClick={() => setDeleteId(camp.id)} className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded text-zinc-500 hover:text-red-500 transition-all"><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>

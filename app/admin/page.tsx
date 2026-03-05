@@ -57,7 +57,7 @@ export default function AdminDashboard() {
       {/* Header Section with Refresh for Mobile */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-0.5">
-          <h1 className="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-gray-100 italic uppercase">
+          <h1 className="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-gray-100 uppercase">
             Dashboard
           </h1>
           <p className="text-[10px] md:text-sm text-gray-500 dark:text-gray-400 font-medium uppercase tracking-widest">
@@ -67,7 +67,7 @@ export default function AdminDashboard() {
         <button 
           onClick={() => fetchDashboardMetrics(true)}
           disabled={refreshing}
-          className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-full active:rotate-180 transition-transform duration-500"
+          className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded active:rotate-180 transition-transform duration-500"
         >
           <RefreshCcw className={`h-4 w-4 text-zinc-500 ${refreshing ? 'animate-spin' : ''}`} />
         </button>
@@ -100,7 +100,7 @@ export default function AdminDashboard() {
       {/* Analytics Visualization: Optimized padding for small screens */}
       <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] overflow-hidden shadow-sm p-4 md:p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 italic">Sales Velocity</h3>
+          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Sales Velocity</h3>
           {(loading || refreshing) && <Loader2 className="h-3 w-3 animate-spin text-green-600" />}
         </div>
         <div className="h-[200px] md:h-auto">
@@ -110,7 +110,7 @@ export default function AdminDashboard() {
 
       {/* Data Table Section: Horizontal Scroll safety */}
       <div className="space-y-3">
-        <h2 className="text-sm md:text-lg font-black text-gray-900 dark:text-gray-100 italic uppercase px-1">
+        <h2 className="text-sm md:text-lg font-black text-gray-900 dark:text-gray-100 uppercase px-1">
           Recent Activity
         </h2>
         <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] shadow-sm overflow-hidden">

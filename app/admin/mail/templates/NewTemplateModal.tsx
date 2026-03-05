@@ -64,7 +64,7 @@ export default function NewTemplateModal({ open, onClose, editData }: NewTemplat
               <Sparkles className="h-5 w-5 text-green-600" />
             </div>
             <div>
-              <h2 className="text-lg md:text-xl font-black italic uppercase tracking-tighter dark:text-zinc-100">
+              <h2 className="text-lg md:text-xl font-black uppercase tracking-tighter dark:text-zinc-100">
                 {editData ? "Edit Template" : "New Template"}
               </h2>
               <p className="hidden xs:block text-[9px] font-black uppercase text-zinc-400 tracking-widest">Editorial Architect</p>
@@ -73,16 +73,16 @@ export default function NewTemplateModal({ open, onClose, editData }: NewTemplat
 
           <div className="flex items-center gap-2 md:gap-4">
             {/* View Toggle - Custom Joyalure Switch */}
-            <div className="flex bg-zinc-200 dark:bg-zinc-800 p-1 rounded-xl">
+            <div className="flex bg-zinc-200 dark:bg-zinc-800 p-1 rounded">
               <button 
                 onClick={() => setPreviewMode(false)} 
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${!previewMode ? "bg-white dark:bg-zinc-700 shadow-sm text-green-700 dark:text-green-400" : "text-zinc-500"}`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-[10px] font-black uppercase tracking-widest transition-all ${!previewMode ? "bg-white dark:bg-zinc-700 shadow-sm text-green-700 dark:text-green-400" : "text-zinc-500"}`}
               >
                 <Code size={14} /> <span className="hidden sm:inline">Editor</span>
               </button>
               <button 
                 onClick={() => setPreviewMode(true)} 
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${previewMode ? "bg-white dark:bg-zinc-700 shadow-sm text-green-700 dark:text-green-400" : "text-zinc-500"}`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-[10px] font-black uppercase tracking-widest transition-all ${previewMode ? "bg-white dark:bg-zinc-700 shadow-sm text-green-700 dark:text-green-400" : "text-zinc-500"}`}
               >
                 <Eye size={14} /> <span className="hidden sm:inline">Preview</span>
               </button>
@@ -138,11 +138,11 @@ export default function NewTemplateModal({ open, onClose, editData }: NewTemplat
 
         {/* FOOTER */}
         <div className="p-5 md:p-6 border-t dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 flex flex-col-reverse sm:flex-row justify-end gap-3">
-          <button onClick={onClose} className="px-6 py-3 border dark:border-zinc-800 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 font-black text-[10px] uppercase tracking-widest text-zinc-500 transition-all">Cancel</button>
+          <button onClick={onClose} className="px-6 py-3 border dark:border-zinc-800 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 font-black text-[10px] uppercase tracking-widest text-zinc-500 transition-all">Cancel</button>
           <button 
             onClick={handleSubmit} 
             disabled={isSubmitting} 
-            className="px-10 py-3 bg-green-600 text-white font-black text-[10px] uppercase tracking-widest rounded-xl shadow-xl shadow-green-600/20 flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50"
+            className="px-10 py-3 bg-green-600 text-white font-black text-[10px] uppercase tracking-widest rounded shadow-xl shadow-green-600/20 flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50"
           >
             {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save size={16} />}
             {editData ? "Archive Changes" : "Create Template"}

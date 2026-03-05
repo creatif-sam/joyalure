@@ -44,8 +44,6 @@ export default function SubscribersPage() {
   }, [])
 
   const deleteSubscriber = async (id: string) => {
-    if (!confirm("Remove this member from the newsletter archive?")) return
-    
     try {
       const { error } = await supabase
         .from("newsletter_subscribers")
@@ -54,9 +52,9 @@ export default function SubscribersPage() {
 
       if (error) throw error
       setSubscribers(prev => prev.filter(sub => sub.id !== id))
-      toast.success("Subscriber Purged")
+      toast.success("Subscriber removed successfully")
     } catch (err) {
-      toast.error("Deletion Failed")
+      toast.error("Deletion failed")
     }
   }
 
@@ -88,7 +86,7 @@ export default function SubscribersPage() {
           
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div className="space-y-1">
-              <h1 className="text-2xl md:text-3xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100 flex items-center gap-3 italic">
+              <h1 className="text-2xl md:text-3xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100 flex items-center gap-3">
                 <Users className="h-8 w-8 text-green-600" /> Newsletter <span className="text-green-600">Audience</span>
               </h1>
               <p className="text-xs md:text-sm text-zinc-500 font-medium tracking-tight">Managing {subscribers.length} verified editorial leads.</p>
@@ -96,7 +94,7 @@ export default function SubscribersPage() {
             
             <button 
               onClick={exportCSV}
-              className="w-full lg:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-sm hover:shadow-md active:scale-95 transition-all text-zinc-900 dark:text-zinc-100"
+              className="w-full lg:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded text-[10px] font-black uppercase tracking-widest shadow-sm hover:shadow-md active:scale-95 transition-all text-zinc-900 dark:text-zinc-100"
             >
               <Download className="h-3.5 w-3.5" /> Export Dataset
             </button>
@@ -142,7 +140,7 @@ export default function SubscribersPage() {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-zinc-50/50 dark:bg-zinc-950/50 text-zinc-400 text-[10px] uppercase tracking-widest font-black border-b dark:border-zinc-800">
-                  <th className="px-8 py-5 italic">Identity</th>
+                  <th className="px-8 py-5">Identity</th>
                   <th className="px-6 py-5">Joined Timestamp</th>
                   <th className="px-6 py-5">Lifecycle</th>
                   <th className="px-8 py-5 text-right">Control</th>
@@ -155,12 +153,12 @@ export default function SubscribersPage() {
                   <tr key={sub.id} className="hover:bg-green-50/30 dark:hover:bg-green-500/5 transition-all group">
                     <td className="px-8 py-5">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-green-50 dark:bg-green-500/10 flex items-center justify-center text-green-700 font-black italic">
+                        <div className="h-10 w-10 rounded bg-green-50 dark:bg-green-500/10 flex items-center justify-center text-green-700 font-black">
                           {sub.email[0].toUpperCase()}
                         </div>
                         <div className="min-w-0">
                           <p className="font-bold text-zinc-900 dark:text-zinc-100 truncate">{sub.email}</p>
-                          <p className="text-[10px] font-black text-zinc-400 uppercase tracking-tighter italic">Editorial Lead</p>
+                          <p className="text-[10px] font-black text-zinc-400 uppercase tracking-tighter">Editorial Lead</p>
                         </div>
                       </div>
                     </td>
@@ -171,13 +169,13 @@ export default function SubscribersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-5">
-                      <span className="px-3 py-1 rounded-full bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400 text-[9px] font-black uppercase tracking-widest border border-green-200 dark:border-green-900/30">
+                      <span className="px-3 py-1 rounded bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400 text-[9px] font-black uppercase tracking-widest border border-green-200 dark:border-green-900/30">
                         Verified
                       </span>
                     </td>
                     <td className="px-8 py-5">
                       <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
-                        <button onClick={() => deleteSubscriber(sub.id)} className="p-2.5 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 transition-all rounded-xl">
+                        <button onClick={() => deleteSubscriber(sub.id)} className="p-2.5 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 transition-all rounded">
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>

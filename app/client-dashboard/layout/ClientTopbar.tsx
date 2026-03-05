@@ -2,12 +2,13 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Bell, LogOut, User, Settings } from "lucide-react"
+import { LogOut, User, Settings } from "lucide-react"
 import { useUser } from "@/hooks/use-user"
 import { Avatar } from "@/components/ui/avatar"
 import { ThemeSwitcher } from "@/components/theme-switcher"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
+import NotificationsDropdown from "./NotificationsDropdown"
 
 export default function ClientTopBar() {
   const [open, setOpen] = useState(false)
@@ -42,13 +43,7 @@ export default function ClientTopBar() {
           <ThemeSwitcher />
 
           {/* Notifications */}
-          <button
-            className="relative text-green-700 dark:text-green-500 hover:opacity-80 transition-opacity"
-            aria-label="Notifications"
-          >
-            <Bell size={18} />
-            <span className="absolute -top-1 -right-1 h-2.5 w-2.5 bg-green-600 rounded-full ring-2 ring-white dark:ring-zinc-950" />
-          </button>
+          <NotificationsDropdown />
 
           {/* Profile Trigger */}
           <button

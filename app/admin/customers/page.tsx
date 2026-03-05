@@ -104,7 +104,7 @@ export default async function CustomersPage({ searchParams }: PageProps) {
             <div className="mt-4 flex justify-end">
               <Link 
                 href={getBaseUrl({ view: undefined })}
-                className="w-full md:w-auto text-center px-4 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-bold transition"
+                className="w-full md:w-auto text-center px-4 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded text-sm font-bold transition"
               >
                 Close
               </Link>
@@ -119,7 +119,7 @@ export default async function CustomersPage({ searchParams }: PageProps) {
           <h1 className="text-2xl font-black tracking-tight text-gray-900 dark:text-gray-100">Customer Base</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Manage and segment your community.</p>
         </div>
-        <div className="flex items-center self-start md:self-center gap-2 px-4 py-2 rounded-xl bg-green-50 dark:bg-green-500/10 border border-green-100 dark:border-green-500/20">
+        <div className="flex items-center self-start md:self-center gap-2 px-4 py-2 rounded bg-green-50 dark:bg-green-500/10 border border-green-100 dark:border-green-500/20">
           <Users className="h-4 w-4 text-green-600 dark:text-green-400" />
           <span className="text-sm font-black text-green-700 dark:text-green-400">
             {count ?? 0} total
@@ -128,7 +128,7 @@ export default async function CustomersPage({ searchParams }: PageProps) {
       </div>
 
       {/* FILTER FORM - Grid adjustments for mobile */}
-      <form className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-2xl shadow-sm">
+      <form className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded shadow-sm">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
@@ -136,14 +136,14 @@ export default async function CustomersPage({ searchParams }: PageProps) {
             name="q"
             defaultValue={query}
             placeholder="Search identity..."
-            className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100"
+            className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100"
           />
         </div>
 
         <select 
           name="country" 
           defaultValue={country}
-          className="w-full px-4 py-2.5 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100 appearance-none"
+          className="w-full px-4 py-2.5 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100 appearance-none"
         >
           <option value="">All Countries</option>
           {countryOptions.map(c => (
@@ -154,20 +154,20 @@ export default async function CustomersPage({ searchParams }: PageProps) {
         <select 
           name="sort" 
           defaultValue={sort}
-          className="w-full px-4 py-2.5 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100 appearance-none"
+          className="w-full px-4 py-2.5 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100 appearance-none"
         >
           <option value="created_at_desc">Newest First</option>
           <option value="total_spent_desc">Highest Spent</option>
           <option value="total_orders_desc">Most Orders</option>
         </select>
 
-        <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl transition-all shadow-lg shadow-green-600/20 active:scale-95">
+        <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded transition-all shadow-lg shadow-green-600/20 active:scale-95">
           Apply Filters
         </button>
       </form>
 
       {/* DATA VIEW */}
-      <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded overflow-hidden shadow-sm">
         
         {/* DESKTOP TABLE */}
         <div className="hidden md:block overflow-x-auto">

@@ -54,13 +54,13 @@ export default function ProductForm() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-3xl shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] shadow-sm overflow-hidden">
         {/* Header decoration */}
         <div className="h-2 bg-green-600 w-full" />
         
         <div className="p-8">
           <div className="flex items-center gap-3 mb-8">
-            <div className="p-2 bg-green-50 dark:bg-green-500/10 rounded-lg text-green-600">
+            <div className="p-2 bg-green-50 dark:bg-green-500/10 rounded text-green-600">
               <PackagePlus size={24} />
             </div>
             <div>
@@ -78,7 +78,7 @@ export default function ProductForm() {
                   name="name"
                   type="text"
                   required
-                  className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100"
+                  className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded px-4 py-3 text-sm focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100"
                   placeholder="e.g. Shea Butter Glow"
                 />
               </div>
@@ -89,7 +89,7 @@ export default function ProductForm() {
                 <select
                   name="category_id"
                   required
-                  className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100 appearance-none"
+                  className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded px-4 py-3 text-sm focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100 appearance-none"
                 >
                   <option value="">Select Category</option>
                   {categories.map((cat) => (
@@ -105,7 +105,7 @@ export default function ProductForm() {
                   name="slug"
                   type="text"
                   required
-                  className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100"
+                  className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded px-4 py-3 text-sm focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100"
                   placeholder="shea-butter-glow"
                 />
               </div>
@@ -118,7 +118,7 @@ export default function ProductForm() {
                   type="number"
                   required
                   min="0"
-                  className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100 font-mono"
+                  className="w-full bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded px-4 py-3 text-sm focus:ring-2 focus:ring-green-600 outline-none transition dark:text-gray-100 font-mono"
                   placeholder="2500"
                 />
               </div>
@@ -142,7 +142,7 @@ export default function ProductForm() {
                     }}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   />
-                  <div className="w-full bg-gray-50 dark:bg-zinc-950 border-2 border-dashed dark:border-zinc-800 rounded-xl px-4 py-3 text-sm flex items-center gap-2 text-gray-500">
+                  <div className="w-full bg-gray-50 dark:bg-zinc-950 border-2 border-dashed dark:border-zinc-800 rounded px-4 py-3 text-sm flex items-center gap-2 text-gray-500">
                     <ImageIcon size={18} />
                     <span>{imagePreview ? "Change Image" : "Upload File"}</span>
                   </div>
@@ -152,11 +152,11 @@ export default function ProductForm() {
 
             {/* PREVIEW BOX */}
             {imagePreview && (
-              <div className="p-4 bg-gray-50 dark:bg-zinc-950 rounded-2xl border dark:border-zinc-800 flex justify-center">
+              <div className="p-4 bg-gray-50 dark:bg-zinc-950 rounded border dark:border-zinc-800 flex justify-center">
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  className="h-40 w-40 object-cover rounded-xl shadow-md border-2 border-white dark:border-zinc-800"
+                  className="h-40 w-40 object-cover rounded shadow-md border-2 border-white dark:border-zinc-800"
                 />
               </div>
             )}
@@ -164,7 +164,7 @@ export default function ProductForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 shadow-lg shadow-green-600/20 active:scale-[0.98]"
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded transition-all disabled:opacity-50 shadow-lg shadow-green-600/20 active:scale-[0.98]"
             >
               {loading ? "Processing..." : "Deploy Product"}
             </button>

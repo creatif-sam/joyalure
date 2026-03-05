@@ -57,7 +57,7 @@ export function PreviewFooter() {
           <div>
             <p className="text-sm font-semibold text-gray-900">{settings.siteName}</p>
             <p className="text-sm text-gray-600 leading-relaxed mt-2">
-              {settings.footerAbout || "Chez Joy Gyamfi<br />Yes Tik, Texas<br />United States"}
+              {settings.footerAbout || "Chez Joy Gyamfi<br />Fort Worth, Texas<br />United States"}
             </p>
           </div>
 

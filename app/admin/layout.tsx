@@ -1,6 +1,7 @@
 import "@/app/globals.css"
 import AdminSidebar from "@/app/admin/components/admin/AdminSidebar"
 import AdminTopbar from "@/app/admin/components/admin/AdminTopbar"
+import { Toaster } from "sonner"
 
 // FIXED: Import from theme-provider, NOT theme-switcher
 import { ThemeProvider } from "@/components/theme-provider" 
@@ -18,6 +19,7 @@ export default function AdminLayout({
         enableSystem
         disableTransitionOnChange
       >
+        <Toaster position="top-right" richColors closeButton />
         <div className="flex min-h-screen bg-gray-50 dark:bg-zinc-950 transition-colors duration-300">
           <AdminSidebar />
 

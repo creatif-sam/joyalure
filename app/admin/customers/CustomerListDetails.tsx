@@ -43,7 +43,7 @@ export function CustomerListDetails({ customerId }: { customerId: string }) {
         </h3>
         
         {data?.cart.length === 0 ? (
-          <div className="py-6 border-2 border-dashed dark:border-zinc-800 rounded-2xl flex flex-col items-center justify-center">
+          <div className="py-6 border-2 border-dashed dark:border-zinc-800 rounded flex flex-col items-center justify-center">
             <p className="text-xs text-gray-400 dark:text-zinc-500 font-medium">No items in cart</p>
           </div>
         ) : (
@@ -51,10 +51,10 @@ export function CustomerListDetails({ customerId }: { customerId: string }) {
             {data?.cart.map(item => (
               <div 
                 key={item.id} 
-                className="group flex items-center justify-between p-3 rounded-xl border dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50 hover:bg-white dark:hover:bg-zinc-900 transition-all shadow-sm"
+                className="group flex items-center justify-between p-3 rounded border dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50 hover:bg-white dark:hover:bg-zinc-900 transition-all shadow-sm"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-lg bg-white dark:bg-zinc-800 border dark:border-zinc-700 flex items-center justify-center">
+                  <div className="h-10 w-10 rounded bg-white dark:bg-zinc-800 border dark:border-zinc-700 flex items-center justify-center">
                      <Package className="h-5 w-5 text-gray-400" />
                   </div>
                   <div>
@@ -79,7 +79,7 @@ export function CustomerListDetails({ customerId }: { customerId: string }) {
         </h3>
         
         {data?.wishlist.length === 0 ? (
-          <div className="py-6 border-2 border-dashed dark:border-zinc-800 rounded-2xl flex flex-col items-center justify-center">
+          <div className="py-6 border-2 border-dashed dark:border-zinc-800 rounded flex flex-col items-center justify-center">
             <p className="text-xs text-gray-400 dark:text-zinc-500 font-medium">Wishlist is empty</p>
           </div>
         ) : (
@@ -87,7 +87,7 @@ export function CustomerListDetails({ customerId }: { customerId: string }) {
             {data?.wishlist.map(item => (
               <div 
                 key={item.id} 
-                className="p-3 rounded-xl border dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col gap-1 hover:border-pink-200 dark:hover:border-pink-900/30 transition-colors"
+                className="p-3 rounded border dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col gap-1 hover:border-pink-200 dark:hover:border-pink-900/30 transition-colors"
               >
                 <span className="text-xs font-bold text-gray-900 dark:text-zinc-100 truncate">
                   {item.products.name}

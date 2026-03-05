@@ -40,7 +40,7 @@ export default async function EditBlogPage({
         </Link>
         
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-green-50 dark:bg-green-500/10 rounded-xl text-green-600">
+          <div className="p-2 bg-green-50 dark:bg-green-500/10 rounded text-green-600">
             <FileEdit size={24} />
           </div>
           <div>
@@ -48,7 +48,7 @@ export default async function EditBlogPage({
               Edit Article
             </h1>
             <p className="text-xs text-gray-500 font-medium">
-              Update content, visibility, and metadata for: <span className="text-green-600 italic">"{post.title}"</span>
+              Update content, visibility, and metadata for: <span className="text-green-600">"{post.title}"</span>
             </p>
           </div>
         </div>

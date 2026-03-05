@@ -53,7 +53,7 @@ export default function Footer() {
             <p className="text-sm font-semibold text-gray-900 dark:text-zinc-100">Joyalure.</p>
             <p className="text-sm text-gray-600 dark:text-zinc-400 leading-relaxed mt-2">
               Chez Joy Gyamfi<br />
-              Yes Tik, Texas<br />
+              Fort Worth, Texas<br />
               United States
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Address and copyright on the left */}
           <div className="flex flex-col md:flex-row md:items-center gap-2 text-xs text-gray-500 dark:text-zinc-500 md:order-1 order-2">
-            <span>Chez Joy Gyamfi, Yes Tik, Texas, United States</span>
+            <span>Chez Joy Gyamfi, Fort Worth, Texas, United States</span>
             <span className="hidden md:inline mx-2 text-gray-300 dark:text-zinc-800">|</span>
             <span>© 2026 Joyalure. All rights reserved.</span>
           </div>

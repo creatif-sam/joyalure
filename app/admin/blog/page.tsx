@@ -28,7 +28,6 @@ export default function AdminBlog() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Institutional Rule: Permanent deletion cannot be undone. Continue?')) return;
     const supabase = createClient();
     const { error } = await supabase.from('blog_posts').delete().eq('id', id);
     
@@ -36,7 +35,7 @@ export default function AdminBlog() {
       toast.error('Error deleting post');
     } else {
       setBlogPosts(posts => posts.filter(post => post.id !== id));
-      toast.success('Post removed from Joyalure ecosystem');
+      toast.success('Post deleted successfully');
     }
   };
 
@@ -70,12 +69,12 @@ export default function AdminBlog() {
       {/* HEADER SECTION */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-black tracking-tighter text-gray-900 dark:text-gray-100 uppercase italic">Editorial Manager</h1>
+          <h1 className="text-2xl md:text-3xl font-black tracking-tighter text-gray-900 dark:text-gray-100 uppercase">Editorial Manager</h1>
           <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-medium tracking-tight">Archive and publish skincare insights.</p>
         </div>
         <Link 
           href="/admin/blog/new" 
-          className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-4 md:py-3 rounded-2xl text-[10px] md:text-xs font-black uppercase tracking-widest transition-all shadow-xl shadow-green-600/20 active:scale-95"
+          className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-4 md:py-3 rounded text-[10px] md:text-xs font-black uppercase tracking-widest transition-all shadow-xl shadow-green-600/20 active:scale-95"
         >
           <Plus size={18} strokeWidth={3} />
           New Article
@@ -118,7 +117,7 @@ export default function AdminBlog() {
                   <td className="px-4 py-4">
                     <button 
                       onClick={() => togglePublished(post.id, post.published)}
-                      className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
+                      className={`px-4 py-1.5 rounded text-[10px] font-black uppercase tracking-widest transition-all ${
                         post.published 
                         ? "bg-green-600 text-white shadow-lg shadow-green-600/20" 
                         : "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-500"

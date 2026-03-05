@@ -13,8 +13,8 @@ export default function CategoryList({ categories }: { categories: any[] }) {
   // 1. Check if the array exists and has items
   if (!categories || categories.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-3xl bg-gray-50/50">
-        <div className="p-4 bg-white rounded-full shadow-sm mb-4 text-gray-400">
+      <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-[2rem] bg-gray-50/50">
+        <div className="p-4 bg-white rounded shadow-sm mb-4 text-gray-400">
           <FolderSearch size={32} />
         </div>
         <h3 className="text-sm font-bold text-gray-900">No collections found</h3>
@@ -26,8 +26,6 @@ export default function CategoryList({ categories }: { categories: any[] }) {
   }
 
   async function handleDelete(id: string, name: string) {
-    if (!confirm(`Are you sure you want to delete the "${name}" collection?`)) return
-
     const { error } = await supabase.from("categories").delete().eq("id", id)
 
     if (error) {

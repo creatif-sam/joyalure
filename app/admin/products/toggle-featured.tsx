@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useTransition } from "react"
+import { toast } from "sonner"
 
 export default function ToggleFeatured({
   productId,
@@ -30,7 +31,9 @@ export default function ToggleFeatured({
 
       if (!res.ok) {
         setEnabled(enabled)
-        alert("Failed to update featured status")
+        toast.error("Failed to update featured status")
+      } else {
+        toast.success("Featured status updated")
       }
     })
   }

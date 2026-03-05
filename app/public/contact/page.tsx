@@ -90,7 +90,7 @@ export default function ContactPage() {
                 </p>
                 <p className="text-gray-800 dark:text-zinc-200 font-medium leading-relaxed">
                   Chez Joy Gyamfi<br />
-                  Yes Tik, Texas<br />
+                  Fort Worth, Texas<br />
                   United States
                 </p>
               </div>

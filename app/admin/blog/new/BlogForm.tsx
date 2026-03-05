@@ -106,7 +106,7 @@ export function BlogForm() {
                 <Rocket size={24} />
             </div>
             <div>
-              <CardTitle className="text-2xl font-black tracking-tighter dark:text-zinc-100 uppercase italic">Editorial Desk</CardTitle>
+              <CardTitle className="text-2xl font-black tracking-tighter dark:text-zinc-100 uppercase">Editorial Desk</CardTitle>
               <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Institutional Content Manager</p>
             </div>
         </div>
@@ -121,11 +121,11 @@ export function BlogForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-3">
               <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Article Headline</Label>
-              <Input name="title" required className="bg-zinc-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-2xl py-7 px-6 text-lg font-bold focus:ring-green-600" placeholder="The Ritual of Radiance..." />
+              <Input name="title" required className="bg-zinc-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded py-7 px-6 text-lg font-bold focus:ring-green-600" placeholder="The Ritual of Radiance..." />
             </div>
             <div className="space-y-3">
               <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">SEO Description</Label>
-              <Input name="meta_description" className="bg-zinc-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-2xl py-7 px-6" placeholder="Discover the science behind..." />
+              <Input name="meta_description" className="bg-zinc-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded py-7 px-6" placeholder="Discover the science behind..." />
             </div>
           </div>
 
@@ -134,8 +134,8 @@ export function BlogForm() {
             <div className="flex flex-col items-center justify-center border-2 border-dashed dark:border-zinc-800 rounded-[2.5rem] p-10 bg-zinc-50/50 dark:bg-zinc-950/50 hover:border-green-600/50 transition-all group">
               {imagePreview ? (
                 <div className="relative w-full max-w-2xl h-64 mb-6">
-                  <img src={imagePreview} className="w-full h-full object-cover rounded-3xl border dark:border-zinc-800 shadow-2xl" alt="Preview" />
-                  <button type="button" onClick={() => setImagePreview(null)} className="absolute -top-3 -right-3 p-3 bg-red-600 text-white rounded-full shadow-xl hover:scale-110 transition-transform">
+                  <img src={imagePreview} className="w-full h-full object-cover rounded-[2rem] border dark:border-zinc-800 shadow-2xl" alt="Preview" />
+                  <button type="button" onClick={() => setImagePreview(null)} className="absolute -top-3 -right-3 p-3 bg-red-600 text-white rounded shadow-xl hover:scale-110 transition-transform">
                     <XCircle size={20} />
                   </button>
                 </div>
@@ -177,7 +177,7 @@ export function BlogForm() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-6 pt-10 border-t dark:border-zinc-800">
-            <Button type="submit" disabled={loading} className="h-20 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-black uppercase tracking-widest text-xs rounded-3xl flex-1 transition-all hover:bg-zinc-200">
+            <Button type="submit" disabled={loading} className="h-20 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-black uppercase tracking-widest text-xs rounded flex-1 transition-all hover:bg-zinc-200">
               <Save className="mr-2 h-5 w-5" /> {loading ? 'Saving...' : 'Archive Draft'}
             </Button>
             
@@ -191,7 +191,7 @@ export function BlogForm() {
                 } else form?.reportValidity();
               }}
               disabled={loading} 
-              className="h-20 bg-green-600 hover:bg-green-700 text-white font-black uppercase tracking-widest text-xs rounded-3xl shadow-xl shadow-green-600/20 flex-1 transition-all active:scale-95"
+              className="h-20 bg-green-600 hover:bg-green-700 text-white font-black uppercase tracking-widest text-xs rounded shadow-xl shadow-green-600/20 flex-1 transition-all active:scale-95"
             >
               <Rocket className="mr-2 h-5 w-5" /> Publish to Joyalure
             </Button>

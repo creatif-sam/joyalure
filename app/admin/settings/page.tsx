@@ -16,6 +16,7 @@ import { PreviewHero } from "@/components/preview/PreviewHero"
 import { PreviewFooter } from "@/components/preview/PreviewFooter"
 import { PreviewFeatures } from "@/components/preview/PreviewFeatures"
 import { PreviewCategories } from "@/components/preview/PreviewCategories"
+import { toast } from "sonner"
 
 function SettingsContent() {
   const [loading, setLoading] = useState(true)
@@ -75,13 +76,13 @@ function SettingsContent() {
 
       if (error) {
         console.error(`Error saving ${section} settings:`, error)
-        alert(`Failed to save ${section} settings`)
+        toast.error(`Failed to save ${section} settings`)
       } else {
-        alert(`${section.charAt(0).toUpperCase() + section.slice(1)} settings saved successfully!`)
+        toast.success(`${section.charAt(0).toUpperCase() + section.slice(1)} settings saved successfully`)
       }
     } catch (error) {
       console.error(`Error saving ${section} settings:`, error)
-      alert(`Failed to save ${section} settings`)
+      toast.error(`Failed to save ${section} settings`)
     } finally {
       setSaving(null)
     }

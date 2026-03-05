@@ -120,9 +120,9 @@ export default function CategoryForm() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-gray-900 text-white p-2.5 rounded-xl hover:bg-black transition disabled:opacity-50"
+            className="bg-gray-900 text-white p-2.5 rounded hover:bg-black transition disabled:opacity-50"
           >
-            {loading ? <div className="animate-spin h-4 w-4 border-2 border-white/20 border-t-white rounded-full" /> : <Plus size={18} />}
+            {loading ? <div className="animate-spin h-4 w-4 border-2 border-white/20 border-t-white rounded" /> : <Plus size={18} />}
           </button>
         </div>
       </form>
