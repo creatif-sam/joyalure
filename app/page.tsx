@@ -219,6 +219,28 @@ export default function JoyAllureComingSoon() {
             status={status} 
             fadeInUp={fadeInUp} 
           />
+
+          {/* Shea Butter Store Button */}
+          <motion.div variants={fadeInUp} className="mt-8">
+            <a
+              href="/shea-butter-store"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-600 hover:via-yellow-600 hover:to-amber-700 text-white font-bold rounded-full shadow-2xl hover:shadow-amber-500/50 transition-all duration-300 hover:scale-105 group"
+            >
+              <span className="text-2xl">🧴</span>
+              <div className="text-left">
+                <p className="text-sm uppercase tracking-wider font-black">Shop Now</p>
+                <p className="text-xs opacity-90">Premium Shea Butter Products</p>
+              </div>
+              <svg 
+                className="w-5 h-5 group-hover:translate-x-1 transition-transform" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+          </motion.div>
         </motion.div>
       </div>
 

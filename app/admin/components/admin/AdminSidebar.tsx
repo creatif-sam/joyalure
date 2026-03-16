@@ -16,6 +16,8 @@ import {
   Menu,
   Mail,
   X,
+  Sparkles,
+  ShoppingBag,
 } from "lucide-react"
 
 const menu = [
@@ -30,6 +32,13 @@ const menu = [
       { name: "Mail", href: "/admin/mail", icon: Mail },
       { name: "Customers", href: "/admin/customers", icon: Users },
       { name: "Blogs", href: "/admin/blog", icon: FileText },
+    ],
+  },
+  {
+    section: "Shea Butter Store",
+    items: [
+      { name: "Manage Products", href: "/admin/shea-butter/products", icon: Sparkles },
+      { name: "View Orders", href: "/admin/shea-butter/orders", icon: ShoppingBag },
     ],
   },
   {
