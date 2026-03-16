@@ -100,7 +100,7 @@ export default function InventoryPageUI({ products, lowStockProducts }: Inventor
         </div>
         <Button 
           onClick={() => { setEditMode(false); setOpen(true); }}
-          className="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white rounded-xl px-6 py-6 md:py-2 shadow-lg shadow-green-600/20 active:scale-95 transition-all font-bold uppercase text-[10px] tracking-widest"
+          className="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white rounded px-6 py-6 md:py-2 shadow-lg shadow-green-600/20 active:scale-95 transition-all font-bold uppercase text-[10px] tracking-widest"
         >
           <PackageOpen className="mr-2 h-4 w-4" />
           Update Inventory
@@ -108,18 +108,18 @@ export default function InventoryPageUI({ products, lowStockProducts }: Inventor
       </div>
 
       {/* FILTER BAR */}
-      <div className="flex flex-col md:flex-row gap-3 p-3 md:p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-2xl shadow-sm">
+      <div className="flex flex-col md:flex-row gap-3 p-3 md:p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded shadow-sm">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
             type="text"
             placeholder="Search collections..."
-            className="w-full pl-10 pr-4 py-3 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100"
+            className="w-full pl-10 pr-4 py-3 text-sm bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded outline-none focus:ring-2 focus:ring-green-600 transition dark:text-gray-100"
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
         </div>
-        <div className="flex items-center gap-2 px-3 bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded-xl">
+        <div className="flex items-center gap-2 px-3 bg-gray-50 dark:bg-zinc-950 border dark:border-zinc-800 rounded">
           <Filter size={14} className="text-gray-400" />
           <select
             className="w-full md:w-auto py-3 text-[10px] font-black uppercase tracking-widest bg-transparent outline-none cursor-pointer dark:text-gray-100 pr-2"
@@ -135,7 +135,7 @@ export default function InventoryPageUI({ products, lowStockProducts }: Inventor
       </div>
 
       {/* INVENTORY LISTING */}
-      <Card className="border dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm rounded-3xl overflow-hidden">
+      <Card className="border dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm rounded overflow-hidden">
         <CardHeader className="border-b dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-950/50 p-4 md:p-6">
           <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-2">
             <TrendingUp size={14} className="text-green-500" />
@@ -154,7 +154,7 @@ export default function InventoryPageUI({ products, lowStockProducts }: Inventor
               return (
                 <div key={product.id} className="group flex flex-col md:flex-row md:items-center justify-between p-4 md:p-6 hover:bg-gray-50 dark:hover:bg-zinc-800/40 transition-colors gap-4">
                   <div className="flex items-center space-x-4 md:space-x-5">
-                    <div className="h-12 w-12 md:h-14 md:w-14 shrink-0 rounded-2xl overflow-hidden border dark:border-zinc-800 bg-gray-100 dark:bg-zinc-950">
+                    <div className="h-12 w-12 md:h-14 md:w-14 shrink-0 rounded overflow-hidden border dark:border-zinc-800 bg-gray-100 dark:bg-zinc-950">
                       <img src={product.image_url || "/placeholder.jpg"} alt="" className="object-cover h-full w-full" />
                     </div>
                     <div className="min-w-0 flex-1">
@@ -180,7 +180,7 @@ export default function InventoryPageUI({ products, lowStockProducts }: Inventor
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="rounded-xl h-10 w-10 md:h-10 md:w-10 bg-gray-100 md:bg-transparent dark:bg-zinc-800 md:dark:bg-transparent hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all active:scale-90"
+                      className="rounded h-10 w-10 md:h-10 md:w-10 bg-gray-100 md:bg-transparent dark:bg-zinc-800 md:dark:bg-transparent hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all active:scale-90"
                       onClick={() => {
                         setEditMode(true);
                         setSelectedProduct(product.id);
@@ -210,7 +210,7 @@ export default function InventoryPageUI({ products, lowStockProducts }: Inventor
           } 
         }}
       >
-        <DialogContent className="w-[95vw] md:max-w-md dark:bg-zinc-950 dark:border-zinc-800 rounded-[2rem] border shadow-2xl p-6">
+        <DialogContent className="w-[95vw] md:max-w-md dark:bg-zinc-950 dark:border-zinc-800 rounded border shadow-2xl p-6">
           <DialogHeader className="text-left">
             <DialogTitle className="text-xl font-black uppercase italic dark:text-gray-100">
               {editMode ? "Adjust Stock" : "New Entry"}
@@ -224,7 +224,7 @@ export default function InventoryPageUI({ products, lowStockProducts }: Inventor
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Product Identity</label>
               <select
-                className="w-full bg-zinc-50 dark:bg-zinc-900 border dark:border-zinc-800 rounded-xl p-4 text-sm font-bold outline-none dark:text-gray-100 focus:ring-2 focus:ring-green-600 transition appearance-none"
+                className="w-full bg-zinc-50 dark:bg-zinc-900 border dark:border-zinc-800 rounded p-4 text-sm font-bold outline-none dark:text-gray-100 focus:ring-2 focus:ring-green-600 transition appearance-none"
                 value={selectedProduct}
                 onChange={e => setSelectedProduct(e.target.value)}
                 required
@@ -241,7 +241,7 @@ export default function InventoryPageUI({ products, lowStockProducts }: Inventor
               <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Unit Quantity</label>
               <input
                 type="number"
-                className="w-full bg-zinc-50 dark:bg-zinc-900 border dark:border-zinc-800 rounded-xl p-4 text-sm font-black dark:text-gray-100 outline-none focus:ring-2 focus:ring-green-600 transition"
+                className="w-full bg-zinc-50 dark:bg-zinc-900 border dark:border-zinc-800 rounded p-4 text-sm font-black dark:text-gray-100 outline-none focus:ring-2 focus:ring-green-600 transition"
                 value={stock}
                 onChange={e => setStock(Number(e.target.value))}
                 min={0}
@@ -253,7 +253,7 @@ export default function InventoryPageUI({ products, lowStockProducts }: Inventor
               <Button type="button" variant="ghost" onClick={() => setOpen(false)} className="w-full md:w-auto text-[10px] font-black uppercase tracking-widest dark:text-zinc-500">
                 Cancel
               </Button>
-              <Button type="submit" disabled={submitting} className="w-full md:w-auto bg-green-600 text-white rounded-xl px-10 py-6 md:py-2 font-black uppercase text-[10px] tracking-widest hover:bg-green-700 shadow-lg shadow-green-600/20 transition-all active:scale-95">
+              <Button type="submit" disabled={submitting} className="w-full md:w-auto bg-green-600 text-white rounded px-10 py-6 md:py-2 font-black uppercase text-[10px] tracking-widest hover:bg-green-700 shadow-lg shadow-green-600/20 transition-all active:scale-95">
                 {submitting ? "Syncing..." : "Commit Entry"}
               </Button>
             </div>

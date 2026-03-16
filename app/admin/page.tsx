@@ -5,7 +5,7 @@ import DashboardStatCard from "@/app/admin/components/admin/DashboardStatsCard";
 import DashboardChartPlaceholder from "@/app/admin/components/admin/DashboardChartPlaceholder";
 import RecentOrdersTable from "@/app/admin/components/admin/RecentOrdersTable";
 import { createClient } from "@/lib/supabase/client";
-import { Loader2, RefreshCcw } from "lucide-react";
+import { Loader2, RefreshCcw, MousePointerClick, TrendingUp, Smartphone, Globe } from "lucide-react";
 
 export default function AdminDashboard() {
   const supabase = createClient();
@@ -17,6 +17,8 @@ export default function AdminDashboard() {
     customers: 0,
     conversion: "3.2%",
   });
+  const [tiktokStats, setTiktokStats] = useState<any>(null);
+  const [loadingTiktok, setLoadingTiktok] = useState(true);
 
   const fetchDashboardMetrics = useCallback(async (isSilent = false) => {
     try {
@@ -46,9 +48,27 @@ export default function AdminDashboard() {
     }
   }, [supabase]);
 
+  const fetchTiktokStats = useCallback(async () => {
+    try {
+      setLoadingTiktok(true);
+      const response = await fetch('/api/tiktok-clicks');
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setTiktokStats(result.data);
+        }
+      }
+    } catch (error) {
+      console.error("TikTok Stats Error:", error);
+    } finally {
+      setLoadingTiktok(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchDashboardMetrics();
-  }, [fetchDashboardMetrics]);
+    fetchTiktokStats();
+  }, [fetchDashboardMetrics, fetchTiktokStats]);
 
   return (
     // Institutional Note: Reduced horizontal padding on mobile (px-4) vs desktop (px-0 if parent has it)
@@ -106,6 +126,196 @@ export default function AdminDashboard() {
         <div className="h-[200px] md:h-auto">
           <DashboardChartPlaceholder />
         </div>
+      </div>
+
+      {/* TikTok Shop Button Analytics */}
+      <div className="bg-gradient-to-br from-pink-50 via-purple-50 to-green-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-green-950/20 border-2 border-pink-200 dark:border-pink-800 rounded-[2rem] overflow-hidden shadow-lg p-4 md:p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl">
+              <MousePointerClick className="h-5 w-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-sm md:text-base font-black uppercase tracking-wide text-gray-900 dark:text-gray-100">
+                TikTok Shop Clicks
+              </h3>
+              <p className="text-[9px] md:text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Button Performance Analytics
+              </p>
+            </div>
+          </div>
+          <button 
+            onClick={fetchTiktokStats}
+            disabled={loadingTiktok}
+            className="p-2 bg-white dark:bg-zinc-800 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors"
+          >
+            <RefreshCcw className={`h-4 w-4 text-pink-600 dark:text-pink-400 ${loadingTiktok ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+
+        {loadingTiktok ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-pink-600" />
+          </div>
+        ) : tiktokStats ? (
+          <div className="space-y-6">
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-pink-200 dark:border-pink-900">
+                <div className="flex items-center gap-2 mb-2">
+                  <MousePointerClick className="h-4 w-4 text-pink-600" />
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-gray-500">Total</p>
+                </div>
+                <p className="text-2xl md:text-3xl font-black text-gray-900 dark:text-gray-100">
+                  {tiktokStats.summary?.total_clicks || 0}
+                </p>
+                <p className="text-[8px] text-gray-400 mt-1">All-time clicks</p>
+              </div>
+
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-purple-200 dark:border-purple-900">
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingUp className="h-4 w-4 text-purple-600" />
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-gray-500">24 Hours</p>
+                </div>
+                <p className="text-2xl md:text-3xl font-black text-gray-900 dark:text-gray-100">
+                  {tiktokStats.summary?.clicks_last_24h || 0}
+                </p>
+                <p className="text-[8px] text-gray-400 mt-1">Last day</p>
+              </div>
+
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-green-200 dark:border-green-900">
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingUp className="h-4 w-4 text-green-600" />
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-gray-500">7 Days</p>
+                </div>
+                <p className="text-2xl md:text-3xl font-black text-gray-900 dark:text-gray-100">
+                  {tiktokStats.summary?.clicks_last_7d || 0}
+                </p>
+                <p className="text-[8px] text-gray-400 mt-1">Last week</p>
+              </div>
+
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-blue-200 dark:border-blue-900">
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingUp className="h-4 w-4 text-blue-600" />
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-gray-500">30 Days</p>
+                </div>
+                <p className="text-2xl md:text-3xl font-black text-gray-900 dark:text-gray-100">
+                  {tiktokStats.summary?.clicks_last_30d || 0}
+                </p>
+                <p className="text-[8px] text-gray-400 mt-1">Last month</p>
+              </div>
+            </div>
+
+            {/* Device & Geographic Breakdown */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* Device Stats */}
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-gray-200 dark:border-zinc-800">
+                <div className="flex items-center gap-2 mb-4">
+                  <Smartphone className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                    Device Types
+                  </h4>
+                </div>
+                <div className="space-y-2">
+                  {tiktokStats.deviceStats && Object.entries(tiktokStats.deviceStats).length > 0 ? (
+                    Object.entries(tiktokStats.deviceStats).map(([device, count]: [string, any]) => (
+                      <div key={device} className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600 dark:text-gray-400">{device}</span>
+                        <div className="flex items-center gap-2">
+                          <div className="w-20 bg-gray-200 dark:bg-zinc-800 rounded-full h-2">
+                            <div 
+                              className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full"
+                              style={{ 
+                                width: `${(count / (tiktokStats.summary?.clicks_last_30d || 1)) * 100}%` 
+                              }}
+                            />
+                          </div>
+                          <span className="text-sm font-bold text-gray-900 dark:text-gray-100 min-w-[2rem] text-right">
+                            {count}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500 italic">No device data yet</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Country Stats */}
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-gray-200 dark:border-zinc-800">
+                <div className="flex items-center gap-2 mb-4">
+                  <Globe className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                    Geographic Distribution
+                  </h4>
+                </div>
+                <div className="space-y-2">
+                  {tiktokStats.countryStats && Object.entries(tiktokStats.countryStats).length > 0 ? (
+                    Object.entries(tiktokStats.countryStats)
+                      .sort((a: any, b: any) => b[1] - a[1])
+                      .slice(0, 5)
+                      .map(([country, count]: [string, any]) => (
+                        <div key={country} className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600 dark:text-gray-400">
+                            {country === 'Unknown' ? '🌍 Unknown' : `🌍 ${country}`}
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <div className="w-20 bg-gray-200 dark:bg-zinc-800 rounded-full h-2">
+                              <div 
+                                className="bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full"
+                                style={{ 
+                                  width: `${(count / (tiktokStats.summary?.clicks_last_30d || 1)) * 100}%` 
+                                }}
+                              />
+                            </div>
+                            <span className="text-sm font-bold text-gray-900 dark:text-gray-100 min-w-[2rem] text-right">
+                              {count}
+                            </span>
+                          </div>
+                        </div>
+                      ))
+                  ) : (
+                    <p className="text-sm text-gray-500 italic">No geographic data yet</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Click Trend Chart */}
+            {tiktokStats.clicksByDate && Object.keys(tiktokStats.clicksByDate).length > 0 && (
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-gray-200 dark:border-zinc-800">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-4">
+                  Last 30 Days Trend
+                </h4>
+                <div className="flex items-end gap-1 h-32">
+                  {Object.entries(tiktokStats.clicksByDate)
+                    .slice(-30)
+                    .map(([date, count]: [string, any]) => {
+                      const maxClicks = Math.max(...Object.values(tiktokStats.clicksByDate).map((c: any) => c || 0));
+                      const height = maxClicks > 0 ? (count / maxClicks) * 100 : 0;
+                      return (
+                        <div 
+                          key={date} 
+                          className="flex-1 bg-gradient-to-t from-pink-500 to-purple-500 rounded-t min-w-[4px] hover:opacity-75 transition-opacity group relative"
+                          style={{ height: `${height}%` }}
+                          title={`${date}: ${count} clicks`}
+                        >
+                          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[8px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                            {new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}: {count}
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-500 dark:text-gray-400">No data available</p>
+          </div>
+        )}
       </div>
 
       {/* Data Table Section: Horizontal Scroll safety */}

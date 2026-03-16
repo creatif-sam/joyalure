@@ -33,6 +33,26 @@ export default function JoyAllureComingSoon() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isDuplicateOpen, setIsDuplicateOpen] = useState(false);
 
+  const handleTikTokClick = async () => {
+    try {
+      // Track the click
+      await fetch('/api/tiktok-clicks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+        }),
+      });
+    } catch (error) {
+      console.error('Error tracking click:', error);
+    }
+    
+    // Open TikTok store in new tab
+    window.open('https://www.tiktok.com/t/ZP9d2oDRfBQnj-3aTfO/', '_blank');
+  };
+
   const slides = [
     "/images/skin-care-1.jpg",
     "/images/skin-1.png",
@@ -90,6 +110,41 @@ export default function JoyAllureComingSoon() {
         </div>
       </div>
 
+      {/* Add custom styles for animations */}
+      <style jsx>{`
+        @keyframes pulse-glow {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.5),
+                        0 0 40px rgba(168, 85, 247, 0.3),
+                        0 0 60px rgba(34, 197, 94, 0.2);
+          }
+          50% {
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.8),
+                        0 0 60px rgba(168, 85, 247, 0.6),
+                        0 0 90px rgba(34, 197, 94, 0.4);
+          }
+        }
+        
+        @keyframes ping-slow {
+          0% {
+            transform: scale(1);
+            opacity: 0.8;
+          }
+          50% {
+            transform: scale(1.1);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 0;
+          }
+        }
+        
+        .animate-ping-slow {
+          animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+      `}</style>
+
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 min-h-screen">
         
         {/* Left: Timer Column */}
@@ -101,6 +156,38 @@ export default function JoyAllureComingSoon() {
             Launching Soon
           </motion.p>
           <CountdownTimer fadeInUp={fadeInUp} />
+          
+          {/* TikTok Shop Button - Under Timer */}
+          <motion.div
+            variants={fadeInUp}
+            className="mt-8 md:mt-10"
+          >
+            <button
+              onClick={handleTikTokClick}
+              className="group relative w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-pink-500 via-purple-500 to-green-500 rounded-full overflow-hidden shadow-2xl hover:shadow-pink-500/50 transition-all duration-300 hover:scale-105"
+              style={{
+                animation: 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-pink-600 via-purple-600 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative flex items-center justify-center gap-2 md:gap-3">
+                <span className="text-white font-bold text-sm md:text-base uppercase tracking-wider drop-shadow-lg">
+                  🛍️ Shop on TikTok
+                </span>
+                <svg 
+                  className="w-4 h-4 md:w-5 md:h-5 text-white group-hover:translate-x-1 transition-transform" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+              
+              {/* Animated ring effect */}
+              <span className="absolute inset-0 rounded-full border-4 border-white/30 animate-ping-slow" />
+            </button>
+          </motion.div>
         </motion.div>
 
         {/* Right: Content Column */}

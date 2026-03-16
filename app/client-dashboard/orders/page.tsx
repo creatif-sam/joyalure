@@ -74,11 +74,11 @@ export default async function OrdersPage() {
 function OrderCard({ order }: { order: any }) {
   return (
     /* Adjusted p-4 for mobile to maximize content space */
-    <div className="bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded-2xl p-4 md:p-6 space-y-5 shadow-sm hover:shadow-md transition-all group">
+    <div className="bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded p-4 md:p-6 space-y-5 shadow-sm hover:shadow-md transition-all group">
 
       <div className="flex flex-row justify-between items-start gap-4">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 shrink-0 rounded-xl bg-gray-50 dark:bg-zinc-900 flex items-center justify-center text-gray-400 dark:text-zinc-500">
+          <div className="h-10 w-10 shrink-0 rounded bg-gray-50 dark:bg-zinc-900 flex items-center justify-center text-gray-400 dark:text-zinc-500">
             <Package size={20} />
           </div>
           <div className="min-w-0">
@@ -157,7 +157,7 @@ function OrderStatus({ status }: { status: string }) {
 
 function EmptyOrders() {
   return (
-    <div className="bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded-2xl p-8 md:p-12 text-center shadow-sm mx-4">
+    <div className="bg-white dark:bg-zinc-950 border border-green-100 dark:border-zinc-800 rounded p-8 md:p-12 text-center shadow-sm mx-4">
       <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-50 dark:bg-zinc-900 text-gray-400 mb-4">
         <Package size={20} />
       </div>
