@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create notification using admin client
-    const { data: notification, error } = await supabaseAdmin
+    const { data: notification, error } = await supabaseAdmin()
       .from("notifications")
       .insert({
         user_id: userId,
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
         message,
         data,
         read: false,
-      } as any)
+      })
       .select("id")
       .single()
 

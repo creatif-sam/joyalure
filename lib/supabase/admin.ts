@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js"
 
 let _client: ReturnType<typeof createClient> | null = null
 
-const getSupabaseAdmin = () => {
+export const supabaseAdmin = (): ReturnType<typeof createClient> => {
   if (_client) return _client
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -15,9 +15,3 @@ const getSupabaseAdmin = () => {
   _client = createClient(url, key)
   return _client
 }
-
-export const supabaseAdmin = new Proxy({} as ReturnType<typeof createClient>, {
-  get(_target, prop) {
-    return (getSupabaseAdmin() as any)[prop]
-  },
-})

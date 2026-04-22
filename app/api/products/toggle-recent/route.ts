@@ -3,9 +3,9 @@ import { supabaseAdmin } from "@/lib/supabase/admin"
 
 export async function POST(req: Request) {
   const { productId, isRecent } = await req.json()
-  const { error } = await supabaseAdmin
+  const { error } = await supabaseAdmin()
     .from("products")
-    .update({ is_recent: isRecent } as any)
+    .update({ is_recent: isRecent })
     .eq("id", productId)
 
   if (error) {

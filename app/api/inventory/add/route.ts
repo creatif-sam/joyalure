@@ -14,10 +14,10 @@ export async function POST(req: Request) {
       )
     }
 
-    const { error } = await supabaseAdmin
+    const { error } = await supabaseAdmin()
       .from("inventory")
       .upsert(
-        { product_id, stock } as any,
+        { product_id, stock },
         { onConflict: "product_id" }
       )
 
