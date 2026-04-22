@@ -3,6 +3,7 @@ import Navigation from "@/components/navigation/Navigation"
 import Footer from "@/components/Footer"
 import CartDrawer from "@/components/cart-drawer"
 import CurrencySwitcher from "@/components/CurrencySwitcher"
+import AnalyticsProvider from "@/components/AnalyticsProvider"
 
 export const metadata: Metadata = {
   title: "Joyalure Organic Skincare",
@@ -16,6 +17,7 @@ export default function PublicLayout({
 }) {
   return (
     <>
+      <AnalyticsProvider />
       <Navigation />
       {children}
       <Footer />

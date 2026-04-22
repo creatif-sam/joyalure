@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useCartStore } from "@/lib/cart-store"
 import { useCurrencyStore } from "@/lib/currency-store"
+import { useAnalytics } from "@/hooks/use-analytics"
 import { toast } from "sonner"
 import Image from "next/image"
 import { ShieldCheck, ShoppingBag } from "lucide-react"
@@ -11,8 +12,13 @@ export default function CheckoutPage() {
   const [mounted, setMounted] = useState(false)
   const { items, subtotal, checkout, isCheckingOut } = useCartStore()
   const { currency, rate } = useCurrencyStore()
+  const { trackCheckoutStart, trackClick } = useAnalytics()
 
-  useEffect(() => { setMounted(true) }, [])
+  useEffect(() => {
+    setMounted(true)
+    // Track that the user landed on checkout page
+    trackCheckoutStart()
+  }, [trackCheckoutStart])
 
   const symbol = currency === "USD" ? "$" : "₵"
 
@@ -31,6 +37,7 @@ export default function CheckoutPage() {
 
   const handleShopifyCheckout = async () => {
     try {
+      trackClick("shopify_checkout", "/public/check-out")
       toast.loading("Redirecting to secure checkout…", { id: "shopify-checkout" })
       await checkout()
       // If redirect happened, toast will never resolve – that's expected.

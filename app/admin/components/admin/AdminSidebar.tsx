@@ -18,6 +18,7 @@ import {
   X,
   Sparkles,
   ShoppingBag,
+  BarChart3,
 } from "lucide-react"
 
 const menu = [
@@ -25,6 +26,7 @@ const menu = [
     section: "Main",
     items: [
       { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+      { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
       { name: "Blogs", href: "/admin/blog", icon: FileText },
       { name: "Customers", href: "/admin/customers", icon: Users },
       { name: "Inventory", href: "/admin/inventory", icon: Boxes },
