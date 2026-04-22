@@ -1,11 +1,265 @@
-"use client";
+"use client"
 
-import { useEffect, useState, useCallback } from "react";
-import DashboardStatCard from "@/app/admin/components/admin/DashboardStatsCard";
-import DashboardChartPlaceholder from "@/app/admin/components/admin/DashboardChartPlaceholder";
-import RecentOrdersTable from "@/app/admin/components/admin/RecentOrdersTable";
-import { createClient } from "@/lib/supabase/client";
-import { Loader2, RefreshCcw, MousePointerClick, TrendingUp, Smartphone, Globe } from "lucide-react";
+import { useEffect, useState, useCallback } from "react"
+import DashboardStatCard from "@/app/admin/components/admin/DashboardStatsCard"
+import RecentOrdersTable from "@/app/admin/components/admin/RecentOrdersTable"
+import { createClient } from "@/lib/supabase/client"
+import {
+  RefreshCcw,
+  DollarSign,
+  ShoppingCart,
+  Users,
+  MousePointerClick,
+  TrendingUp,
+  Smartphone,
+  Globe,
+  Loader2,
+} from "lucide-react"
+
+type TiktokStats = {
+  summary: {
+    total_clicks: number
+    clicks_last_24h: number
+    clicks_last_7d: number
+    clicks_last_30d: number
+  }
+  deviceStats: Record<string, number>
+  countryStats: Record<string, number>
+  clicksByDate: Record<string, number>
+}
+
+export default function AdminDashboard() {
+  const supabase = createClient()
+  const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+  const [stats, setStats] = useState({
+    revenue: 0,
+    orders: 0,
+    customers: 0,
+  })
+  const [tiktokStats, setTiktokStats] = useState<TiktokStats | null>(null)
+  const [loadingTiktok, setLoadingTiktok] = useState(true)
+
+  const fetchDashboardMetrics = useCallback(async (silent = false) => {
+    try {
+      if (!silent) setLoading(true)
+      else setRefreshing(true)
+
+      const [ordersRes, customersRes] = await Promise.all([
+        supabase.from("orders").select("total_amount"),
+        supabase.from("customers").select("id", { count: "exact", head: true }),
+      ])
+
+      const totalRevenue = (ordersRes.data ?? []).reduce(
+        (acc, o) => acc + (o.total_amount || 0),
+        0
+      )
+
+      setStats({
+        revenue: totalRevenue / 100,
+        orders: (ordersRes.data ?? []).length,
+        customers: customersRes.count ?? 0,
+      })
+    } catch (e) {
+      console.error("Dashboard fetch error:", e)
+    } finally {
+      setLoading(false)
+      setRefreshing(false)
+    }
+  }, [supabase])
+
+  const fetchTiktokStats = useCallback(async () => {
+    try {
+      setLoadingTiktok(true)
+      const res = await fetch("/api/tiktok-clicks")
+      if (res.ok) {
+        const json = await res.json()
+        if (json.success) setTiktokStats(json.data)
+      }
+    } catch (e) {
+      console.error("TikTok fetch error:", e)
+    } finally {
+      setLoadingTiktok(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchDashboardMetrics()
+    fetchTiktokStats()
+  }, [fetchDashboardMetrics, fetchTiktokStats])
+
+  return (
+    <div className="space-y-6 pb-10">
+
+      {/* Page Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Overview</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Joyalure store performance</p>
+        </div>
+        <button
+          onClick={() => fetchDashboardMetrics(true)}
+          disabled={refreshing}
+          className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-md hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors disabled:opacity-50"
+        >
+          <RefreshCcw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
+          Refresh
+        </button>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+        <DashboardStatCard
+          title="Total Revenue"
+          value={loading ? "—" : `$${stats.revenue.toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
+          icon={<DollarSign className="h-4 w-4" />}
+        />
+        <DashboardStatCard
+          title="Total Orders"
+          value={loading ? "—" : stats.orders.toLocaleString()}
+          icon={<ShoppingCart className="h-4 w-4" />}
+        />
+        <DashboardStatCard
+          title="Customers"
+          value={loading ? "—" : stats.customers.toLocaleString()}
+          icon={<Users className="h-4 w-4" />}
+        />
+      </div>
+
+      {/* TikTok Analytics */}
+      <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-sm overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-zinc-800">
+          <div className="flex items-center gap-2">
+            <MousePointerClick className="h-4 w-4 text-pink-500" />
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200">TikTok Shop Clicks</h2>
+          </div>
+          <button
+            onClick={fetchTiktokStats}
+            disabled={loadingTiktok}
+            className="flex items-center gap-1.5 px-2.5 py-1 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-zinc-700 rounded-md hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
+          >
+            <RefreshCcw className={`h-3 w-3 ${loadingTiktok ? "animate-spin" : ""}`} />
+            Refresh
+          </button>
+        </div>
+
+        <div className="p-5">
+          {loadingTiktok ? (
+            <div className="flex justify-center py-10">
+              <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+            </div>
+          ) : tiktokStats ? (
+            <div className="space-y-5">
+              {/* Click Counts */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                {[
+                  { label: "All Time", value: tiktokStats.summary?.total_clicks ?? 0, icon: <MousePointerClick className="h-3.5 w-3.5" /> },
+                  { label: "24 Hours",  value: tiktokStats.summary?.clicks_last_24h ?? 0, icon: <TrendingUp className="h-3.5 w-3.5" /> },
+                  { label: "7 Days",    value: tiktokStats.summary?.clicks_last_7d ?? 0,  icon: <TrendingUp className="h-3.5 w-3.5" /> },
+                  { label: "30 Days",   value: tiktokStats.summary?.clicks_last_30d ?? 0, icon: <TrendingUp className="h-3.5 w-3.5" /> },
+                ].map((item) => (
+                  <div key={item.label} className="bg-gray-50 dark:bg-zinc-800 rounded-md p-3 border border-gray-100 dark:border-zinc-700">
+                    <div className="flex items-center gap-1.5 text-gray-400 mb-1.5">{item.icon}<span className="text-[11px] font-medium uppercase tracking-wider">{item.label}</span></div>
+                    <p className="text-xl font-bold text-gray-900 dark:text-gray-100 tabular-nums">{item.value.toLocaleString()}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Device & Country */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="border border-gray-100 dark:border-zinc-800 rounded-md p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Smartphone className="h-3.5 w-3.5 text-gray-400" />
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Device Types</h4>
+                  </div>
+                  {Object.keys(tiktokStats.deviceStats ?? {}).length > 0 ? (
+                    <div className="space-y-2">
+                      {Object.entries(tiktokStats.deviceStats).map(([device, count]) => {
+                        const total = tiktokStats.summary?.clicks_last_30d || 1
+                        return (
+                          <div key={device} className="flex items-center justify-between gap-3">
+                            <span className="text-sm text-gray-600 dark:text-gray-400 min-w-[80px]">{device}</span>
+                            <div className="flex-1 bg-gray-100 dark:bg-zinc-700 rounded-full h-1.5">
+                              <div className="bg-pink-500 h-1.5 rounded-full" style={{ width: `${Math.min((count / total) * 100, 100)}%` }} />
+                            </div>
+                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 tabular-nums">{count}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-400">No data yet</p>
+                  )}
+                </div>
+
+                <div className="border border-gray-100 dark:border-zinc-800 rounded-md p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Globe className="h-3.5 w-3.5 text-gray-400" />
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Top Countries</h4>
+                  </div>
+                  {Object.keys(tiktokStats.countryStats ?? {}).length > 0 ? (
+                    <div className="space-y-2">
+                      {Object.entries(tiktokStats.countryStats)
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 5)
+                        .map(([country, count]) => {
+                          const total = tiktokStats.summary?.clicks_last_30d || 1
+                          return (
+                            <div key={country} className="flex items-center justify-between gap-3">
+                              <span className="text-sm text-gray-600 dark:text-gray-400 min-w-[80px] truncate">{country}</span>
+                              <div className="flex-1 bg-gray-100 dark:bg-zinc-700 rounded-full h-1.5">
+                                <div className="bg-green-500 h-1.5 rounded-full" style={{ width: `${Math.min((count / total) * 100, 100)}%` }} />
+                              </div>
+                              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 tabular-nums">{count}</span>
+                            </div>
+                          )
+                        })}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-400">No data yet</p>
+                  )}
+                </div>
+              </div>
+
+              {/* 30-Day Bar Chart */}
+              {Object.keys(tiktokStats.clicksByDate ?? {}).length > 0 && (
+                <div className="border border-gray-100 dark:border-zinc-800 rounded-md p-4">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">Last 30 Days</h4>
+                  <div className="flex items-end gap-0.5 h-24">
+                    {Object.entries(tiktokStats.clicksByDate)
+                      .slice(-30)
+                      .map(([date, count]) => {
+                        const max = Math.max(...Object.values(tiktokStats.clicksByDate))
+                        const pct = max > 0 ? (count / max) * 100 : 0
+                        return (
+                          <div
+                            key={date}
+                            className="flex-1 bg-pink-400 dark:bg-pink-500 rounded-sm min-w-[3px] hover:bg-pink-500 dark:hover:bg-pink-400 transition-colors group relative"
+                            style={{ height: `${Math.max(pct, 2)}%` }}
+                            title={`${new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}: ${count}`}
+                          />
+                        )
+                      })}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-400 py-8 text-center">No TikTok data available</p>
+          )}
+        </div>
+      </div>
+
+      {/* Recent Orders */}
+      <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-sm overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-zinc-800">
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200">Recent Orders</h2>
+        </div>
+        <RecentOrdersTable />
+      </div>
+    </div>
+  )
+}
 
 export default function AdminDashboard() {
   const supabase = createClient();

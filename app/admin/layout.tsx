@@ -20,14 +20,14 @@ export default function AdminLayout({
         disableTransitionOnChange
       >
         <Toaster position="top-right" richColors closeButton />
-        <div className="flex min-h-screen bg-gray-50 dark:bg-zinc-950 transition-colors duration-300">
+        <div className="flex min-h-screen bg-gray-50 dark:bg-zinc-950 transition-colors duration-150">
           <AdminSidebar />
 
-          <div className="flex-1 flex flex-col ml-3">
+          <div className="flex-1 flex flex-col min-w-0">
             <AdminTopbar />
             
-            <main className="flex-1 p-6 lg:p-10">
-              <div className="max-w-6xl mx-auto">
+            <main className="flex-1 p-5 lg:p-8">
+              <div className="max-w-5xl mx-auto">
                 {children}
               </div>
             </main>

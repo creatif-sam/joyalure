@@ -4,66 +4,56 @@ import { useState } from "react"
 import { Search, X } from "lucide-react"
 import { ThemeSwitcher } from "@/components/theme-switcher"
 import { UserDropdown } from "./UserDropdown"
-import NotificationsDropdown from "./NotificationsDropdown" 
+import NotificationsDropdown from "./NotificationsDropdown"
 
 export default function AdminTopbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-30 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b transition-colors duration-300">
-      <div className="flex items-center justify-between px-4 md:px-6 py-3 gap-2">
-        
-        {/* Mobile: Invisible spacer for centering if sidebar trigger exists */}
-        <div className="w-8 lg:hidden md:block hidden" />
+    <header className="sticky top-0 z-30 bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800 transition-colors duration-150">
+      <div className="flex items-center justify-between px-4 md:px-6 py-2.5 gap-3">
 
-        {/* Search Logic: Expandable on Mobile, Static on Desktop */}
+        {/* Spacer for mobile menu button */}
+        <div className="w-8 lg:hidden" />
+
+        {/* Search */}
         <div className={`
-          ${isSearchOpen ? 'absolute inset-0 z-40 bg-white dark:bg-zinc-950 px-4 flex items-center' : 'relative flex-1 max-w-xl'}
-          transition-all duration-300
+          ${isSearchOpen ? "absolute inset-0 z-40 bg-white dark:bg-zinc-900 px-4 flex items-center border-b border-gray-200 dark:border-zinc-800" : "relative flex-1 max-w-sm"}
+          transition-all duration-200
         `}>
-          <Search className={`
-            absolute left-3 md:left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 
-            ${isSearchOpen ? 'left-7' : ''}
-          `} />
-          
+          <Search className={`absolute ${isSearchOpen ? "left-7" : "left-3"} top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400`} />
           <input
             type="text"
-            placeholder={isSearchOpen ? "Search..." : "Search items..."}
+            placeholder="Search..."
             className={`
-              w-full rounded border bg-gray-50 dark:bg-zinc-900 pl-10 pr-4 py-2 text-sm 
-              focus:outline-none focus:ring-2 focus:ring-green-500 transition-all
-              ${!isSearchOpen ? 'hidden md:block' : 'block'}
+              w-full rounded-md border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800
+              pl-9 pr-4 py-1.5 text-sm text-gray-900 dark:text-gray-100
+              placeholder:text-gray-400
+              focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent
+              transition-all
+              ${!isSearchOpen ? "hidden md:block" : "block"}
             `}
           />
-
-          {/* Mobile Search Close Trigger */}
           {isSearchOpen && (
-            <button 
-              onClick={() => setIsSearchOpen(false)}
-              className="ml-2 p-2 text-zinc-500 lg:hidden"
-            >
-              <X size={20} />
+            <button onClick={() => setIsSearchOpen(false)} className="ml-2 p-1 text-zinc-500 lg:hidden">
+              <X size={18} />
             </button>
           )}
         </div>
 
-        {/* Action Group */}
-        <div className={`flex items-center gap-2 md:gap-3 ${isSearchOpen ? 'hidden' : 'flex'}`}>
-          
-          {/* Mobile Search Toggle */}
-          <button 
+        {/* Right actions */}
+        <div className={`flex items-center gap-1.5 ${isSearchOpen ? "hidden" : "flex"}`}>
+          <button
             onClick={() => setIsSearchOpen(true)}
-            className="md:hidden h-9 w-9 flex items-center justify-center rounded-xl hover:bg-gray-100 dark:hover:bg-zinc-900 transition-colors"
+            className="md:hidden h-8 w-8 flex items-center justify-center rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
           >
-            <Search className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+            <Search className="h-4 w-4 text-gray-500 dark:text-gray-400" />
           </button>
 
           <ThemeSwitcher />
-
-          {/* Notifications */}
           <NotificationsDropdown />
 
-          <div className="h-5 w-[1px] bg-gray-200 dark:bg-zinc-800 mx-0.5 md:mx-1" />
+          <div className="h-5 w-px bg-gray-200 dark:bg-zinc-700 mx-1" />
 
           <UserDropdown />
         </div>
