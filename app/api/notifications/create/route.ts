@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
         message,
         data,
         read: false,
-      })
+      } as any)
       .select("id")
       .single()
 

@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   const { productId, isRecent } = await req.json()
   const { error } = await supabaseAdmin
     .from("products")
-    .update({ is_recent: isRecent })
+    .update({ is_recent: isRecent } as any)
     .eq("id", productId)
 
   if (error) {
