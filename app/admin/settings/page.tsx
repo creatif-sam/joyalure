@@ -55,7 +55,7 @@ function SettingsContent() {
       footer: ["footerAbout", "footerCopyright"],
       theme: ["primaryColor", "secondaryColor", "accentColor"],
     }
-    const data = Object.fromEntries((sectionKeys[section] ?? []).map((k) => [k, (settings as Record<string, unknown>)[k]]))
+    const data = Object.fromEntries((sectionKeys[section] ?? []).map((k) => [k, (settings as unknown as Record<string, unknown>)[k]]))
     setSaving(section)
     try {
       const { error } = await supabase.from("settings").upsert({ key: `${section}_settings`, value: data })
