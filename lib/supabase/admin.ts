@@ -2,7 +2,8 @@ import { createClient } from "@supabase/supabase-js"
 
 let _client: ReturnType<typeof createClient> | null = null
 
-export const supabaseAdmin = (): ReturnType<typeof createClient> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const supabaseAdmin = (): any => {
   if (_client) return _client
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
