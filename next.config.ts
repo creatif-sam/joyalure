@@ -13,6 +13,16 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      // Shopify CDN – product images hosted on Shopify
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com',
+      },
+      // Shopify store domain – used for checkout redirects & assets
+      {
+        protocol: 'https',
+        hostname: 'fegyg1-bm.myshopify.com',
+      },
     ],
   },
 
@@ -32,8 +42,7 @@ const nextConfig: NextConfig = {
             value:
               "default-src 'self'; " +
               "script-src 'self' 'unsafe-inline' https://kit.fontawesome.com https://ka-f.fontawesome.com; " +
-              // FIX: Added wss: for real-time and ensured storage uploads aren't blocked
-              "connect-src 'self' https://bmuinasqpiqsakpbhueq.supabase.co wss://bmuinasqpiqsakpbhueq.supabase.co https://ka-f.fontawesome.com; " +
+              "connect-src 'self' https://bmuinasqpiqsakpbhueq.supabase.co wss://bmuinasqpiqsakpbhueq.supabase.co https://ka-f.fontawesome.com https://fegyg1-bm.myshopify.com; " +
               // FIX: Added 'blob:' to allow the editor's local image previews
               "img-src 'self' data: blob: https://bmuinasqpiqsakpbhueq.supabase.co https:; " +
               "style-src 'self' 'unsafe-inline'; " +

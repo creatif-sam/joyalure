@@ -1,25 +1,13 @@
 import { NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
+import { getShopifyProducts } from "@/lib/shopify"
 
 export async function GET() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-
-  const { data, error } = await supabase
-    .from("products")
-    .select("id, title, price, image_url")
-    .eq("active", true)
-    .eq("is_featured", true)
-    .order("created_at", { ascending: false })
-
-  if (error) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    )
+  try {
+    const all = await getShopifyProducts(50)
+    const featured = all.filter((p) => p.is_featured)
+    return NextResponse.json(featured)
+  } catch (error) {
+    console.error("[GET /api/products/featured]", error)
+    return NextResponse.json({ error: "Failed to fetch featured products" }, { status: 500 })
   }
-
-  return NextResponse.json(data)
 }

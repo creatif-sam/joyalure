@@ -1,33 +1,12 @@
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { getShopifyProducts } from "@/lib/shopify"
 
 export async function GET() {
-  const supabase = createServerSupabaseClient({
-    cookies: await cookies()
-  })
-
-  const { data, error } = await supabase
-    .from("products")
-    .select(`
-      id,
-      title,
-      description,
-      price,
-      image_url,
-      is_featured,
-      is_recent,
-      created_at
-    `)
-    .eq("active", true)
-    .order("created_at", { ascending: false })
-
-  if (error) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    )
+  try {
+    const products = await getShopifyProducts(50)
+    return NextResponse.json(products)
+  } catch (error) {
+    console.error("[GET /api/products]", error)
+    return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 })
   }
-
-  return NextResponse.json(data)
 }
