@@ -60,7 +60,7 @@ export default async function BlogPostDetail({ params }: Props) {
 
       {post.main_image && (
         <div className="max-w-5xl mx-auto px-6 mb-16">
-          <div className="aspect-video rounded-2xl overflow-hidden border dark:border-zinc-800 shadow-xl">
+          <div className="aspect-video rounded-md overflow-hidden border dark:border-zinc-800 shadow-xl">
             <img src={post.main_image} alt={post.title} className="w-full h-full object-cover" />
           </div>
         </div>

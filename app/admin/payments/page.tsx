@@ -50,7 +50,7 @@ export default async function AdminPayments() {
           </h1>
           <p className="text-xs md:text-sm font-medium text-zinc-500">Track and manage Joyalure financial transactions.</p>
         </div>
-        <Button className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white rounded-xl shadow-lg shadow-green-600/20 active:scale-95 transition-all">
+        <Button className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white rounded-md shadow-lg shadow-green-600/20 active:scale-95 transition-all">
           <CreditCard className="mr-2 h-4 w-4" />
           Process Payments
         </Button>
@@ -64,7 +64,7 @@ export default async function AdminPayments() {
       </div>
 
       {/* RECENT PAYMENTS */}
-      <Card className="rounded-[2rem] border-zinc-100 dark:border-zinc-800 overflow-hidden shadow-2xl shadow-zinc-200/50 dark:shadow-none">
+      <Card className="rounded-md border-zinc-100 dark:border-zinc-800 overflow-hidden shadow-2xl shadow-zinc-200/50 dark:shadow-none">
         <CardHeader className="p-6 md:p-8 border-b dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50">
           <CardTitle className="text-lg font-black uppercase tracking-tight italic">Recent Activity</CardTitle>
         </CardHeader>
@@ -77,7 +77,7 @@ export default async function AdminPayments() {
                   className="flex flex-col sm:flex-row sm:items-center justify-between p-5 md:p-6 hover:bg-green-50/30 dark:hover:bg-green-500/5 transition-all gap-4"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 shrink-0 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center text-zinc-500">
+                    <div className="h-12 w-12 shrink-0 bg-zinc-100 dark:bg-zinc-800 rounded-md flex items-center justify-center text-zinc-500">
                       <CreditCard size={20} />
                     </div>
                     <div className="min-w-0">
@@ -85,7 +85,7 @@ export default async function AdminPayments() {
                         ${payment.amount} <span className="text-[10px] font-black uppercase text-zinc-400">{payment.currency}</span>
                       </h3>
                       <p className="text-xs text-zinc-500 truncate max-w-[200px] md:max-w-none">
-                        {payment.user_email ?? "Anonymous"} • {payment.payment_method}
+                        {payment.user_email ?? "Anonymous"} â€¢ {payment.payment_method}
                       </p>
                       <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter mt-0.5">
                         {new Date(payment.created_at).toLocaleDateString()}
@@ -94,7 +94,7 @@ export default async function AdminPayments() {
                   </div>
                   
                   <div className="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-0 pt-3 sm:pt-0">
-                    <Badge variant="outline" className={`rounded-lg px-3 py-1 text-[10px] font-black uppercase tracking-widest border-0 ${getStatusColor(payment.status)}`}>
+                    <Badge variant="outline" className={`rounded-md px-3 py-1 text-[10px] font-black uppercase tracking-widest border-0 ${getStatusColor(payment.status)}`}>
                       {payment.status}
                     </Badge>
                     <button className="p-2 text-zinc-300 hover:text-green-600 transition-colors">
@@ -115,7 +115,7 @@ export default async function AdminPayments() {
 
 function StatCard({ label, value, icon: Icon, desc, color }: any) {
   return (
-    <Card className="rounded-[1.5rem] border-zinc-100 dark:border-zinc-800 shadow-sm">
+    <Card className="rounded-md border-zinc-100 dark:border-zinc-800 shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">{label}</CardTitle>
         <Icon className={`h-4 w-4 ${color}`} />

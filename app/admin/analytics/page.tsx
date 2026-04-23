@@ -108,12 +108,12 @@ export default function AnalyticsPage() {
         </div>
         <div className="flex items-center gap-2">
           {/* Range picker */}
-          <div className="flex bg-gray-100 dark:bg-zinc-800 rounded-full p-1 gap-1">
+          <div className="flex bg-gray-100 dark:bg-zinc-800 rounded-md p-1 gap-1">
             {RANGES.map((r) => (
               <button
                 key={r.value}
                 onClick={() => setRange(r.value)}
-                className={`px-3 py-1 rounded-full text-xs font-bold transition-colors ${
+                className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${
                   range === r.value
                     ? "bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow"
                     : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
@@ -126,7 +126,7 @@ export default function AnalyticsPage() {
           <button
             onClick={fetchData}
             disabled={loading}
-            className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-full active:rotate-180 transition-transform duration-500"
+            className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-md active:rotate-180 transition-transform duration-500"
           >
             <RefreshCcw className={`h-4 w-4 text-zinc-500 ${loading ? "animate-spin" : ""}`} />
           </button>
@@ -135,12 +135,12 @@ export default function AnalyticsPage() {
 
       {/* Setup notice */}
       {noTable && (
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-6">
+        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-md p-6">
           <h3 className="font-bold text-amber-800 dark:text-amber-400 mb-2">Database table not set up yet</h3>
           <p className="text-sm text-amber-700 dark:text-amber-300 mb-3">
             Create an <code className="bg-amber-100 dark:bg-amber-900 px-1 rounded">analytics_events</code> table in your Supabase project to start collecting data.
           </p>
-          <pre className="bg-amber-100 dark:bg-amber-900/50 text-amber-900 dark:text-amber-200 rounded-xl p-4 text-xs overflow-x-auto whitespace-pre-wrap">
+          <pre className="bg-amber-100 dark:bg-amber-900/50 text-amber-900 dark:text-amber-200 rounded-md p-4 text-xs overflow-x-auto whitespace-pre-wrap">
 {`create table analytics_events (
   id           uuid default gen_random_uuid() primary key,
   event_type   text not null,

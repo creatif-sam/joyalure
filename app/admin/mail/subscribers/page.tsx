@@ -116,7 +116,7 @@ export default function SubscribersPage() {
         </div>
 
         {/* MAIN CONTAINER */}
-        <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-zinc-200/50 dark:shadow-none overflow-hidden">
+        <div className="bg-white dark:bg-zinc-900 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-zinc-200/50 dark:shadow-none overflow-hidden">
           
           {/* SEARCH & ACTIONS */}
           <div className="p-4 md:p-6 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-4">
@@ -127,10 +127,10 @@ export default function SubscribersPage() {
                 placeholder="Search via email identity..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-green-500/20 outline-none text-sm font-medium transition-all"
+                className="w-full pl-12 pr-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-md focus:ring-2 focus:ring-green-500/20 outline-none text-sm font-medium transition-all"
               />
             </div>
-            <button onClick={fetchSubscribers} className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-xl hover:text-green-600 transition-colors shrink-0">
+            <button onClick={fetchSubscribers} className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-md hover:text-green-600 transition-colors shrink-0">
               <Loader2 className={`h-5 w-5 ${loading ? 'animate-spin text-green-600' : 'text-zinc-400'}`} />
             </button>
           </div>
@@ -193,7 +193,7 @@ export default function SubscribersPage() {
             ) : filteredSubscribers.map((sub) => (
               <div key={sub.id} className="p-5 flex items-center justify-between gap-4 active:bg-zinc-50 transition-colors">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="h-10 w-10 shrink-0 rounded-xl bg-green-50 dark:bg-green-500/10 flex items-center justify-center text-green-700 font-black italic">
+                  <div className="h-10 w-10 shrink-0 rounded-md bg-green-50 dark:bg-green-500/10 flex items-center justify-center text-green-700 font-black italic">
                     {sub.email[0].toUpperCase()}
                   </div>
                   <div className="min-w-0">
@@ -228,7 +228,7 @@ export default function SubscribersPage() {
 
 function StatCard({ label, value, icon: Icon, color }: any) {
   return (
-    <div className="bg-white dark:bg-zinc-900 p-5 md:p-6 rounded-[1.5rem] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col justify-between">
+    <div className="bg-white dark:bg-zinc-900 p-5 md:p-6 rounded-md border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col justify-between">
       <div className="flex items-center justify-between mb-2">
         <p className="text-[9px] md:text-[10px] text-zinc-400 uppercase tracking-[0.2em] font-black">{label}</p>
         <Icon className={`h-4 w-4 ${color} opacity-40`} />

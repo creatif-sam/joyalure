@@ -60,12 +60,12 @@ export default function SpecialOffers() {
               SAVE 20%
             </span>
             <Countdown endDate="2026-12-31T23:59:59" />
-            <h3 className="text-white text-3xl font-black tracking-tighter uppercase italic mt-6 mb-6">
+            <h3 className="text-white text-3xl font-black tracking-tighter uppercase mt-6 mb-6">
               Special Offer
             </h3>
             <Link
               href="/products?offer=20"
-              className="inline-block bg-yellow-400 text-black px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-green-600 hover:text-white transition-all active:scale-95 shadow-lg shadow-yellow-400/20 hover:shadow-green-600/20"
+              className="inline-block bg-yellow-400 text-black px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-md hover:bg-green-600 hover:text-white transition-all active:scale-95 shadow-lg shadow-yellow-400/20 hover:shadow-green-600/20"
             >
               Shop Now
             </Link>
@@ -87,12 +87,12 @@ export default function SpecialOffers() {
               SAVE 30%
             </span>
             <Countdown endDate="2026-11-30T23:59:59" />
-            <h3 className="text-white text-3xl font-black tracking-tighter uppercase italic mt-6 mb-6">
+            <h3 className="text-white text-3xl font-black tracking-tighter uppercase mt-6 mb-6">
               Special Offer
             </h3>
             <Link
               href="/products?offer=30"
-              className="inline-block bg-yellow-400 text-black px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-green-600 hover:text-white transition-all active:scale-95 shadow-lg shadow-yellow-400/20 hover:shadow-green-600/20"
+              className="inline-block bg-yellow-400 text-black px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-md hover:bg-green-600 hover:text-white transition-all active:scale-95 shadow-lg shadow-yellow-400/20 hover:shadow-green-600/20"
             >
               Shop Now
             </Link>

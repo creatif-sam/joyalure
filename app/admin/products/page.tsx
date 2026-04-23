@@ -100,7 +100,7 @@ export default function AdminProductsPageWrapper() {
           <div className="py-20 text-center text-zinc-500 italic text-sm">No products found.</div>
         ) : (
           products.map(product => (
-            <div key={product.id} className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] p-5 shadow-sm space-y-4">
+            <div key={product.id} className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-md p-5 shadow-sm space-y-4">
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="font-black uppercase text-zinc-900 dark:text-zinc-100">{product.title}</h3>
@@ -144,7 +144,7 @@ export default function AdminProductsPageWrapper() {
 
 function StatusBadge({ active }: { active: boolean }) {
   return (
-    <span className={`inline-flex px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest ${
+    <span className={`inline-flex px-3 py-1.5 rounded-md text-[9px] font-black uppercase tracking-widest ${
       active 
       ? "bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-400 border border-green-100/50" 
       : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400"
@@ -155,7 +155,7 @@ function StatusBadge({ active }: { active: boolean }) {
 }
 
 function ActionButtons({ product, onView, mobile = false }: { product: Product, onView: () => void, mobile?: boolean }) {
-  const iconClass = "p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all active:scale-90"
+  const iconClass = "p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-md text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all active:scale-90"
   
   return (
     <>

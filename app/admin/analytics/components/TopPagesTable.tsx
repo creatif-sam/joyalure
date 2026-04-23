@@ -4,7 +4,7 @@ interface PageRow { page: string; views: number }
 
 export default function TopPagesTable({ pages, total }: { pages: PageRow[]; total: number }) {
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden">
+    <div className="bg-white dark:bg-zinc-900 rounded-md shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-100 dark:border-zinc-800 flex items-center gap-2">
         <FileText className="h-4 w-4 text-green-600" />
         <h3 className="text-sm font-black uppercase tracking-widest text-gray-700 dark:text-gray-300">

@@ -12,10 +12,10 @@ export default async function HomeCategories() {
         {/* HEADER */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div className="space-y-1">
-            <h2 className="text-3xl font-black tracking-tighter text-gray-900 dark:text-zinc-100 uppercase italic">
+            <h2 className="text-3xl font-black tracking-tighter text-gray-900 dark:text-zinc-100 uppercase">
               The Collection
             </h2>
-            <p className="text-gray-500 dark:text-zinc-400 text-sm italic">Tailored skincare for your unique glow.</p>
+            <p className="text-gray-500 dark:text-zinc-400 text-sm">Tailored skincare for your unique glow.</p>
           </div>
           <Link 
             href="/products" 
@@ -31,7 +31,7 @@ export default async function HomeCategories() {
             <Link
               key={category.slug}
               href={`/products?category=${category.slug}`}
-              className="group relative rounded-2xl overflow-hidden bg-gray-100 dark:bg-zinc-900 aspect-[4/3] border dark:border-zinc-800"
+              className="group relative rounded-md overflow-hidden bg-gray-100 dark:bg-zinc-900 aspect-[4/3] border dark:border-zinc-800"
             >
               {/* IMAGE */}
               <Image
@@ -48,7 +48,7 @@ export default async function HomeCategories() {
               {/* CONTENT AREA */}
               <div className="absolute inset-0 p-6 flex flex-col justify-end">
                 <div className="translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                  <span className="text-white text-lg font-black tracking-tight block italic uppercase">
+                  <span className="text-white text-lg font-black tracking-tight block uppercase">
                     {category.name}
                   </span>
                   

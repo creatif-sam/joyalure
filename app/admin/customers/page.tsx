@@ -91,7 +91,7 @@ export default async function CustomersPage({ searchParams }: PageProps) {
       {/* MODAL - Mobile optimized width */}
       {viewId && (
         <Dialog open={true}>
-          <DialogContent className="w-[95vw] max-w-2xl rounded-2xl overflow-hidden">
+          <DialogContent className="w-[95vw] max-w-2xl rounded-md overflow-hidden">
             <DialogHeader>
               <DialogTitle>Customer Engagement</DialogTitle>
               <DialogDescription>
@@ -191,7 +191,7 @@ export default async function CustomersPage({ searchParams }: PageProps) {
                   <td className="px-4 py-4 text-center">
                     <Link 
                       href={getBaseUrl({ view: c.id })}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-green-600 hover:text-white dark:hover:bg-green-600 rounded-lg text-xs font-bold transition-all"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-green-600 hover:text-white dark:hover:bg-green-600 rounded-md text-xs font-bold transition-all"
                     >
                       <Eye className="h-3.5 w-3.5" />
                       View Lists
@@ -245,7 +245,7 @@ export default async function CustomersPage({ searchParams }: PageProps) {
                  </div>
                  <Link 
                     href={getBaseUrl({ view: c.id })}
-                    className="flex-1 max-w-[140px] text-center px-3 py-2 bg-zinc-100 dark:bg-zinc-800 active:bg-green-600 active:text-white rounded-xl text-xs font-black transition-all"
+                    className="flex-1 max-w-[140px] text-center px-3 py-2 bg-zinc-100 dark:bg-zinc-800 active:bg-green-600 active:text-white rounded-md text-xs font-black transition-all"
                   >
                     View Details
                   </Link>
@@ -260,7 +260,7 @@ export default async function CustomersPage({ searchParams }: PageProps) {
         <div className="flex items-center justify-between gap-4 px-2">
           <Link
             href={getBaseUrl({ page: Math.max(1, page - 1) })}
-            className={`px-4 py-2 text-sm font-bold rounded-xl transition ${
+            className={`px-4 py-2 text-sm font-bold rounded-md transition ${
               page <= 1 ? "pointer-events-none opacity-50 bg-gray-100" : "bg-white dark:bg-zinc-900 border dark:border-zinc-800 hover:bg-gray-50"
             }`}
           >
@@ -271,7 +271,7 @@ export default async function CustomersPage({ searchParams }: PageProps) {
           </span>
           <Link
             href={getBaseUrl({ page: Math.min(totalPages, page + 1) })}
-            className={`px-4 py-2 text-sm font-bold rounded-xl transition ${
+            className={`px-4 py-2 text-sm font-bold rounded-md transition ${
               page >= totalPages ? "pointer-events-none opacity-50 bg-gray-100" : "bg-white dark:bg-zinc-900 border dark:border-zinc-800 hover:bg-gray-50"
             }`}
           >

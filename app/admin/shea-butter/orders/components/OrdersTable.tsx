@@ -37,7 +37,7 @@ interface Props {
 
 export default function OrdersTable({ orders, updatingStatus, onStatusChange, onViewDetails }: Props) {
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-3xl overflow-hidden shadow-lg border-2 border-gray-100 dark:border-zinc-800">
+    <div className="bg-white dark:bg-zinc-900 rounded-md overflow-hidden shadow-lg border-2 border-gray-100 dark:border-zinc-800">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">

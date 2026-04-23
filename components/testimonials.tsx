@@ -87,7 +87,7 @@ export default function TestimonialsCarousel() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl font-black tracking-tighter text-gray-900 dark:text-zinc-100 mb-12 uppercase italic"
+          className="text-3xl font-black tracking-tighter text-gray-900 dark:text-zinc-100 mb-12 uppercase"
         >
           Loved By Customers Worldwide
         </motion.h2>
@@ -122,7 +122,7 @@ export default function TestimonialsCarousel() {
                 ))}
               </div>
 
-              <p className="text-gray-700 dark:text-zinc-300 leading-relaxed mb-8 text-lg italic">
+              <p className="text-gray-700 dark:text-zinc-300 leading-relaxed mb-8 text-lg">
                 “{testimonial.review}”
               </p>
 

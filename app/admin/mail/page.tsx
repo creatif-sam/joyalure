@@ -96,7 +96,7 @@ export default function AdminMail() {
     <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-8 animate-in fade-in duration-700">
       
       {/* BRANDED HEADER */}
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-white dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-[2rem] shadow-sm">
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-white dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-md shadow-sm">
         <div className="flex items-center gap-4">
           <div className="h-12 w-12 rounded bg-green-600 flex items-center justify-center text-white shadow-lg shadow-green-600/20">
             <Mail size={24} />
@@ -119,9 +119,9 @@ export default function AdminMail() {
       {/* STATS GRID */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map(card => (
-          <div key={card.label} className="bg-white dark:bg-zinc-950 rounded-[1.5rem] border dark:border-zinc-800 p-5 flex flex-col justify-between group hover:border-green-500/30 transition-all">
+          <div key={card.label} className="bg-white dark:bg-zinc-950 rounded-md border dark:border-zinc-800 p-5 flex flex-col justify-between group hover:border-green-500/30 transition-all">
             <div className="flex justify-between items-center mb-4">
-              <div className={`p-2 rounded-xl ${card.bg} dark:bg-zinc-900 ${card.color}`}>
+              <div className={`p-2 rounded-md ${card.bg} dark:bg-zinc-900 ${card.color}`}>
                 <card.icon size={18} />
               </div>
               <div className="h-1 w-8 bg-zinc-100 dark:bg-zinc-800 rounded-full" />
@@ -165,10 +165,10 @@ export default function AdminMail() {
         {tab === "templates" && <EmailTemplatesTable />}
 
         {tab === "subscribers" && (
-          <div className="bg-white dark:bg-zinc-950 rounded-[2rem] border dark:border-zinc-800 shadow-sm overflow-hidden">
+          <div className="bg-white dark:bg-zinc-950 rounded-md border dark:border-zinc-800 shadow-sm overflow-hidden">
             <div className="p-6 border-b dark:border-zinc-800 flex justify-between items-center bg-zinc-50/50 dark:bg-zinc-900/50">
                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Archive Dataset</h3>
-               <button onClick={exportCSV} className="h-10 px-4 rounded-xl bg-white dark:bg-zinc-800 border dark:border-zinc-700 text-[10px] font-black uppercase flex items-center gap-2 active:scale-95 transition-all">
+               <button onClick={exportCSV} className="h-10 px-4 rounded-md bg-white dark:bg-zinc-800 border dark:border-zinc-700 text-[10px] font-black uppercase flex items-center gap-2 active:scale-95 transition-all">
                  <Download size={14} /> Export CSV
                </button>
             </div>
@@ -189,7 +189,7 @@ export default function AdminMail() {
                       <td className="px-8 py-5 font-bold text-zinc-900 dark:text-zinc-100">{sub.email}</td>
                       <td className="px-8 py-5 text-xs font-medium text-zinc-500">{new Date(sub.created_at).toLocaleDateString()}</td>
                       <td className="px-8 py-5 text-right">
-                        <button onClick={() => handleDeleteSubscriber(sub.id)} className="opacity-0 group-hover:opacity-100 h-9 w-9 flex items-center justify-center text-zinc-300 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all ml-auto">
+                        <button onClick={() => handleDeleteSubscriber(sub.id)} className="opacity-0 group-hover:opacity-100 h-9 w-9 flex items-center justify-center text-zinc-300 hover:text-red-600 hover:bg-red-50 rounded-md transition-all ml-auto">
                           <Trash2 size={16} />
                         </button>
                       </td>
@@ -207,7 +207,7 @@ export default function AdminMail() {
                     <p className="text-sm font-black text-zinc-900 dark:text-zinc-100 truncate leading-none">{sub.email}</p>
                     <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-tight mt-1.5">{new Date(sub.created_at).toLocaleDateString()}</p>
                   </div>
-                  <button onClick={() => handleDeleteSubscriber(sub.id)} className="h-10 w-10 flex items-center justify-center text-zinc-300 active:text-red-500 active:bg-red-50 rounded-xl">
+                  <button onClick={() => handleDeleteSubscriber(sub.id)} className="h-10 w-10 flex items-center justify-center text-zinc-300 active:text-red-500 active:bg-red-50 rounded-md">
                     <Trash2 size={18} />
                   </button>
                 </div>

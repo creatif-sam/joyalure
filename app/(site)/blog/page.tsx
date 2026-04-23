@@ -33,9 +33,9 @@ export default async function BlogPage() {
       {/* FEATURED HERO */}
       {featuredPost && (
         <section className="max-w-7xl mx-auto px-6 pt-12 pb-20">
-          <div className="bg-green-50/40 dark:bg-green-900/10 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center border border-green-100 dark:border-zinc-800">
+          <div className="bg-green-50/40 dark:bg-green-900/10 rounded-md p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center border border-green-100 dark:border-zinc-800">
             <div className="w-full md:w-1/2 relative group">
-              <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl relative bg-white dark:bg-zinc-800">
+              <div className="aspect-[4/3] rounded-md overflow-hidden shadow-2xl relative bg-white dark:bg-zinc-800">
                 {featuredPost.main_image ? (
                   <img 
                     src={featuredPost.main_image} 
@@ -94,7 +94,7 @@ export default async function BlogPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {recentPosts?.map((post) => (
             <Link key={post.id} href={`/blog/${post.slug}`} className="group space-y-5">
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-gray-50 dark:bg-zinc-900 relative border border-gray-100 dark:border-zinc-800 transition-all group-hover:shadow-xl group-hover:shadow-green-600/5">
+              <div className="aspect-[4/3] rounded-md overflow-hidden bg-gray-50 dark:bg-zinc-900 relative border border-gray-100 dark:border-zinc-800 transition-all group-hover:shadow-xl group-hover:shadow-green-600/5">
                 {post.main_image ? (
                   <img 
                     src={post.main_image} 
@@ -112,7 +112,7 @@ export default async function BlogPage() {
                   <span className="text-green-600">Editorial</span>
                   <span className="text-gray-400">{new Date(post.created_at).toLocaleDateString()}</span>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-zinc-100 group-hover:text-green-600 transition-colors leading-snug uppercase tracking-tight italic">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-zinc-100 group-hover:text-green-600 transition-colors leading-snug uppercase tracking-tight">
                   {post.title}
                 </h3>
                 

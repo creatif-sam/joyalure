@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
@@ -90,7 +90,7 @@ export default function AdminProductEditPage() {
 
       <form
         onSubmit={handleSave}
-        className="bg-white border rounded-lg p-6 space-y-6"
+        className="bg-white border rounded-md p-6 space-y-6"
       >
         {/* TITLE */}
         <div>

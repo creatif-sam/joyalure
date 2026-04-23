@@ -19,7 +19,7 @@ export default function CheckoutFunnelCard({ data }: { data: FunnelData }) {
   const max = Math.max(data.addToCart, 1)
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden">
+    <div className="bg-white dark:bg-zinc-900 rounded-md shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-100 dark:border-zinc-800">
         <h3 className="text-sm font-black uppercase tracking-widest text-gray-700 dark:text-gray-300">
           Checkout Funnel
@@ -30,7 +30,7 @@ export default function CheckoutFunnelCard({ data }: { data: FunnelData }) {
           const pct = Math.round((value / max) * 100)
           return (
             <div key={label} className="flex items-center gap-4">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${color} shrink-0`}>
+              <div className={`w-8 h-8 rounded-md flex items-center justify-center ${color} shrink-0`}>
                 <Icon className="h-4 w-4 text-white" />
               </div>
               <div className="flex-1 min-w-0">
@@ -47,11 +47,11 @@ export default function CheckoutFunnelCard({ data }: { data: FunnelData }) {
         })}
 
         <div className="pt-4 border-t border-gray-100 dark:border-zinc-800 grid grid-cols-2 gap-4">
-          <div className="text-center bg-amber-50 dark:bg-amber-900/20 rounded-xl p-3">
+          <div className="text-center bg-amber-50 dark:bg-amber-900/20 rounded-md p-3">
             <p className="text-2xl font-black text-amber-600">{data.cartToCheckoutRate}%</p>
             <p className="text-xs text-gray-500 mt-1">Cart → Checkout rate</p>
           </div>
-          <div className="text-center bg-green-50 dark:bg-green-900/20 rounded-xl p-3">
+          <div className="text-center bg-green-50 dark:bg-green-900/20 rounded-md p-3">
             <p className="text-2xl font-black text-green-600">{data.checkoutConversionRate}%</p>
             <p className="text-xs text-gray-500 mt-1">Checkout conversion rate</p>
           </div>

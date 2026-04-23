@@ -22,7 +22,7 @@ export function BlogForm() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const router = useRouter();
 
-  const editorClass = "border dark:border-zinc-800 rounded-xl min-h-[250px] p-4 bg-gray-50 dark:bg-zinc-950 prose dark:prose-invert max-w-none focus:outline-none focus:ring-2 focus:ring-green-600 transition-all text-sm";
+  const editorClass = "border dark:border-zinc-800 rounded-md min-h-[250px] p-4 bg-gray-50 dark:bg-zinc-950 prose dark:prose-invert max-w-none focus:outline-none focus:ring-2 focus:ring-green-600 transition-all text-sm";
 
   const extensions = useMemo(() => [
     StarterKit,
@@ -99,10 +99,10 @@ export function BlogForm() {
   };
 
   return (
-    <Card className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] shadow-sm overflow-hidden border-t-8 border-t-green-600">
+    <Card className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-md shadow-sm overflow-hidden border-t-8 border-t-green-600">
       <CardHeader className="border-b dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/50 flex flex-row items-center justify-between p-8">
         <div className="flex items-center gap-4">
-            <div className="p-3 bg-green-100 dark:bg-green-500/10 rounded-2xl text-green-700">
+            <div className="p-3 bg-green-100 dark:bg-green-500/10 rounded-md text-green-700">
                 <Rocket size={24} />
             </div>
             <div>
@@ -134,7 +134,7 @@ export function BlogForm() {
             <div className="flex flex-col items-center justify-center border-2 border-dashed dark:border-zinc-800 rounded-[2.5rem] p-10 bg-zinc-50/50 dark:bg-zinc-950/50 hover:border-green-600/50 transition-all group">
               {imagePreview ? (
                 <div className="relative w-full max-w-2xl h-64 mb-6">
-                  <img src={imagePreview} className="w-full h-full object-cover rounded-[2rem] border dark:border-zinc-800 shadow-2xl" alt="Preview" />
+                  <img src={imagePreview} className="w-full h-full object-cover rounded-md border dark:border-zinc-800 shadow-2xl" alt="Preview" />
                   <button type="button" onClick={() => setImagePreview(null)} className="absolute -top-3 -right-3 p-3 bg-red-600 text-white rounded shadow-xl hover:scale-110 transition-transform">
                     <XCircle size={20} />
                   </button>
@@ -151,7 +151,7 @@ export function BlogForm() {
                 name="image_file" 
                 type="file" 
                 accept="image/*" 
-                className="max-w-xs cursor-pointer bg-white dark:bg-zinc-900 border-none shadow-sm rounded-xl py-2"
+                className="max-w-xs cursor-pointer bg-white dark:bg-zinc-900 border-none shadow-sm rounded-md py-2"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) setImagePreview(URL.createObjectURL(file));
@@ -204,11 +204,11 @@ export function BlogForm() {
 
 function Toolbar({ editor }: { editor: any }) {
   if (!editor) return null;
-  const btnClass = "p-3 rounded-xl transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 active:scale-90";
+  const btnClass = "p-3 rounded-md transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 active:scale-90";
   const activeClass = "bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400 ring-1 ring-green-200 dark:ring-green-500/20";
 
   return (
-    <div className="flex flex-wrap gap-1 mb-2 border dark:border-zinc-800 p-2 rounded-2xl bg-white dark:bg-zinc-950 shadow-sm">
+    <div className="flex flex-wrap gap-1 mb-2 border dark:border-zinc-800 p-2 rounded-md bg-white dark:bg-zinc-950 shadow-sm">
       <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className={`${btnClass} ${editor.isActive('bold') ? activeClass : ''}`}><Bold size={18}/></button>
       <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} className={`${btnClass} ${editor.isActive('italic') ? activeClass : ''}`}><Italic size={18}/></button>
       <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()} className={`${btnClass} ${editor.isActive('underline') ? activeClass : ''}`}><UnderlineIcon size={18}/></button>

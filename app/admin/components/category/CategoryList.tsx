@@ -13,7 +13,7 @@ export default function CategoryList({ categories }: { categories: any[] }) {
   // 1. Check if the array exists and has items
   if (!categories || categories.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-[2rem] bg-gray-50/50">
+      <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-md bg-gray-50/50">
         <div className="p-4 bg-white rounded shadow-sm mb-4 text-gray-400">
           <FolderSearch size={32} />
         </div>
@@ -42,9 +42,9 @@ export default function CategoryList({ categories }: { categories: any[] }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {categories.map((cat) => (
-        <div key={cat.id} className="group relative bg-white border border-gray-100 rounded-2xl overflow-hidden p-3 transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1">
+        <div key={cat.id} className="group relative bg-white border border-gray-100 rounded-md overflow-hidden p-3 transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1">
           {/* IMAGE PREVIEW */}
-          <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-4 bg-gray-50">
+          <div className="relative aspect-[4/3] rounded-md overflow-hidden mb-4 bg-gray-50">
             <Image 
               src={cat.image_url || "/placeholder-cat.jpg"} 
               alt={cat.name}
@@ -70,7 +70,7 @@ export default function CategoryList({ categories }: { categories: any[] }) {
             
             <button 
               onClick={() => handleDelete(cat.id, cat.name)}
-              className="p-2 text-gray-300 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="p-2 text-gray-300 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
               title="Delete Category"
             >
               <Trash2 size={18} />

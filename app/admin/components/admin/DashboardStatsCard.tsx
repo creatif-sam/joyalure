@@ -12,7 +12,7 @@ export default function DashboardStatCard({ title, value, delta, icon }: Props) 
   const isNegative = delta?.startsWith("-")
 
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-md p-3 shadow-sm hover:shadow-md transition-shadow duration-200">
       <div className="flex items-center justify-between mb-3">
         <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
           {title}

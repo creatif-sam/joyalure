@@ -85,7 +85,7 @@ export default function DashboardChartPlaceholder() {
         </div>
       </div>
 
-      <div className="bg-zinc-50 dark:bg-zinc-950/50 rounded-3xl overflow-hidden border dark:border-zinc-800/50 touch-pan-x touch-pan-y">
+      <div className="bg-zinc-50 dark:bg-zinc-950/50 rounded-md overflow-hidden border dark:border-zinc-800/50 touch-pan-x touch-pan-y">
         <svg
           ref={ref}
           viewBox="0 0 900 450"
@@ -95,7 +95,7 @@ export default function DashboardChartPlaceholder() {
 
       {/* MOBILE BOTTOM SHEET TOOLTIP */}
       {selectedRegion && (
-        <div className="absolute bottom-4 left-4 right-4 z-30 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-2xl rounded-[2rem] p-5 animate-in slide-in-from-bottom-4 duration-300">
+        <div className="absolute bottom-4 left-4 right-4 z-30 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-2xl rounded-md p-5 animate-in slide-in-from-bottom-4 duration-300">
           <div className="flex justify-between items-start mb-3">
             <h4 className="font-black italic uppercase text-lg text-green-600">{selectedRegion.name}</h4>
             <button 

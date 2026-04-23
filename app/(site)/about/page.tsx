@@ -141,7 +141,7 @@ export default function AboutPage() {
                 desc: "We believe trust is built through transparency. What you see on our label is exactly what your skin receives." 
               }
             ].map((value, i) => (
-              <div key={i} className="bg-card dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-3xl p-8 shadow-sm">
+              <div key={i} className="bg-card dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-md p-8 shadow-sm">
                 <h3 className="text-xl font-black italic uppercase tracking-tight mb-4 text-green-700 dark:text-green-500">
                   {value.title}
                 </h3>

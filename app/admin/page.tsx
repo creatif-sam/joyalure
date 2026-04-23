@@ -129,7 +129,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Sales Map */}
-      <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] overflow-hidden shadow-sm p-4 md:p-6">
+      <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-md overflow-hidden shadow-sm p-4 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Sales Velocity</h3>
           {(loading || refreshing) && <Loader2 className="h-3 w-3 animate-spin text-green-600" />}
@@ -151,7 +151,7 @@ export default function AdminDashboard() {
         <h2 className="text-sm md:text-lg font-black text-gray-900 dark:text-gray-100 uppercase px-1">
           Recent Activity
         </h2>
-        <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-md shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <RecentOrdersTable />
           </div>

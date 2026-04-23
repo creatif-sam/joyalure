@@ -47,7 +47,7 @@ export default function ProductFormModal({
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-white dark:bg-zinc-900 rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-white dark:bg-zinc-900 rounded-md p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-black text-gray-900 dark:text-white">
@@ -68,7 +68,7 @@ export default function ProductFormModal({
               required
               value={formData.name}
               onChange={(e) => onChange("name", e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800 border-2 border-gray-200 dark:border-zinc-700 rounded-xl focus:border-green-600 focus:outline-none"
+              className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800 border-2 border-gray-200 dark:border-zinc-700 rounded-md focus:border-green-600 focus:outline-none"
               placeholder="Premium Shea Butter Body Cream"
             />
           </div>
@@ -82,7 +82,7 @@ export default function ProductFormModal({
               value={formData.description}
               onChange={(e) => onChange("description", e.target.value)}
               rows={4}
-              className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800 border-2 border-gray-200 dark:border-zinc-700 rounded-xl focus:border-green-600 focus:outline-none resize-none"
+              className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800 border-2 border-gray-200 dark:border-zinc-700 rounded-md focus:border-green-600 focus:outline-none resize-none"
               placeholder="Describe your product..."
             />
           </div>
@@ -99,7 +99,7 @@ export default function ProductFormModal({
                 min="0"
                 value={formData.price}
                 onChange={(e) => onChange("price", parseFloat(e.target.value))}
-                className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800 border-2 border-gray-200 dark:border-zinc-700 rounded-xl focus:border-green-600 focus:outline-none"
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800 border-2 border-gray-200 dark:border-zinc-700 rounded-md focus:border-green-600 focus:outline-none"
               />
             </div>
             <div>
@@ -112,7 +112,7 @@ export default function ProductFormModal({
                 min="0"
                 value={formData.stock_quantity}
                 onChange={(e) => onChange("stock_quantity", parseInt(e.target.value))}
-                className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800 border-2 border-gray-200 dark:border-zinc-700 rounded-xl focus:border-green-600 focus:outline-none"
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800 border-2 border-gray-200 dark:border-zinc-700 rounded-md focus:border-green-600 focus:outline-none"
               />
             </div>
           </div>
@@ -155,14 +155,14 @@ export default function ProductFormModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 border-2 border-gray-300 dark:border-zinc-700 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full font-bold transition-colors"
+              className="flex-1 py-3 border-2 border-gray-300 dark:border-zinc-700 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-md font-bold transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-md transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}
               {submitting ? "Saving..." : isEditing ? "Update Product" : "Create Product"}

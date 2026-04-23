@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic"
+﻿export const dynamic = "force-dynamic"
 
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
@@ -50,7 +50,7 @@ export default async function ViewBlogPost({
       </div>
 
       {/* FEATURED IMAGE HERO - Responsive Aspect Ratio */}
-      <section className="relative aspect-[4/3] md:aspect-video w-full overflow-hidden rounded-[1.5rem] md:rounded-[2.5rem] border dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 shadow-xl md:shadow-2xl">
+      <section className="relative aspect-[4/3] md:aspect-video w-full overflow-hidden rounded-md md:rounded-[2.5rem] border dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 shadow-xl md:shadow-2xl">
         {post.main_image && post.main_image !== "" ? (
           <img 
             src={post.main_image} 
@@ -99,7 +99,7 @@ export default async function ViewBlogPost({
               Joyalure Editorial
             </div>
           </div>
-          <div className="w-fit font-mono bg-zinc-50 dark:bg-zinc-900 px-3 py-1.5 rounded-lg lowercase tracking-normal border dark:border-zinc-800">
+          <div className="w-fit font-mono bg-zinc-50 dark:bg-zinc-900 px-3 py-1.5 rounded-md lowercase tracking-normal border dark:border-zinc-800">
             slug: /{post.slug}
           </div>
         </div>

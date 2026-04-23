@@ -7,7 +7,7 @@ export default function TrafficChart({ data }: { data: DayRow[] }) {
   const labelEvery = Math.ceil(data.length / 7)
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
+    <div className="bg-white dark:bg-zinc-900 rounded-md shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
       <h3 className="text-sm font-black uppercase tracking-widest text-gray-700 dark:text-gray-300 mb-6">
         Daily Page Views
       </h3>

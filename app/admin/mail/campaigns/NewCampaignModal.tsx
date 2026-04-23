@@ -129,7 +129,7 @@ export default function NewCampaignModal({ open, onClose, initialRecipient }: Ne
               <div className={`bg-white text-black transition-all duration-500 shadow-2xl relative flex flex-col ${
                 previewDevice === 'mobile' 
                 ? 'w-full max-w-[320px] rounded-[2.5rem] border-[8px] border-zinc-950 h-[580px] my-4' 
-                : 'w-full rounded-2xl min-h-[500px]'
+                : 'w-full rounded-md min-h-[500px]'
               }`}>
                   <div className="p-4 border-b bg-zinc-50 flex flex-col gap-1">
                      <p className="text-[9px] font-black uppercase text-zinc-400 truncate">Subject: <span className="text-zinc-900 normal-case font-bold">{subject || "Empty"}</span></p>
@@ -162,7 +162,7 @@ export default function NewCampaignModal({ open, onClose, initialRecipient }: Ne
                     value={emails} 
                     onChange={e => setEmails(e.target.value)} 
                     placeholder="Emails (comma separated)..." 
-                    className="w-full border dark:border-zinc-800 rounded-xl px-4 py-3 text-sm bg-zinc-50 dark:bg-zinc-950 outline-none transition font-bold" 
+                    className="w-full border dark:border-zinc-800 rounded-md px-4 py-3 text-sm bg-zinc-50 dark:bg-zinc-950 outline-none transition font-bold" 
                   />
                 )}
               </div>
@@ -183,11 +183,11 @@ export default function NewCampaignModal({ open, onClose, initialRecipient }: Ne
               <div className="space-y-5">
                 <div className="space-y-2">
                   <label className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Headline</label>
-                  <input type="text" value={subject} onChange={e => setSubject(e.target.value)} placeholder="Subject..." className="w-full border dark:border-zinc-800 rounded-xl px-4 py-3 text-sm bg-zinc-50 dark:bg-zinc-950 outline-none font-bold" />
+                  <input type="text" value={subject} onChange={e => setSubject(e.target.value)} placeholder="Subject..." className="w-full border dark:border-zinc-800 rounded-md px-4 py-3 text-sm bg-zinc-50 dark:bg-zinc-950 outline-none font-bold" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Body (HTML)</label>
-                  <textarea value={body} onChange={e => setBody(e.target.value)} placeholder="HTML Source..." className="w-full border dark:border-zinc-800 rounded-xl px-4 py-4 text-sm bg-zinc-50 dark:bg-zinc-950 outline-none min-h-[180px] font-mono" />
+                  <textarea value={body} onChange={e => setBody(e.target.value)} placeholder="HTML Source..." className="w-full border dark:border-zinc-800 rounded-md px-4 py-4 text-sm bg-zinc-50 dark:bg-zinc-950 outline-none min-h-[180px] font-mono" />
                 </div>
               </div>
             </div>
@@ -199,9 +199,9 @@ export default function NewCampaignModal({ open, onClose, initialRecipient }: Ne
           {isPreview ? (
             <button onClick={() => setIsPreview(false)} className="flex-1 flex items-center justify-center gap-2 font-black text-[9px] uppercase text-zinc-500 h-12 border dark:border-zinc-800 rounded"><ArrowLeft size={14}/> Back</button>
           ) : (
-            <button onClick={() => setIsPreview(true)} className="flex-1 md:flex-none md:px-6 h-12 rounded-xl font-black text-[9px] uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-100 flex items-center justify-center gap-2"><Eye size={14} /> Preview</button>
+            <button onClick={() => setIsPreview(true)} className="flex-1 md:flex-none md:px-6 h-12 rounded-md font-black text-[9px] uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-100 flex items-center justify-center gap-2"><Eye size={14} /> Preview</button>
           )}
-          <button onClick={handleSaveDraft} disabled={isSaving} className="flex-[2] md:flex-none md:px-10 h-12 rounded-xl font-black text-[9px] uppercase bg-green-600 text-white shadow-lg flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50">
+          <button onClick={handleSaveDraft} disabled={isSaving} className="flex-[2] md:flex-none md:px-10 h-12 rounded-md font-black text-[9px] uppercase bg-green-600 text-white shadow-lg flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50">
             {isSaving ? <Loader2 className="animate-spin h-3 w-3" /> : <Save size={14} />} Archive
           </button>
         </div>

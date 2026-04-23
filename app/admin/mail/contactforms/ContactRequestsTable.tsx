@@ -74,7 +74,7 @@ export default function ContactRequestsTable() {
     <div className="space-y-6 animate-in fade-in duration-700">
       
       {/* DESKTOP TABLE VIEW */}
-      <div className="hidden lg:block bg-white dark:bg-zinc-950 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-2xl shadow-zinc-200/50 dark:shadow-none overflow-hidden">
+      <div className="hidden lg:block bg-white dark:bg-zinc-950 rounded-md border border-zinc-100 dark:border-zinc-800 shadow-2xl shadow-zinc-200/50 dark:shadow-none overflow-hidden">
         <table className="w-full text-sm text-left">
           <thead className="bg-zinc-50/50 dark:bg-zinc-900/50 border-b dark:border-zinc-800">
             <tr className="text-[10px] uppercase tracking-[0.15em] text-zinc-400 font-black">
@@ -135,7 +135,7 @@ export default function ContactRequestsTable() {
       {/* MOBILE CARD VIEW */}
       <div className="lg:hidden space-y-4 px-1">
         {requests.map((req) => (
-          <div key={req.id} className="bg-white dark:bg-zinc-900 p-6 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-5 animate-in slide-in-from-bottom-2 duration-500">
+          <div key={req.id} className="bg-white dark:bg-zinc-900 p-6 rounded-md border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-5 animate-in slide-in-from-bottom-2 duration-500">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded bg-green-50 dark:bg-green-500/10 flex items-center justify-center text-green-600">
@@ -162,13 +162,13 @@ export default function ContactRequestsTable() {
             <div className="flex gap-3 pt-2">
               <button 
                 onClick={() => handleReply(req.email)}
-                className="flex-[3] flex items-center justify-center gap-2 h-14 rounded-2xl bg-green-600 text-white text-[10px] font-black uppercase tracking-widest shadow-xl shadow-green-600/30 active:scale-95 transition-all"
+                className="flex-[3] flex items-center justify-center gap-2 h-14 rounded-md bg-green-600 text-white text-[10px] font-black uppercase tracking-widest shadow-xl shadow-green-600/30 active:scale-95 transition-all"
               >
                 <Send size={14} /> Initiate Reply
               </button>
               <button 
                 onClick={() => handleDelete(req.id)}
-                className="flex-1 flex items-center justify-center h-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-400 hover:text-red-500 active:scale-95 transition-all"
+                className="flex-1 flex items-center justify-center h-14 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-400 hover:text-red-500 active:scale-95 transition-all"
               >
                 <Trash2 size={18} />
               </button>

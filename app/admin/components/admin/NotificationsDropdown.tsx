@@ -120,7 +120,7 @@ export default function NotificationsDropdown() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="relative h-9 w-9 flex items-center justify-center rounded-xl border dark:border-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-900 transition-colors"
+        className="relative h-9 w-9 flex items-center justify-center rounded-md border dark:border-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-900 transition-colors"
       >
         <Bell className="h-4 w-4 text-gray-600 dark:text-gray-400" />
         {unreadCount > 0 && (

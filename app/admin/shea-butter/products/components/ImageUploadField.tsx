@@ -26,7 +26,7 @@ export default function ImageUploadField({ images, uploading, onUpload, onRemove
           className="hidden"
           disabled={uploading}
         />
-        <div className="w-full px-6 py-4 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-2 border-dashed border-green-300 dark:border-green-700 rounded-xl hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors flex items-center justify-center gap-3">
+        <div className="w-full px-6 py-4 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-2 border-dashed border-green-300 dark:border-green-700 rounded-md hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors flex items-center justify-center gap-3">
           {uploading ? (
             <>
               <Loader2 className="h-5 w-5 animate-spin text-green-600" />
@@ -46,7 +46,7 @@ export default function ImageUploadField({ images, uploading, onUpload, onRemove
         <div className="mt-4 grid grid-cols-3 gap-3">
           {images.map((img, idx) => (
             <div key={idx} className="relative group">
-              <div className="relative h-24 bg-gray-100 dark:bg-zinc-800 rounded-lg overflow-hidden">
+              <div className="relative h-24 bg-gray-100 dark:bg-zinc-800 rounded-md overflow-hidden">
                 <Image src={img} alt={`Product ${idx + 1}`} fill className="object-cover" />
               </div>
               <button

@@ -82,7 +82,7 @@ export default function AdminBlog() {
       </div>
 
       {/* LISTING SECTION */}
-      <div className="bg-white dark:bg-zinc-950 border dark:border-zinc-800 rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-zinc-950 border dark:border-zinc-800 rounded-md overflow-hidden shadow-sm">
         
         {/* DESKTOP TABLE - Visible only on md and up */}
         <div className="hidden md:block overflow-x-auto">
@@ -100,7 +100,7 @@ export default function AdminBlog() {
               {blogPosts.map((post) => (
                 <tr key={post.id} className="group hover:bg-green-50/30 dark:hover:bg-zinc-900/30 transition-colors">
                   <td className="px-6 py-4">
-                    <div className="h-14 w-20 rounded-xl overflow-hidden bg-gray-100 dark:bg-zinc-900 border dark:border-zinc-800 flex items-center justify-center">
+                    <div className="h-14 w-20 rounded-md overflow-hidden bg-gray-100 dark:bg-zinc-900 border dark:border-zinc-800 flex items-center justify-center">
                       {post.main_image ? (
                         <img src={post.main_image} alt="" className="h-full w-full object-cover" />
                       ) : (
@@ -131,13 +131,13 @@ export default function AdminBlog() {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Link href={`/admin/blog/${post.id}`} className="p-2.5 bg-white dark:bg-zinc-900 rounded-xl border dark:border-zinc-800 text-zinc-400 hover:text-green-600 transition-all shadow-sm">
+                      <Link href={`/admin/blog/${post.id}`} className="p-2.5 bg-white dark:bg-zinc-900 rounded-md border dark:border-zinc-800 text-zinc-400 hover:text-green-600 transition-all shadow-sm">
                         <Eye size={16} />
                       </Link>
-                      <Link href={`/admin/blog/edit/${post.id}`} className="p-2.5 bg-white dark:bg-zinc-900 rounded-xl border dark:border-zinc-800 text-zinc-400 hover:text-blue-500 transition-all shadow-sm">
+                      <Link href={`/admin/blog/edit/${post.id}`} className="p-2.5 bg-white dark:bg-zinc-900 rounded-md border dark:border-zinc-800 text-zinc-400 hover:text-blue-500 transition-all shadow-sm">
                         <Pencil size={16} />
                       </Link>
-                      <button onClick={() => handleDelete(post.id)} className="p-2.5 bg-white dark:bg-zinc-900 rounded-xl border dark:border-zinc-800 text-zinc-400 hover:text-red-500 transition-all shadow-sm">
+                      <button onClick={() => handleDelete(post.id)} className="p-2.5 bg-white dark:bg-zinc-900 rounded-md border dark:border-zinc-800 text-zinc-400 hover:text-red-500 transition-all shadow-sm">
                         <Trash2 size={16} />
                       </button>
                     </div>
@@ -154,7 +154,7 @@ export default function AdminBlog() {
             blogPosts.map((post) => (
               <div key={post.id} className="p-5 flex flex-col gap-4">
                 <div className="flex gap-4">
-                  <div className="h-16 w-16 shrink-0 rounded-2xl overflow-hidden bg-gray-100 dark:bg-zinc-900 border dark:border-zinc-800 flex items-center justify-center">
+                  <div className="h-16 w-16 shrink-0 rounded-md overflow-hidden bg-gray-100 dark:bg-zinc-900 border dark:border-zinc-800 flex items-center justify-center">
                     {post.main_image ? (
                       <img src={post.main_image} alt="" className="h-full w-full object-cover" />
                     ) : (
@@ -173,7 +173,7 @@ export default function AdminBlog() {
                 <div className="flex items-center justify-between gap-3">
                   <button 
                     onClick={() => togglePublished(post.id, post.published)}
-                    className={`flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
+                    className={`flex-1 py-3 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${
                       post.published 
                       ? "bg-green-600 text-white shadow-lg" 
                       : "bg-zinc-100 text-zinc-500 dark:bg-zinc-800"
@@ -183,10 +183,10 @@ export default function AdminBlog() {
                   </button>
                   
                   <div className="flex gap-2">
-                    <Link href={`/admin/blog/edit/${post.id}`} className="p-3 bg-zinc-50 dark:bg-zinc-900 rounded-xl border dark:border-zinc-800 text-zinc-500">
+                    <Link href={`/admin/blog/edit/${post.id}`} className="p-3 bg-zinc-50 dark:bg-zinc-900 rounded-md border dark:border-zinc-800 text-zinc-500">
                       <Pencil size={18} />
                     </Link>
-                    <button onClick={() => handleDelete(post.id)} className="p-3 bg-zinc-50 dark:bg-zinc-900 rounded-xl border dark:border-zinc-800 text-red-400">
+                    <button onClick={() => handleDelete(post.id)} className="p-3 bg-zinc-50 dark:bg-zinc-900 rounded-md border dark:border-zinc-800 text-red-400">
                       <Trash2 size={18} />
                     </button>
                   </div>

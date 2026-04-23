@@ -72,7 +72,7 @@ export default function CategoryForm() {
   }
 
   return (
-    <div className="bg-white border rounded-2xl p-6 shadow-sm mb-8">
+    <div className="bg-white border rounded-md p-6 shadow-sm mb-8">
       <div className="flex items-center gap-2 mb-6 text-green-700">
         <FolderPlus size={20} />
         <h2 className="text-lg font-bold">Create New Category</h2>
@@ -85,7 +85,7 @@ export default function CategoryForm() {
             value={name}
             onChange={handleNameChange}
             required
-            className="w-full border rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none"
+            className="w-full border rounded-md px-4 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none"
             placeholder="e.g. Organic Oils"
           />
         </div>
@@ -95,7 +95,7 @@ export default function CategoryForm() {
           <input
             value={slug}
             readOnly
-            className="w-full border bg-gray-50 rounded-xl px-4 py-2 text-sm text-gray-500 cursor-not-allowed"
+            className="w-full border bg-gray-50 rounded-md px-4 py-2 text-sm text-gray-500 cursor-not-allowed"
           />
         </div>
 
@@ -111,7 +111,7 @@ export default function CategoryForm() {
             />
             <label 
               htmlFor="cat-image"
-              className="flex items-center justify-center gap-2 w-full border-2 border-dashed border-gray-200 rounded-xl py-2 text-xs font-bold text-gray-500 hover:border-green-600 hover:text-green-600 cursor-pointer transition"
+              className="flex items-center justify-center gap-2 w-full border-2 border-dashed border-gray-200 rounded-md py-2 text-xs font-bold text-gray-500 hover:border-green-600 hover:text-green-600 cursor-pointer transition"
             >
               <ImageIcon size={14} /> Add Cover
             </label>

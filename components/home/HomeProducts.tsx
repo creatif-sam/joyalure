@@ -27,17 +27,17 @@ export default function HomeProducts({
         
         {/* Header & Toggle Section */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-6">
-          <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-gray-900 dark:text-zinc-100 italic uppercase">
+          <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-gray-900 dark:text-zinc-100 uppercase">
             {mode === "featured" ? "Our Favorites" : "The Latest"}
           </h2>
 
           {/* Toggle Switch: Adapted for Dark Mode */}
-          <div className="flex bg-gray-100 dark:bg-zinc-900 p-1 rounded-xl transition-colors">
+          <div className="flex bg-gray-100 dark:bg-zinc-900 p-1 rounded-md transition-colors">
             {(["featured", "recent"] as const).map((m) => (
               <button
                 key={m}
                 onClick={() => setMode(m)}
-                className={`px-6 py-2 text-[10px] font-black uppercase tracking-widest transition-all rounded-lg ${
+                className={`px-6 py-2 text-[10px] font-black uppercase tracking-widest transition-all rounded-md ${
                   mode === m 
                     ? "bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100 shadow-sm" 
                     : "text-gray-500 dark:text-zinc-500 hover:text-gray-900 dark:hover:text-zinc-300"

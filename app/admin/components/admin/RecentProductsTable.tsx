@@ -11,7 +11,7 @@ export default function RecentProductsTable({
   products
 }: RecentProductsTableProps) {
   return (
-    <div className="bg-white border rounded-lg overflow-hidden mt-8">
+    <div className="bg-white border rounded-md overflow-hidden mt-8">
       <h2 className="px-4 py-3 text-lg font-semibold border-b">
         Recent Products
       </h2>

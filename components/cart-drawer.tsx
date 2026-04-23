@@ -101,7 +101,7 @@ export default function CartDrawer() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   className="flex gap-4 border-b pb-6 mb-6 last:border-0"
                 >
-                  <div className="relative w-20 h-24 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
+                  <div className="relative w-20 h-24 bg-gray-50 rounded-md overflow-hidden flex-shrink-0">
                     <Image
                       src={item.image_url || "/placeholder.png"}
                       alt={item.title}
@@ -117,7 +117,7 @@ export default function CartDrawer() {
                     </p>
 
                     <div className="flex items-center gap-3 mt-4">
-                      <div className="flex items-center border rounded-lg bg-gray-50">
+                      <div className="flex items-center border rounded-md bg-gray-50">
                         <button onClick={() => decrease(item.id)} className="p-1.5 hover:text-green-600 transition"><Minus size={14} /></button>
                         <span className="text-xs font-bold w-8 text-center">{item.quantity}</span>
                         <button onClick={() => increase(item.id)} className="p-1.5 hover:text-green-600 transition"><Plus size={14} /></button>
@@ -161,7 +161,7 @@ export default function CartDrawer() {
 
             <button 
               onClick={handleCheckout}
-              className="w-full py-4 bg-green-600 text-white font-bold uppercase tracking-widest text-xs rounded-xl hover:bg-green-700 shadow-lg shadow-green-600/20 transition-all active:scale-[0.98]"
+              className="w-full py-4 bg-green-600 text-white font-bold uppercase tracking-widest text-xs rounded-md hover:bg-green-700 shadow-lg shadow-green-600/20 transition-all active:scale-[0.98]"
             >
               Proceed to Checkout
             </button>

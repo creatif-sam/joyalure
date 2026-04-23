@@ -38,7 +38,7 @@ export default function SearchBar({ onClose, className }: SearchBarProps) {
           placeholder="Search for Joyalure products..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full pl-12 pr-12 py-3 bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-600/50 focus:bg-white dark:focus:bg-zinc-950 transition-all text-sm shadow-sm dark:text-zinc-100"
+          className="w-full pl-12 pr-12 py-3 bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600/50 focus:bg-white dark:focus:bg-zinc-950 transition-all text-sm shadow-sm dark:text-zinc-100"
         />
         {query && (
           <button

@@ -27,7 +27,7 @@ export default function ProductCard({ product, onEdit, onDelete }: Props) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-zinc-900 rounded-3xl overflow-hidden shadow-lg border-2 border-gray-100 dark:border-zinc-800 hover:shadow-2xl transition-shadow"
+      className="bg-white dark:bg-zinc-900 rounded-md overflow-hidden shadow-lg border-2 border-gray-100 dark:border-zinc-800 hover:shadow-2xl transition-shadow"
     >
       <div className="relative h-48 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900/20 dark:to-green-800/20">
         {product.images && product.images.length > 0 ? (
@@ -56,13 +56,13 @@ export default function ProductCard({ product, onEdit, onDelete }: Props) {
           <div className="flex gap-2">
             <button
               onClick={() => onEdit(product)}
-              className="p-2 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50 rounded-lg transition-colors"
+              className="p-2 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50 rounded-md transition-colors"
             >
               <Edit className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             </button>
             <button
               onClick={() => product.id && onDelete(product.id)}
-              className="p-2 bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 rounded-lg transition-colors"
+              className="p-2 bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 rounded-md transition-colors"
             >
               <Trash2 className="h-4 w-4 text-red-600 dark:text-red-400" />
             </button>

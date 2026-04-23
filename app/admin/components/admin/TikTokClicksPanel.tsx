@@ -22,10 +22,10 @@ interface Props {
 
 export default function TikTokClicksPanel({ stats, loading, onRefresh }: Props) {
   return (
-    <div className="bg-gradient-to-br from-pink-50 via-purple-50 to-green-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-green-950/20 border-2 border-pink-200 dark:border-pink-800 rounded-[2rem] overflow-hidden shadow-lg p-4 md:p-6">
+    <div className="bg-gradient-to-br from-pink-50 via-purple-50 to-green-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-green-950/20 border-2 border-pink-200 dark:border-pink-800 rounded-md overflow-hidden shadow-lg p-4 md:p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl">
+          <div className="p-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-md">
             <MousePointerClick className="h-5 w-5 text-white" />
           </div>
           <div>
@@ -40,7 +40,7 @@ export default function TikTokClicksPanel({ stats, loading, onRefresh }: Props) 
         <button
           onClick={onRefresh}
           disabled={loading}
-          className="p-2 bg-white dark:bg-zinc-800 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors"
+          className="p-2 bg-white dark:bg-zinc-800 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors"
         >
           <RefreshCcw className={`h-4 w-4 text-pink-600 dark:text-pink-400 ${loading ? "animate-spin" : ""}`} />
         </button>
@@ -62,7 +62,7 @@ export default function TikTokClicksPanel({ stats, loading, onRefresh }: Props) 
             ].map(({ label, sublabel, value, color }) => (
               <div
                 key={label}
-                className={`bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-${color}-200 dark:border-${color}-900`}
+                className={`bg-white dark:bg-zinc-900 rounded-md p-4 border border-${color}-200 dark:border-${color}-900`}
               >
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingUp className={`h-4 w-4 text-${color}-600`} />
@@ -76,7 +76,7 @@ export default function TikTokClicksPanel({ stats, loading, onRefresh }: Props) 
 
           {/* Device & Geographic Breakdown */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-gray-200 dark:border-zinc-800">
+            <div className="bg-white dark:bg-zinc-900 rounded-md p-4 border border-gray-200 dark:border-zinc-800">
               <div className="flex items-center gap-2 mb-4">
                 <Smartphone className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                 <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
@@ -107,7 +107,7 @@ export default function TikTokClicksPanel({ stats, loading, onRefresh }: Props) 
               </div>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-gray-200 dark:border-zinc-800">
+            <div className="bg-white dark:bg-zinc-900 rounded-md p-4 border border-gray-200 dark:border-zinc-800">
               <div className="flex items-center gap-2 mb-4">
                 <Globe className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                 <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
@@ -146,7 +146,7 @@ export default function TikTokClicksPanel({ stats, loading, onRefresh }: Props) 
 
           {/* Click Trend Chart */}
           {stats.clicksByDate && Object.keys(stats.clicksByDate).length > 0 && (
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-gray-200 dark:border-zinc-800">
+            <div className="bg-white dark:bg-zinc-900 rounded-md p-4 border border-gray-200 dark:border-zinc-800">
               <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-4">
                 Last 30 Days Trend
               </h4>

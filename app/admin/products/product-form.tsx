@@ -54,7 +54,7 @@ export default function ProductForm() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-md shadow-sm overflow-hidden">
         {/* Header decoration */}
         <div className="h-2 bg-green-600 w-full" />
         

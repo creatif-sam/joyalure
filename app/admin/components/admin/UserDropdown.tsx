@@ -52,7 +52,7 @@ export function UserDropdown() {
       </button>
       
       {/* Dropdown Menu - Added 'pointer-events-auto' to ensure buttons are clickable */}
-      <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-xl shadow-xl opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 pointer-events-none z-50 transform origin-top-right scale-95 group-hover:scale-100">
+      <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-md shadow-xl opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 pointer-events-none z-50 transform origin-top-right scale-95 group-hover:scale-100">
         <div className="py-2">
           <div className="px-4 py-2 border-b dark:border-zinc-800 mb-1">
             <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Admin Account</p>

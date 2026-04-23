@@ -4,6 +4,20 @@ import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
 import { ArrowRight, Calendar } from "lucide-react"
 
+/** Strip HTML tags and decode basic entities for plain-text preview */
+function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
 export default async function BlogPreview() {
   const cookieStore = await cookies()
   const supabase = createServerSupabaseClient({ cookies: cookieStore })
@@ -25,10 +39,10 @@ export default async function BlogPreview() {
         {/* HEADER: Institutional Branding */}
         <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-4">
           <div>
-            <h2 className="text-3xl md:text-4xl font-black tracking-tighter text-gray-900 dark:text-zinc-100 uppercase italic">
+            <h2 className="text-3xl md:text-4xl font-black tracking-tighter text-gray-900 dark:text-zinc-100 uppercase">
               From Our Journal
             </h2>
-            <p className="text-gray-500 dark:text-zinc-400 text-sm mt-1 font-medium italic">
+            <p className="text-gray-500 dark:text-zinc-400 text-sm mt-1 font-medium">
               Editorial insights into the world of high-end skincare.
             </p>
           </div>
@@ -77,12 +91,12 @@ export default async function BlogPreview() {
                     })}
                   </div>
 
-                  <h3 className="text-lg font-black text-gray-900 dark:text-zinc-100 mb-3 tracking-tight italic uppercase leading-tight group-hover:text-green-600 transition-colors">
+                  <h3 className="text-lg font-black text-gray-900 dark:text-zinc-100 mb-3 tracking-tight uppercase leading-tight group-hover:text-green-600 transition-colors">
                     {post.title}
                   </h3>
 
                   <p className="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed line-clamp-3 font-medium">
-                    {post.excerpt}
+                    {stripHtml(post.excerpt || "")}
                   </p>
                   
                   <div className="mt-auto pt-6 flex items-center text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-green-600 transition-colors">

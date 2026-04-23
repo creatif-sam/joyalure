@@ -21,11 +21,11 @@ export default function ProductCard({ product, priority = false }: any) {
   const displayDescription = product.description || "Soft, effective skincare designed for daily glow and balance.";
 
   return (
-    <div className="group relative bg-white dark:bg-zinc-900 flex flex-col h-full rounded-2xl hover:rounded-xl transition-all duration-500 hover:shadow-md dark:hover:shadow-zinc-950/50 p-2 border border-transparent dark:border-zinc-800/50">
+    <div className="group relative bg-white dark:bg-zinc-900 flex flex-col h-full rounded-md hover:rounded-md transition-all duration-500 hover:shadow-md dark:hover:shadow-zinc-950/50 p-2 border border-transparent dark:border-zinc-800/50">
       
       {/* IMAGE SECTION: Optimized background for dark mode */}
       <Link href={`/products/${product.handle}`} className="block">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[#fcfcfc] dark:bg-zinc-950">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-[#fcfcfc] dark:bg-zinc-950">
           <Image
             src={product.image_url || "/placeholder.png"}
             alt={product.title}
@@ -82,7 +82,7 @@ export default function ProductCard({ product, priority = false }: any) {
               addItem({ ...product, quantity: 1 });
               toast.success(`${product.title} added`);
             }}
-            className="relative overflow-hidden flex items-center gap-2 px-2 py-2 bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:bg-green-600 dark:hover:bg-green-500 dark:hover:text-white transition-all duration-300 active:scale-95 shadow-sm hover:pr-3 group/btn"
+            className="relative overflow-hidden flex items-center gap-2 px-2 py-2 bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-md hover:bg-green-600 dark:hover:bg-green-500 dark:hover:text-white transition-all duration-300 active:scale-95 shadow-sm hover:pr-3 group/btn"
           >
             <span className="opacity-0 max-w-0 group-hover/btn:opacity-100 group-hover/btn:max-w-[80px] transition-all duration-300 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap overflow-hidden">
               Add to Cart

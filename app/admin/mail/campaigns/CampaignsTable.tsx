@@ -103,7 +103,7 @@ export default function CampaignsTable() {
 
   if (loading && campaigns.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-80 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] md:rounded-[2.5rem]">
+      <div className="flex flex-col items-center justify-center h-80 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-md md:rounded-[2.5rem]">
         <Loader2 className="h-8 w-8 animate-spin text-green-600 mb-4" />
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Syncing Archive...</p>
       </div>
@@ -115,7 +115,7 @@ export default function CampaignsTable() {
       {/* MOBILE VIEW: Card List (Hidden on Desktop) */}
       <div className="grid grid-cols-1 gap-4 md:hidden">
         {campaigns.map((camp) => (
-          <div key={camp.id} className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-[2rem] p-5 shadow-sm space-y-4">
+          <div key={camp.id} className="bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-md p-5 shadow-sm space-y-4">
             <div className="flex justify-between items-start">
               <div className="max-w-[70%]">
                 <h3 className="font-black text-zinc-900 dark:text-zinc-100 tracking-tight leading-tight">{camp.subject}</h3>
@@ -199,20 +199,20 @@ export default function CampaignsTable() {
 
       {/* MODALS (Shared between views) */}
       <Dialog open={!!viewCampaign} onOpenChange={() => setViewCampaign(null)}>
-        <DialogContent className="max-w-2xl w-[95vw] sm:w-full dark:bg-zinc-950 dark:border-zinc-800 rounded-[2rem] md:rounded-[2.5rem] border shadow-2xl overflow-hidden p-0">
+        <DialogContent className="max-w-2xl w-[95vw] sm:w-full dark:bg-zinc-950 dark:border-zinc-800 rounded-md md:rounded-[2.5rem] border shadow-2xl overflow-hidden p-0">
           <div className="p-5 md:p-6 border-b dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/50">
             <h2 className="text-lg md:text-xl font-black italic uppercase dark:text-gray-100 tracking-tighter">Editorial Snapshot</h2>
             <p className="text-[9px] md:text-[10px] font-black uppercase text-zinc-500 tracking-widest mt-1 truncate">Reviewing: {viewCampaign?.subject}</p>
           </div>
           <div className="p-6 md:p-8 max-h-[60vh] overflow-y-auto prose prose-zinc prose-sm dark:prose-invert max-w-none text-xs md:text-sm" dangerouslySetInnerHTML={{ __html: viewCampaign?.body }} />
           <div className="p-5 md:p-6 border-t dark:border-zinc-800 bg-zinc-50/50 flex justify-end">
-            <Button onClick={() => setViewCampaign(null)} className="rounded-xl font-black text-[10px] uppercase bg-zinc-900 text-white px-6">Close</Button>
+            <Button onClick={() => setViewCampaign(null)} className="rounded-md font-black text-[10px] uppercase bg-zinc-900 text-white px-6">Close</Button>
           </div>
         </DialogContent>
       </Dialog>
 
       <Dialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
-        <DialogContent className="max-w-[90vw] sm:max-w-md dark:bg-zinc-950 dark:border-zinc-800 rounded-[2rem] md:rounded-[2.5rem] border shadow-2xl">
+        <DialogContent className="max-w-[90vw] sm:max-w-md dark:bg-zinc-950 dark:border-zinc-800 rounded-md md:rounded-[2.5rem] border shadow-2xl">
           <DialogHeader className="text-center pt-2">
             <div className="mx-auto w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mb-4"><Trash2 className="text-red-600" size={20} /></div>
             <DialogTitle className="text-lg md:text-xl font-black uppercase italic dark:text-gray-100">Permanent Purge</DialogTitle>
@@ -220,7 +220,7 @@ export default function CampaignsTable() {
           </DialogHeader>
           <DialogFooter className="gap-2 sm:gap-3 sm:justify-center py-4 flex flex-col-reverse sm:flex-row">
             <Button variant="ghost" onClick={() => setDeleteId(null)} className="text-[10px] font-black uppercase text-zinc-500">Cancel</Button>
-            <Button onClick={handleDelete} disabled={isProcessing} className="bg-red-600 text-white rounded-xl px-8 font-black text-[10px] uppercase hover:bg-red-700 active:scale-95">
+            <Button onClick={handleDelete} disabled={isProcessing} className="bg-red-600 text-white rounded-md px-8 font-black text-[10px] uppercase hover:bg-red-700 active:scale-95">
               {isProcessing ? <Loader2 className="animate-spin h-3 w-3 mr-2" /> : "Confirm Purge"}
             </Button>
           </DialogFooter>
@@ -228,7 +228,7 @@ export default function CampaignsTable() {
       </Dialog>
 
       <Dialog open={!!confirmSend} onOpenChange={() => setConfirmSend(null)}>
-        <DialogContent className="max-w-[90vw] sm:max-w-md dark:bg-zinc-950 dark:border-zinc-800 rounded-[2rem] md:rounded-[2.5rem] border shadow-2xl">
+        <DialogContent className="max-w-[90vw] sm:max-w-md dark:bg-zinc-950 dark:border-zinc-800 rounded-md md:rounded-[2.5rem] border shadow-2xl">
           <DialogHeader className="text-center pt-2">
             <div className="mx-auto w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mb-4"><Send className="text-green-600" size={20} /></div>
             <DialogTitle className="text-lg md:text-xl font-black uppercase italic dark:text-gray-100">Initiate Broadcast</DialogTitle>
@@ -236,7 +236,7 @@ export default function CampaignsTable() {
           </DialogHeader>
           <DialogFooter className="gap-2 sm:gap-3 sm:justify-center py-4 flex flex-col-reverse sm:flex-row">
             <Button variant="ghost" onClick={() => setConfirmSend(null)} className="text-[10px] font-black uppercase text-zinc-500">Hold</Button>
-            <Button onClick={handleSend} disabled={isProcessing} className="bg-green-600 text-white rounded-xl px-8 font-black text-[10px] uppercase hover:bg-green-700 active:scale-95">
+            <Button onClick={handleSend} disabled={isProcessing} className="bg-green-600 text-white rounded-md px-8 font-black text-[10px] uppercase hover:bg-green-700 active:scale-95">
               {isProcessing ? <Loader2 className="animate-spin h-3 w-3 mr-2" /> : "Authorize Send"}
             </Button>
           </DialogFooter>
@@ -259,7 +259,7 @@ function StatusBadge({ status }: { status: string }) {
   };
   const currentStatus = (status?.toLowerCase() || 'draft') as keyof typeof styles;
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border transition-all ${styles[currentStatus]}`}>
+    <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest border transition-all ${styles[currentStatus]}`}>
       {icons[currentStatus as keyof typeof icons]} {currentStatus}
     </span>
   );

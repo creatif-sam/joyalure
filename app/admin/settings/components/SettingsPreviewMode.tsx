@@ -27,7 +27,7 @@ export default function SettingsPreviewMode({ onExitPreview }: Props) {
         </div>
       </div>
 
-      <div className="border rounded-lg overflow-hidden bg-white">
+      <div className="border rounded-md overflow-hidden bg-white">
         <div className="bg-gray-50 px-4 py-2 border-b text-sm text-gray-600">
           Live Preview - How your site will look with current settings
         </div>

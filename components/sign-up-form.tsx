@@ -69,7 +69,7 @@ export function SignUpForm({
       )}
       {...props}
     >
-      <Card className="w-full max-w-md border-zinc-200 dark:border-zinc-800 bg-card shadow-lg rounded-2xl overflow-hidden">
+      <Card className="w-full max-w-md border-zinc-200 dark:border-zinc-800 bg-card shadow-lg rounded-md overflow-hidden">
         <CardHeader className="space-y-1 text-center pb-8 pt-10">
           <CardTitle className="text-2xl md:text-3xl font-black tracking-tighter text-green-700 dark:text-green-500 uppercase italic">
             Create Account
@@ -153,7 +153,7 @@ export function SignUpForm({
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-14 bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-green-700/20 active:scale-95 transition-all"
+              className="w-full h-14 bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded-md font-black uppercase text-[10px] tracking-widest shadow-lg shadow-green-700/20 active:scale-95 transition-all"
             >
               {isLoading ? (
                 <>

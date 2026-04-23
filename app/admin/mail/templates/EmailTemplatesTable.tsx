@@ -72,7 +72,7 @@ export default function EmailTemplatesTable() {
       {/* HEADER SECTION */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-green-50 dark:bg-green-500/10 rounded-xl">
+          <div className="p-2.5 bg-green-50 dark:bg-green-500/10 rounded-md">
             <FileText className="h-6 w-6 text-green-600" />
           </div>
           <div>
@@ -146,7 +146,7 @@ export default function EmailTemplatesTable() {
           {/* MOBILE CARD VIEW (Hidden on PC) */}
           <div className="lg:hidden space-y-4 px-1">
             {templates.map((t) => (
-              <div key={t.id} className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 p-6 space-y-4 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <div key={t.id} className="bg-white dark:bg-zinc-900 rounded-md border border-zinc-100 dark:border-zinc-800 p-6 space-y-4 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500">
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-black text-zinc-900 dark:text-zinc-100 tracking-tight leading-tight">{t.name}</h3>
@@ -188,7 +188,7 @@ export default function EmailTemplatesTable() {
               </div>
               <div className="flex-1 overflow-y-auto p-4 md:p-12 bg-zinc-100 dark:bg-zinc-900/30 flex justify-center">
                 {/* Image of e-mail preview interface in Joyalure branding */}
-                <div className="bg-white text-black shadow-2xl rounded-2xl md:rounded-[2rem] p-6 md:p-12 w-full max-w-3xl min-h-full" dangerouslySetInnerHTML={{ __html: viewTemplate.body }} />
+                <div className="bg-white text-black shadow-2xl rounded-md md:rounded-md p-6 md:p-12 w-full max-w-3xl min-h-full" dangerouslySetInnerHTML={{ __html: viewTemplate.body }} />
               </div>
             </motion.div>
           </div>
@@ -211,7 +211,7 @@ export default function EmailTemplatesTable() {
 // SUB-COMPONENTS
 function ActionButton({ icon: Icon, onClick, color }: any) {
   return (
-    <button onClick={onClick} className={`p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-zinc-400 transition-all hover:scale-110 active:scale-90 ${color}`}>
+    <button onClick={onClick} className={`p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-md text-zinc-400 transition-all hover:scale-110 active:scale-90 ${color}`}>
       <Icon size={16} />
     </button>
   );
@@ -219,7 +219,7 @@ function ActionButton({ icon: Icon, onClick, color }: any) {
 
 function MobileAction({ icon: Icon, onClick, label, isDestructive }: any) {
   return (
-    <button onClick={onClick} className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-2xl transition-all active:scale-90 ${isDestructive ? 'bg-red-50 dark:bg-red-950/20 text-red-500' : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-500'}`}>
+    <button onClick={onClick} className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md transition-all active:scale-90 ${isDestructive ? 'bg-red-50 dark:bg-red-950/20 text-red-500' : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-500'}`}>
       <Icon size={14} />
       <span className="text-[8px] font-black uppercase tracking-tighter">{label}</span>
     </button>
