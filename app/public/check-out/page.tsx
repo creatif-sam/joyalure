@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
+import Link from "next/link"
 import { useCartStore } from "@/lib/cart-store"
 import { useCurrencyStore } from "@/lib/currency-store"
 import { useAnalytics } from "@/hooks/use-analytics"
@@ -9,14 +10,11 @@ import Image from "next/image"
 import { ShieldCheck, ShoppingBag } from "lucide-react"
 
 export default function CheckoutPage() {
-  const [mounted, setMounted] = useState(false)
   const { items, subtotal, checkout, isCheckingOut } = useCartStore()
   const { currency, rate } = useCurrencyStore()
   const { trackCheckoutStart, trackClick } = useAnalytics()
 
   useEffect(() => {
-    setMounted(true)
-    // Track that the user landed on checkout page
     trackCheckoutStart()
   }, [trackCheckoutStart])
 
@@ -29,9 +27,24 @@ export default function CheckoutPage() {
     return amount.toFixed(2)
   }
 
-  if (!mounted || items.length === 0) return (
-    <div className="py-20 text-center italic text-gray-500">Your cart is empty.</div>
-  )
+  // Show empty state immediately if no items
+  if (items.length === 0) {
+    return (
+      <main className="max-w-7xl mx-auto px-6 py-20">
+        <div className="text-center space-y-6">
+          <div className="text-6xl">🛒</div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Your cart is empty</h2>
+          <p className="text-gray-500 dark:text-zinc-400">Add some products to continue shopping</p>
+          <Link
+            href="/public/products"
+            className="inline-block px-6 py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-colors"
+          >
+            Browse Products
+          </Link>
+        </div>
+      </main>
+    )
+  }
 
   const rawTotal = subtotal()
 
@@ -57,7 +70,7 @@ export default function CheckoutPage() {
           </p>
         </div>
 
-        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 space-y-3">
+        <div className="bg-gray-50 rounded-lg p-6 border border-gray-100 space-y-3">
           <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
             <ShieldCheck size={16} className="text-green-600" />
             Secure Shopify Checkout
@@ -72,7 +85,7 @@ export default function CheckoutPage() {
         <button
           onClick={handleShopifyCheckout}
           disabled={isCheckingOut}
-          className="w-full py-5 bg-green-600 text-white font-bold rounded-2xl hover:bg-green-700 transition-all active:scale-[0.98] shadow-lg shadow-green-600/20 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full py-3 px-6 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all active:scale-[0.98] shadow-lg shadow-green-600/20 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
         >
           <ShoppingBag size={18} />
           {isCheckingOut ? "Redirecting…" : `Checkout · ${symbol}${formatAmount(rawTotal)}`}
@@ -80,7 +93,7 @@ export default function CheckoutPage() {
       </section>
 
       {/* RIGHT: Order Summary */}
-      <section className="bg-gray-50 p-8 rounded-3xl h-fit lg:sticky lg:top-24 border border-gray-100">
+      <section className="bg-gray-50 p-8 rounded-lg h-fit lg:sticky lg:top-24 border border-gray-100">
         <h2 className="text-xl font-medium mb-6">Order Summary</h2>
         <div className="space-y-6 mb-8 max-h-[400px] overflow-y-auto pr-2">
           {items.map((item) => (

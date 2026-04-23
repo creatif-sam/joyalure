@@ -74,9 +74,9 @@ export default function Newsletter() {
               onChange={(e) => setEmail(e.target.value)}
               className="
                 w-full
-                px-6 py-4
+                px-6 py-3
                 border border-gray-200 dark:border-zinc-800
-                rounded-xl
+                rounded-lg
                 bg-white dark:bg-zinc-900
                 text-gray-900 dark:text-zinc-100
                 text-sm
@@ -94,8 +94,8 @@ export default function Newsletter() {
             disabled={loading}
             className="
               w-full md:w-auto
-              px-12 py-4
-              rounded-xl
+              px-8 py-3
+              rounded-lg
               border border-black dark:border-zinc-700
               bg-black dark:bg-zinc-100
               text-white dark:text-zinc-900
