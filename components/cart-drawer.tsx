@@ -47,7 +47,7 @@ export default function CartDrawer() {
 
   const handleCheckout = () => {
     closeCart()
-    router.push("/public/check-out") // Standardized route
+    router.push("/check-out") // Standardized route
   }
 
   const handleRemove = (id: string, title: string) => {

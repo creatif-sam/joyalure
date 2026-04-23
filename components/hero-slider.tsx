@@ -15,7 +15,7 @@ const slides = [
     tag: "ORGANIC SKINCARE",
     title: "Radiance Without Irritation",
     cta: "Shop Now",
-    link: "/public/products"
+    link: "/products"
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ const slides = [
     tag: "CLINICALLY INSPIRED",
     title: "Gentle Care Powered By Nature",
     cta: "Discover",
-    link: "/public/products"
+    link: "/products"
   },
   {
     id: 3,
@@ -33,7 +33,7 @@ const slides = [
     tag: "CLEAN BEAUTY",
     title: "Vegan Formulas For Every Skin",
     cta: "Explore",
-    link: "/public/about"
+    link: "/about"
   }
 ]
 

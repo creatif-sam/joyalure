@@ -24,7 +24,7 @@ export default function ProductCard({ product, priority = false }: any) {
     <div className="group relative bg-white dark:bg-zinc-900 flex flex-col h-full rounded-2xl hover:rounded-xl transition-all duration-500 hover:shadow-md dark:hover:shadow-zinc-950/50 p-2 border border-transparent dark:border-zinc-800/50">
       
       {/* IMAGE SECTION: Optimized background for dark mode */}
-      <Link href={`/public/products/${product.handle}`} className="block">
+      <Link href={`/products/${product.handle}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[#fcfcfc] dark:bg-zinc-950">
           <Image
             src={product.image_url || "/placeholder.png"}
@@ -59,7 +59,7 @@ export default function ProductCard({ product, priority = false }: any) {
           </span>
         )}
 
-        <Link href={`/public/products/${product.handle}`}>
+        <Link href={`/products/${product.handle}`}>
           <h3 className="text-[12px] font-bold text-gray-800 dark:text-zinc-100 line-clamp-1 mb-3 tracking-tight hover:text-green-600 dark:hover:text-green-500 transition-colors">
             {product.title}
           </h3>

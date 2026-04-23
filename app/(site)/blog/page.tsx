@@ -68,7 +68,7 @@ export default async function BlogPage() {
               />
 
               <Link 
-                href={`/public/blog/${featuredPost.slug}`}
+                href={`/blog/${featuredPost.slug}`}
                 className="inline-flex items-center gap-2 text-green-700 dark:text-green-500 font-bold group"
               >
                 Read More <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -93,7 +93,7 @@ export default async function BlogPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {recentPosts?.map((post) => (
-            <Link key={post.id} href={`/public/blog/${post.slug}`} className="group space-y-5">
+            <Link key={post.id} href={`/blog/${post.slug}`} className="group space-y-5">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-gray-50 dark:bg-zinc-900 relative border border-gray-100 dark:border-zinc-800 transition-all group-hover:shadow-xl group-hover:shadow-green-600/5">
                 {post.main_image ? (
                   <img 

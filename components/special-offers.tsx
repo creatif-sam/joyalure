@@ -64,7 +64,7 @@ export default function SpecialOffers() {
               Special Offer
             </h3>
             <Link
-              href="/public/products?offer=20"
+              href="/products?offer=20"
               className="inline-block bg-yellow-400 text-black px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-green-600 hover:text-white transition-all active:scale-95 shadow-lg shadow-yellow-400/20 hover:shadow-green-600/20"
             >
               Shop Now
@@ -91,7 +91,7 @@ export default function SpecialOffers() {
               Special Offer
             </h3>
             <Link
-              href="/public/products?offer=30"
+              href="/products?offer=30"
               className="inline-block bg-yellow-400 text-black px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-green-600 hover:text-white transition-all active:scale-95 shadow-lg shadow-yellow-400/20 hover:shadow-green-600/20"
             >
               Shop Now

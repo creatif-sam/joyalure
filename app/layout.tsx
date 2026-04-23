@@ -13,8 +13,7 @@ export default function RootLayout({
       <body className="bg-gray-50 dark:bg-zinc-950 min-h-screen transition-colors duration-300">
         <ThemeProvider 
           attribute="class" 
-          defaultTheme="system" 
-          enableSystem
+          defaultTheme="light" 
           disableTransitionOnChange
         >
           <SpeedInsights />

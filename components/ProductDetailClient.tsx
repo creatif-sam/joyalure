@@ -55,7 +55,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
       {/* Back Button */}
       <div className="max-w-7xl mx-auto px-4 py-6">
         <Link
-          href="/public/products"
+          href="/products"
           className="inline-flex items-center gap-2 text-sm font-bold text-gray-600 dark:text-zinc-400 hover:text-green-600 dark:hover:text-green-500 transition-colors"
         >
           <ArrowLeft size={16} />

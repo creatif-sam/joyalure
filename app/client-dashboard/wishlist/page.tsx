@@ -47,7 +47,7 @@ export default function WishlistPage() {
             Save items you love to find them easily later.
           </p>
           <Link 
-            href="/public/products" 
+            href="/products" 
             className="px-6 py-3 bg-green-600 text-white font-black uppercase tracking-widest text-[9px] md:text-[10px] rounded-xl hover:bg-green-700 transition-all shadow-lg shadow-green-600/20 active:scale-95"
           >
             Explore Products

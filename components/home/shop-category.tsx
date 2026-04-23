@@ -18,7 +18,7 @@ export default async function HomeCategories() {
             <p className="text-gray-500 dark:text-zinc-400 text-sm italic">Tailored skincare for your unique glow.</p>
           </div>
           <Link 
-            href="/public/products" 
+            href="/products" 
             className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 hover:text-green-600 dark:hover:text-green-500 transition-colors flex items-center gap-2"
           >
             Browse All <ArrowRight size={14} />
@@ -30,7 +30,7 @@ export default async function HomeCategories() {
           {categories.map((category) => (
             <Link
               key={category.slug}
-              href={`/public/products?category=${category.slug}`}
+              href={`/products?category=${category.slug}`}
               className="group relative rounded-2xl overflow-hidden bg-gray-100 dark:bg-zinc-900 aspect-[4/3] border dark:border-zinc-800"
             >
               {/* IMAGE */}

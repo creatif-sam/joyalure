@@ -17,7 +17,7 @@ export default function SearchBar({ onClose, className }: SearchBarProps) {
     e.preventDefault();
     if (!query.trim()) return;
 
-    router.push(`/public/products?q=${encodeURIComponent(query.trim())}`);
+    router.push(`/products?q=${encodeURIComponent(query.trim())}`);
     
     if (onClose) onClose();
   };

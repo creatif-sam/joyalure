@@ -148,6 +148,10 @@ export const useCartStore = create<CartState>()(
     {
       name: "joyalure-cart-storage",
       storage: createJSONStorage(() => localStorage),
+      // Only persist cart items — never persist transient UI state like
+      // isCheckingOut or isOpen, otherwise the button stays "Redirecting…"
+      // forever after the user returns from Shopify checkout.
+      partialize: (state) => ({ items: state.items }),
     }
   )
 )

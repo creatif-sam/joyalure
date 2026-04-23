@@ -34,7 +34,7 @@ export default async function BlogPreview() {
           </div>
 
           <Link
-            href="/public/blog"
+            href="/blog"
             className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 hover:text-green-600 dark:hover:text-green-500 transition-colors flex items-center gap-2"
           >
             View all entries <ArrowRight size={14} />
@@ -47,7 +47,7 @@ export default async function BlogPreview() {
             posts.map((post) => (
               <Link
                 key={post.slug}
-                href={`/public/blog/${post.slug}`}
+                href={`/blog/${post.slug}`}
                 className="group flex flex-col bg-zinc-50 dark:bg-zinc-900 rounded-[2rem] overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:shadow-xl dark:hover:shadow-zinc-950/50 transition-all duration-500"
               >
                 {/* Image Section */}

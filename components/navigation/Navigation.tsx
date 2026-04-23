@@ -72,11 +72,11 @@ export default function Navigation() {
 
           {/* Center Links */}
           <div className="flex gap-8 text-sm font-bold text-gray-500 dark:text-zinc-400">
-            <Link href="/public" className="hover:text-green-600 dark:hover:text-green-500 transition">Home</Link>
-            <Link href="/public/products" className="hover:text-green-600 dark:hover:text-green-500 transition">Products</Link>
-            <Link href="/public/about" className="hover:text-green-600 dark:hover:text-green-500 transition">About</Link>
-                        <Link href="/public/blog" className="hover:text-green-600 dark:hover:text-green-500 transition">Blog</Link>
-            <Link href="/public/contact" className="hover:text-green-600 dark:hover:text-green-500 transition">Contact</Link>
+            <Link href="/" className="hover:text-green-600 dark:hover:text-green-500 transition">Home</Link>
+            <Link href="/products" className="hover:text-green-600 dark:hover:text-green-500 transition">Products</Link>
+            <Link href="/about" className="hover:text-green-600 dark:hover:text-green-500 transition">About</Link>
+                        <Link href="/blog" className="hover:text-green-600 dark:hover:text-green-500 transition">Blog</Link>
+            <Link href="/contact" className="hover:text-green-600 dark:hover:text-green-500 transition">Contact</Link>
           </div>
 
           {/* Right Actions */}
@@ -145,12 +145,12 @@ export default function Navigation() {
       {/* MOBILE BOTTOM NAV */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-lg border-t dark:border-zinc-800 md:hidden pb-safe transition-colors duration-300">
         <div className="flex justify-around items-center h-16">
-          <Link href="/public" className="flex flex-col items-center text-[10px] font-black uppercase tracking-tighter text-gray-500 dark:text-zinc-400">
+          <Link href="/" className="flex flex-col items-center text-[10px] font-black uppercase tracking-tighter text-gray-500 dark:text-zinc-400">
             <Home size={20} />
             <span className="mt-1">Home</span>
           </Link>
 
-          <Link href="/public/products" className="flex flex-col items-center text-[10px] font-black uppercase tracking-tighter text-gray-500 dark:text-zinc-400">
+          <Link href="/products" className="flex flex-col items-center text-[10px] font-black uppercase tracking-tighter text-gray-500 dark:text-zinc-400">
             <Grid size={20} />
             <span className="mt-1">Shop</span>
           </Link>
