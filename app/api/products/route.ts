@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
 import { getShopifyProducts } from "@/lib/shopify"
 
+// Revalidate the product list every 5 minutes
+export const revalidate = 300
+
 export async function GET() {
   try {
     const products = await getShopifyProducts(50)

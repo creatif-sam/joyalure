@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import Image from "next/image"
 
 const SLIDE_DURATION = 7000
 
@@ -10,11 +11,11 @@ const slides = [
   {
     id: 1,
     type: "image",
-    src: "images/skin-care-2.png",
+    src: "/images/skin-care-2.png",
     tag: "ORGANIC SKINCARE",
     title: "Radiance Without Irritation",
     cta: "Shop Now",
-    link: "/products"
+    link: "/public/products"
   },
   {
     id: 2,
@@ -23,16 +24,16 @@ const slides = [
     tag: "CLINICALLY INSPIRED",
     title: "Gentle Care Powered By Nature",
     cta: "Discover",
-    link: "/products"
+    link: "/public/products"
   },
   {
     id: 3,
     type: "image",
-    src: "images/skin-care-1.jpg",
+    src: "/images/skin-care-1.jpg",
     tag: "CLEAN BEAUTY",
     title: "Vegan Formulas For Every Skin",
     cta: "Explore",
-    link: "/about"
+    link: "/public/about"
   }
 ]
 
@@ -61,10 +62,13 @@ export default function HeroSlider() {
           transition={{ duration: 1 }}
         >
           {slide.type === "image" ? (
-            <img
+            <Image
               src={slide.src}
               alt={slide.title}
-              className="w-full h-full object-cover"
+              fill
+              priority={slide.id === 1}
+              className="object-cover"
+              sizes="100vw"
             />
           ) : (
             <video
@@ -73,7 +77,7 @@ export default function HeroSlider() {
               muted
               loop
               playsInline
-              preload="auto"
+              preload="metadata"
               className="w-full h-full object-cover"
             />
           )}
@@ -105,31 +109,19 @@ export default function HeroSlider() {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.7 }}
               >
-               <Link
-  href={slide.link}
-  className="
-    inline-block
-    px-10 py-4
-    rounded-sm
-    bg-yellow-500
-    text-white
-    text-sm
-    tracking-wide
-    transition-colors
-    duration-500
-    hover:bg-green-600
-  "
->
-  {slide.cta}
-</Link>
-
+                <Link
+                  href={slide.link}
+                  className="inline-block px-10 py-4 rounded-sm bg-yellow-500 text-white text-sm tracking-wide transition-colors duration-500 hover:bg-green-600"
+                >
+                  {slide.cta}
+                </Link>
               </motion.div>
             </div>
           </div>
         </motion.div>
       </AnimatePresence>
 
-      {/* Right corner loading dots */}
+      {/* Slide indicator dots */}
       <div className="absolute bottom-8 right-8 flex gap-2">
         {slides.map((_, i) => (
           <button
@@ -143,7 +135,6 @@ export default function HeroSlider() {
                 i === index ? "bg-white" : "bg-white bg-opacity-40"
               }`}
             />
-
             {i === index && (
               <span className="absolute inset-0 rounded-full border border-white animate-dot-progress" />
             )}

@@ -2,37 +2,36 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 
 function Countdown({ endDate }: { endDate: string }) {
-  const [timeLeft, setTimeLeft] = useState("00:00:00")
+  const target = new Date(endDate).getTime()
+  const isExpired = target <= Date.now()
+
+  const [timeLeft, setTimeLeft] = useState<string | null>(null)
 
   useEffect(() => {
-    const target = new Date(endDate).getTime()
+    if (isExpired) return
 
-    const timer = setInterval(() => {
-      const now = new Date().getTime()
-      const diff = target - now
-
+    const compute = () => {
+      const diff = new Date(endDate).getTime() - Date.now()
       if (diff <= 0) {
-        setTimeLeft("00:00:00")
-        clearInterval(timer)
-        return
+        setTimeLeft(null)
+        return false
       }
+      const h = Math.floor(diff / 3_600_000)
+      const m = Math.floor((diff % 3_600_000) / 60_000)
+      const s = Math.floor((diff % 60_000) / 1_000)
+      setTimeLeft(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`)
+      return true
+    }
 
-      const hours = Math.floor(diff / (1000 * 60 * 60))
-      const minutes = Math.floor((diff / (1000 * 60)) % 60)
-      const seconds = Math.floor((diff / 1000) % 60)
-
-      setTimeLeft(
-        `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-          2,
-          "0"
-        )}:${String(seconds).padStart(2, "0")}`
-      )
-    }, 1000)
-
+    if (!compute()) return
+    const timer = setInterval(() => { if (!compute()) clearInterval(timer) }, 1000)
     return () => clearInterval(timer)
-  }, [endDate])
+  }, [endDate, isExpired])
+
+  if (isExpired || timeLeft === null) return null
 
   return (
     <span className="mt-2 inline-block px-4 py-1 text-xs tracking-widest text-white bg-white/20 backdrop-blur rounded-full border border-white/10">
@@ -46,29 +45,26 @@ export default function SpecialOffers() {
     <section className="bg-white dark:bg-zinc-950 py-24 px-4 transition-colors duration-500">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        {/* 20 percent offer */}
+        {/* 20% offer */}
         <div className="relative h-[360px] rounded-2xl overflow-hidden group border dark:border-zinc-800">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9"
-            alt="Save 20 percent"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            alt="Save 20%"
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
-
           <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
-
           <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
             <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">
               SAVE 20%
             </span>
-
-            <Countdown endDate="2026-01-31T23:59:59" />
-
+            <Countdown endDate="2026-12-31T23:59:59" />
             <h3 className="text-white text-3xl font-black tracking-tighter uppercase italic mt-6 mb-6">
               Special Offer
             </h3>
-
             <Link
-              href="/products?offer=20"
+              href="/public/products?offer=20"
               className="inline-block bg-yellow-400 text-black px-8 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-green-600 hover:text-white transition-all active:scale-95 shadow-lg shadow-yellow-400/20 hover:shadow-green-600/20"
             >
               Shop Now
@@ -76,29 +72,26 @@ export default function SpecialOffers() {
           </div>
         </div>
 
-        {/* 30 percent offer */}
+        {/* 30% offer */}
         <div className="relative h-[360px] rounded-2xl overflow-hidden group border dark:border-zinc-800">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1519744792095-2f2205e87b6f"
-            alt="Save 30 percent"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            alt="Save 30%"
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
-
           <div className="absolute inset-0 bg-black/45 group-hover:bg-black/55 transition-colors" />
-
           <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
             <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">
               SAVE 30%
             </span>
-
-            <Countdown endDate="2026-01-25T23:59:59" />
-
+            <Countdown endDate="2026-11-30T23:59:59" />
             <h3 className="text-white text-3xl font-black tracking-tighter uppercase italic mt-6 mb-6">
               Special Offer
             </h3>
-
             <Link
-              href="/products?offer=30"
+              href="/public/products?offer=30"
               className="inline-block bg-yellow-400 text-black px-8 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-green-600 hover:text-white transition-all active:scale-95 shadow-lg shadow-yellow-400/20 hover:shadow-green-600/20"
             >
               Shop Now

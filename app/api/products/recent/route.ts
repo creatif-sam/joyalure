@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { getShopifyProducts } from "@/lib/shopify"
 
+export const revalidate = 300
+
 export async function GET() {
   try {
     const all = await getShopifyProducts(50)

@@ -1,6 +1,5 @@
 import Newsletter from "@/components/newsletter"
 import HeroSlider from "@/components/hero-slider"
-import FeaturedProducts from "@/components/home/FeaturedProducts"
 import Testimonials from "@/components/testimonials"
 import HomeCategories from "@/components/home/shop-category"
 import SpecialOffers from "@/components/special-offers"
@@ -12,10 +11,9 @@ import { getHomeProducts } from "@/lib/products"
 
 export default async function HomePage() {
   
-  // 2. Fetch the data from Supabase
+  // 2. Fetch the data from Shopify in a single parallel-safe call
   const { featured: rawFeatured, recent: rawRecent } = await getHomeProducts();
 
- 
   const featured = rawFeatured?.map((product: any) => ({
     ...product,
     category: Array.isArray(product.category) ? product.category[0] : product.category
@@ -30,17 +28,9 @@ export default async function HomePage() {
     <main>
       <HeroSlider />
       <HomeCategories />
-      
-      {/* Institutional Note: Keeping FeaturedProducts if it's a separate 
-         static section, but HomeProducts now handles the dynamic toggling. 
-      */}
-      <FeaturedProducts /> 
-      
       <SpecialOffers />
-      
-      {/* 3. Passing the "Cleaned" data to HomeProducts */}
+      {/* HomeProducts handles both "featured" and "recent" tabs from server-fetched data */}
       <HomeProducts featured={featured} recent={recent} />
-      
       <BlogPreview />
       <Testimonials />
       <Newsletter />

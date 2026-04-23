@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
 import { ArrowRight, Calendar } from "lucide-react"
@@ -51,10 +52,12 @@ export default async function BlogPreview() {
               >
                 {/* Image Section */}
                 <div className="relative h-56 w-full overflow-hidden bg-zinc-200 dark:bg-zinc-800">
-                  <img
+                  <Image
                     src={post.main_image || "/placeholder.jpg"}
                     alt={post.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   <div className="absolute top-4 left-4">
                     <span className="bg-white/90 dark:bg-zinc-950/90 backdrop-blur-sm px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-800 shadow-sm">

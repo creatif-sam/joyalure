@@ -48,7 +48,7 @@ export async function getShopifyProducts(first = 50): Promise<NormalizedProduct[
     }>({
       query: GET_PRODUCTS_QUERY,
       variables: { first },
-      cache: "no-store",
+      // Uses default 5-minute revalidation cache (set in shopifyFetch)
     })
 
     return data.products.edges.map(({ node }) => normalizeProduct(node))
@@ -65,7 +65,7 @@ export async function getShopifyProductByHandle(
     const data = await shopifyFetch<{ product: ShopifyProduct | null }>({
       query: GET_PRODUCT_BY_HANDLE_QUERY,
       variables: { handle },
-      cache: "no-store",
+      // Uses default 5-minute revalidation cache (set in shopifyFetch)
     })
 
     return data.product ? normalizeProduct(data.product) : null

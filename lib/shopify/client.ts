@@ -16,14 +16,14 @@ if (!SHOPIFY_STORE_DOMAIN || !SHOPIFY_STOREFRONT_TOKEN) {
 export type ShopifyFetchOptions = {
   query: string
   variables?: Record<string, unknown>
-  /** Force no-store cache for mutation routes */
+  /** Override cache behaviour. Omit to use default 5-minute revalidation. Pass "no-store" for mutations. */
   cache?: RequestCache
 }
 
 export async function shopifyFetch<T>({
   query,
   variables,
-  cache = "no-store",
+  cache,
 }: ShopifyFetchOptions): Promise<T> {
   const endpoint = `https://${SHOPIFY_STORE_DOMAIN}/api/${API_VERSION}/graphql.json`
 
@@ -34,7 +34,9 @@ export async function shopifyFetch<T>({
       "X-Shopify-Storefront-Access-Token": SHOPIFY_STOREFRONT_TOKEN!,
     },
     body: JSON.stringify({ query, variables }),
-    cache,
+    // Default: cache product reads for 5 minutes to prevent repeated API calls
+    // Mutations should pass cache: "no-store" explicitly
+    ...(cache ? { cache } : { next: { revalidate: 300 } }),
   })
 
   if (!res.ok) {
