@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { subscribeToNewsletter } from "./actions"; 
+import { subscribeToNewsletter } from "../actions"; 
 import BackgroundSlider from "@/components/coming-soon/BackgroundSlider";
 import CountdownTimer from "@/components/coming-soon/CountdownTimer";
 import NewsletterSection from "@/components/coming-soon/NewsletterSection";
