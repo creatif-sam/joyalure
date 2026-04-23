@@ -206,14 +206,14 @@ export default function ProductDetailClient({ product }: { product: Product }) {
               <button
                 onClick={handleAddToCart}
                 disabled={!product.availableForSale}
-                className="flex-1 flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-green-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-md transition-all active:scale-[0.98] shadow-lg shadow-green-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ShoppingBag size={20} />
                 {product.availableForSale ? "Add to Cart" : "Out of Stock"}
               </button>
               <button
                 onClick={handleToggleWishlist}
-                className={`p-4 border-2 rounded-lg transition-all active:scale-95 ${
+                className={`p-4 border-2 rounded-md transition-all active:scale-95 ${
                   isWishlisted
                     ? "bg-red-50 dark:bg-red-950/20 border-red-500 text-red-500"
                     : "border-gray-200 dark:border-zinc-800 text-gray-600 dark:text-zinc-400 hover:border-red-500 hover:text-red-500"

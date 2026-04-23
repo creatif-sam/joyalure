@@ -97,6 +97,7 @@ export async function createShopifyCart(
   }>({
     query: CREATE_CART_MUTATION,
     variables: { lines },
+    cache: "no-store",
   })
 
   const { cart, userErrors } = data.cartCreate
@@ -123,6 +124,7 @@ export async function addLinesToShopifyCart(
   }>({
     query: ADD_CART_LINES_MUTATION,
     variables: { cartId, lines },
+    cache: "no-store",
   })
 
   const { cart, userErrors } = data.cartLinesAdd

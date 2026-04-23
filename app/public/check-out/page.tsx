@@ -37,7 +37,7 @@ export default function CheckoutPage() {
           <p className="text-gray-500 dark:text-zinc-400">Add some products to continue shopping</p>
           <Link
             href="/public/products"
-            className="inline-block px-6 py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-colors"
+            className="inline-block px-6 py-3 bg-green-600 text-white font-bold rounded-md hover:bg-green-700 transition-colors"
           >
             Browse Products
           </Link>
@@ -85,7 +85,7 @@ export default function CheckoutPage() {
         <button
           onClick={handleShopifyCheckout}
           disabled={isCheckingOut}
-          className="w-full py-3 px-6 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all active:scale-[0.98] shadow-lg shadow-green-600/20 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full py-3 px-6 bg-green-600 text-white font-bold rounded-md hover:bg-green-700 transition-all active:scale-[0.98] shadow-lg shadow-green-600/20 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
         >
           <ShoppingBag size={18} />
           {isCheckingOut ? "Redirecting…" : `Checkout · ${symbol}${formatAmount(rawTotal)}`}
