@@ -128,7 +128,10 @@ export default function AdminMail() {
             </div>
             <div>
               <div className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-zinc-100 leading-none">
-                {loading ? <Loader2 size={20} className="animate-spin" /> : card.value}
+                {loading
+                  ? <div className="h-8 w-16 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse" />
+                  : card.value
+                }
               </div>
               <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mt-2">{card.label}</p>
             </div>

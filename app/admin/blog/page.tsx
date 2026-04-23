@@ -58,9 +58,50 @@ export default function AdminBlog() {
   };
 
   if (loading) return (
-    <div className="flex flex-col items-center justify-center h-screen md:h-64 text-gray-400 gap-4">
-      <div className="h-8 w-8 border-4 border-green-600 border-t-transparent rounded-full animate-spin" />
-      <p className="text-[10px] font-black uppercase tracking-[0.2em]">Syncing Editorial Data...</p>
+    <div className="space-y-6 p-4 md:p-0 animate-in fade-in duration-300">
+      {/* Header skeleton */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-2">
+          <div className="h-7 w-52 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse" />
+          <div className="h-4 w-72 bg-gray-100 dark:bg-zinc-900 rounded animate-pulse" />
+        </div>
+        <div className="h-11 w-36 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse" />
+      </div>
+      {/* Table skeleton */}
+      <div className="bg-white dark:bg-zinc-950 border dark:border-zinc-800 rounded-md overflow-hidden shadow-sm">
+        {/* Desktop */}
+        <div className="hidden md:block">
+          <div className="bg-gray-50/50 dark:bg-zinc-900/50 border-b dark:border-zinc-800 px-6 py-5 flex gap-10">
+            {[80, 200, 60, 90, 80].map((w, i) => (
+              <div key={i} className="h-2.5 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse" style={{ width: w }} />
+            ))}
+          </div>
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="flex items-center gap-6 px-6 py-4 border-b dark:border-zinc-800/60 last:border-0">
+              <div className="h-14 w-20 flex-shrink-0 bg-gray-100 dark:bg-zinc-900 rounded-md animate-pulse" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse w-3/5" />
+                <div className="h-3 bg-gray-100 dark:bg-zinc-900 rounded animate-pulse w-2/5" />
+              </div>
+              <div className="h-6 w-14 bg-gray-100 dark:bg-zinc-900 rounded animate-pulse" />
+              <div className="h-3 w-24 bg-gray-100 dark:bg-zinc-900 rounded animate-pulse" />
+              <div className="h-8 w-24 bg-gray-100 dark:bg-zinc-900 rounded animate-pulse ml-auto" />
+            </div>
+          ))}
+        </div>
+        {/* Mobile */}
+        <div className="md:hidden divide-y dark:divide-zinc-800">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="p-5 flex gap-4 items-center">
+              <div className="h-16 w-16 flex-shrink-0 bg-gray-100 dark:bg-zinc-900 rounded-md animate-pulse" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse w-3/4" />
+                <div className="h-3 bg-gray-100 dark:bg-zinc-900 rounded animate-pulse w-1/2" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 
