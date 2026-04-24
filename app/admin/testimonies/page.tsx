@@ -437,14 +437,14 @@ export default function TestimoniesAdminPage() {
                       </p>
                     )}
                   </div>
-                  {testimony.rating && (
+                  {testimony.rating != null && (
                     <div className="flex gap-0.5">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
                           size={12}
                           className={
-                            i < testimony.rating
+                            i < testimony.rating!
                               ? "fill-yellow-400 text-yellow-400"
                               : "fill-gray-300 text-gray-300"
                           }
