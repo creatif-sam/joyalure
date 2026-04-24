@@ -19,6 +19,8 @@ import {
   Sparkles,
   ShoppingBag,
   BarChart3,
+  Percent,
+  MessageSquareQuote,
 } from "lucide-react"
 
 const menu = [
@@ -41,6 +43,13 @@ const menu = [
     items: [
       { name: "Manage Products", href: "/admin/shea-butter/products", icon: Sparkles },
       { name: "View Orders", href: "/admin/shea-butter/orders", icon: ShoppingBag },
+    ],
+  },
+  {
+    section: "Marketing",
+    items: [
+      { name: "Special Offers", href: "/admin/special-offers", icon: Percent },
+      { name: "Testimonies", href: "/admin/testimonies", icon: MessageSquareQuote },
     ],
   },
 ]

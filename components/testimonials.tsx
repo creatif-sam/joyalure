@@ -8,7 +8,6 @@ type Testimonial = {
   name: string
   country: string
   flag: string
-  avatar: string
   rating: number
   review: string
 }
@@ -18,7 +17,6 @@ const testimonials: Testimonial[] = [
     name: "Abena Ako",
     country: "United States",
     flag: "https://flagcdn.com/w20/us.png",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     rating: 5,
     review:
       "Joy Allure Shea Butter is a game-changer! Light, warm scent; silky texture that melts right in. Skin stays soft and hydrated for 24+ hours with zero greasiness. Deep nourishment that actually lasts. A must-have!"
@@ -27,7 +25,6 @@ const testimonials: Testimonial[] = [
     name: "Abena",
     country: "United States",
     flag: "https://flagcdn.com/w20/us.png",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
     rating: 5,
     review:
       "I received my package few minutes ago and was immediately intrigued to try it out! It really has a beautiful buttery consistency and instantly adds a nourishing and shimmering glow to the skin."
@@ -36,7 +33,6 @@ const testimonials: Testimonial[] = [
     name: "Menaoye",
     country: "United States",
     flag: "https://flagcdn.com/w20/us.png",
-    avatar: "https://randomuser.me/api/portraits/women/12.jpg",
     rating: 5,
     review:
       "Fantastic product. My family loves it especially my son who has eczema."
@@ -45,7 +41,6 @@ const testimonials: Testimonial[] = [
     name: "Hagar Bauah",
     country: "United States",
     flag: "https://flagcdn.com/w20/us.png",
-    avatar: "https://randomuser.me/api/portraits/women/32.jpg",
     rating: 5,
     review:
       "Is 10/10 minus nothing. Am definitely going back for more. Highly recommended for dry skin. Try it out and thank me later 👌"
@@ -137,12 +132,6 @@ export default function TestimonialsCarousel() {
               </p>
 
               <div className="flex justify-center items-center gap-4">
-                <img
-                  src={testimonial.avatar}
-                  alt={testimonial.name}
-                  className="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-zinc-800 shadow-sm"
-                />
-
                 <div className="text-left">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-black uppercase tracking-widest text-gray-900 dark:text-zinc-100">
