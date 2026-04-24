@@ -2,7 +2,8 @@ import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 
-export const dynamic = "force-dynamic"
+// Cache responses for 60 seconds; stale data is served while Next.js revalidates in the background
+export const revalidate = 60
 
 export async function GET() {
   try {

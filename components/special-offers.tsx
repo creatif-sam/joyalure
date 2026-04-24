@@ -1,89 +1,13 @@
-"use client"
-
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { getSpecialOffers } from "@/lib/supabase/special-offers"
+import { SpecialOfferCountdown } from "@/components/special-offer-countdown"
 
-type SpecialOffer = {
-  id: string
-  title: string
-  description: string | null
-  discount_percentage: number
-  image_url: string | null
-  link_url: string | null
-  end_date: string | null
-  is_active: boolean
-  display_order: number
-}
-
-function Countdown({ endDate }: { endDate: string | null }) {
-  const [timeLeft, setTimeLeft] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!endDate) return
-
-    const target = new Date(endDate).getTime()
-    if (target <= Date.now()) return
-
-    const compute = () => {
-      const diff = target - Date.now()
-      if (diff <= 0) {
-        setTimeLeft(null)
-        return false
-      }
-      const h = Math.floor(diff / 3_600_000)
-      const m = Math.floor((diff % 3_600_000) / 60_000)
-      const s = Math.floor((diff % 60_000) / 1_000)
-      setTimeLeft(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`)
-      return true
-    }
-
-    if (!compute()) return
-    const timer = setInterval(() => { if (!compute()) clearInterval(timer) }, 1000)
-    return () => clearInterval(timer)
-  }, [endDate])
-
-  if (!timeLeft) return null
-
-  return (
-    <span className="mt-2 inline-block px-4 py-1 text-xs tracking-widest text-white bg-white/20 backdrop-blur rounded-full border border-white/10">
-      Ends in {timeLeft}
-    </span>
-  )
-}
-
-export default function SpecialOffers() {
-  const [offers, setOffers] = useState<SpecialOffer[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchOffers() {
-      try {
-        const response = await fetch("/api/special-offers")
-        const data = await response.json()
-        setOffers(data.offers || [])
-      } catch (error) {
-        console.error("Failed to fetch special offers:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchOffers()
-  }, [])
-
-  if (loading) {
-    return (
-      <section className="bg-white dark:bg-zinc-950 py-24 px-4 transition-colors duration-500">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-gray-600 dark:text-zinc-400">Loading offers...</p>
-        </div>
-      </section>
-    )
-  }
+export default async function SpecialOffers() {
+  const offers = await getSpecialOffers()
 
   if (offers.length === 0) {
-    return null // Don't show section if no offers
+    return null
   }
 
   return (
@@ -106,7 +30,7 @@ export default function SpecialOffers() {
               <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">
                 SAVE {offer.discount_percentage}%
               </span>
-              <Countdown endDate={offer.end_date} />
+              <SpecialOfferCountdown endDate={offer.end_date} />
               <h3 className="text-white text-3xl font-black tracking-tighter uppercase mt-6 mb-6">
                 {offer.title}
               </h3>
