@@ -128,9 +128,3 @@ export default function SpecialOffers() {
     </section>
   )
 }
-
-
-      </div>
-    </section>
-  )
-}

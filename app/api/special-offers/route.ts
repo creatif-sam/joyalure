@@ -1,11 +1,14 @@
-import { createClient } from "@/lib/supabase/server"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
+import { cookies } from "next/headers"
 
 export const dynamic = "force-dynamic"
 
 export async function GET() {
   try {
-    const supabase = await createClient()
+    const supabase = createServerSupabaseClient({
+      cookies: await cookies()
+    })
 
     const { data: offers, error } = await supabase
       .from("special_offers")
