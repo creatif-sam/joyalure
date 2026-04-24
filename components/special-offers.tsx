@@ -43,7 +43,7 @@ export default async function SpecialOffers() {
                 href={offer.link_url || `/products?offer=${offer.discount_percentage}`}
                 className="inline-block bg-yellow-400 text-black px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-md hover:bg-green-600 hover:text-white transition-all active:scale-95 shadow-lg shadow-yellow-400/20 hover:shadow-green-600/20"
               >
-                Shop Now
+                Coming Soon
               </Link>
             </div>
           </div>
