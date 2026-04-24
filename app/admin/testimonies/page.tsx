@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { uploadTestimonyScreenshot } from "@/lib/supabase/testimony-upload"
 import { toast } from "sonner"
-import { Pencil, Trash2, Plus, Eye, EyeOff, Star } from "lucide-react"
+import { Pencil, Trash2, Plus, Eye, EyeOff, Star, X, ImageIcon } from "lucide-react"
 import Image from "next/image"
 
 type Testimony = {
@@ -22,130 +22,120 @@ type Testimony = {
   display_order: number
 }
 
+const EMPTY_FORM = {
+  customer_name: "",
+  customer_location: "",
+  testimony_text: "",
+  screenshot_url: "",
+  rating: 5,
+  platform: "",
+  verified_purchase: false,
+  testimony_date: "",
+  is_featured: false,
+  is_active: true,
+  display_order: 0,
+}
+
+const INPUT =
+  "w-full px-2.5 py-1.5 text-sm border border-zinc-200 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+
+const LABEL = "block text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1"
+
 export default function TestimoniesAdminPage() {
+  const supabase = useRef(createClient()).current
   const [testimonies, setTestimonies] = useState<Testimony[]>([])
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
-  const [uploading, setUploading] = useState(false)
-  
-  const [formData, setFormData] = useState({
-    customer_name: "",
-    customer_location: "",
-    testimony_text: "",
-    screenshot_url: "",
-    rating: 5,
-    platform: "",
-    verified_purchase: false,
-    testimony_date: "",
-    is_featured: false,
-    is_active: true,
-    display_order: 0,
-  })
+  const [formData, setFormData] = useState({ ...EMPTY_FORM })
 
-  const supabase = createClient()
-
-  useEffect(() => {
-    fetchTestimonies()
-  }, [])
+  useEffect(() => { fetchTestimonies() }, [])
 
   async function fetchTestimonies() {
     setLoading(true)
-    const toastId = toast.loading("Loading testimonies...")
-    const { data, error } = await supabase
-      .from("customer_testimonies")
-      .select("*")
-      .order("display_order", { ascending: true })
-
-    if (error) {
-      toast.error("Failed to load testimonies. Check that the database table exists.", { id: toastId })
-      console.error(error)
-    } else {
-      toast.dismiss(toastId)
+    try {
+      const { data, error } = await supabase
+        .from("customer_testimonies")
+        .select("*")
+        .order("display_order", { ascending: true })
+      if (error) throw error
       setTestimonies(data || [])
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Unknown error"
+      toast.error(`Failed to load: ${msg}`)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    
-    if (editingId) {
-      // Update existing testimony
-      const { error } = await supabase
-        .from("customer_testimonies")
-        .update(formData)
-        .eq("id", editingId)
-
-      if (error) {
-        toast.error("Failed to update testimony")
-        console.error(error)
-      } else {
-        toast.success("Testimony updated successfully")
-        resetForm()
-        fetchTestimonies()
+    setSaving(true)
+    const tid = toast.loading(editingId ? "Updating…" : "Creating…")
+    try {
+      const payload = {
+        ...formData,
+        customer_location: formData.customer_location || null,
+        testimony_text: formData.testimony_text || null,
+        platform: formData.platform || null,
+        testimony_date: formData.testimony_date || null,
       }
-    } else {
-      // Create new testimony
-      const { error } = await supabase
-        .from("customer_testimonies")
-        .insert([formData])
-
-      if (error) {
-        toast.error("Failed to create testimony")
-        console.error(error)
+      if (editingId) {
+        const { error } = await supabase.from("customer_testimonies").update(payload).eq("id", editingId)
+        if (error) throw error
+        toast.success("Testimony updated", { id: tid })
       } else {
-        toast.success("Testimony created successfully")
-        resetForm()
-        fetchTestimonies()
+        const { error } = await supabase.from("customer_testimonies").insert([payload])
+        if (error) throw error
+        toast.success("Testimony added", { id: tid })
       }
-    }
-  }
-
-  async function handleDelete(id: string) {
-    if (!confirm("Are you sure you want to delete this testimony?")) return
-
-    const { error } = await supabase
-      .from("customer_testimonies")
-      .delete()
-      .eq("id", id)
-
-    if (error) {
-      toast.error("Failed to delete testimony")
-      console.error(error)
-    } else {
-      toast.success("Testimony deleted successfully")
+      resetForm()
       fetchTestimonies()
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Unknown error"
+      toast.error(`Error: ${msg}`, { id: tid })
+    } finally {
+      setSaving(false)
     }
   }
 
-  async function toggleActive(id: string, currentState: boolean) {
-    const { error } = await supabase
-      .from("customer_testimonies")
-      .update({ is_active: !currentState })
-      .eq("id", id)
-
-    if (error) {
-      toast.error("Failed to update testimony status")
-      console.error(error)
-    } else {
-      toast.success(`Testimony ${!currentState ? "activated" : "deactivated"}`)
-      fetchTestimonies()
+  async function handleDelete(id: string, name: string) {
+    if (!confirm(`Delete testimony from "${name}"?`)) return
+    const tid = toast.loading("Deleting…")
+    try {
+      const { error } = await supabase.from("customer_testimonies").delete().eq("id", id)
+      if (error) throw error
+      setTestimonies((prev) => prev.filter((t) => t.id !== id))
+      toast.success("Deleted", { id: tid })
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Unknown error"
+      toast.error(`Error: ${msg}`, { id: tid })
     }
   }
 
-  async function toggleFeatured(id: string, currentState: boolean) {
-    const { error } = await supabase
-      .from("customer_testimonies")
-      .update({ is_featured: !currentState })
-      .eq("id", id)
+  async function toggleActive(id: string, current: boolean) {
+    setTestimonies((prev) => prev.map((t) => (t.id === id ? { ...t, is_active: !current } : t)))
+    try {
+      const { error } = await supabase.from("customer_testimonies").update({ is_active: !current }).eq("id", id)
+      if (error) throw error
+      toast.success(!current ? "Activated" : "Deactivated")
+    } catch {
+      setTestimonies((prev) => prev.map((t) => (t.id === id ? { ...t, is_active: current } : t)))
+      toast.error("Failed to update status")
+    }
+  }
 
-    if (error) {
+  async function toggleFeatured(id: string, current: boolean) {
+    setTestimonies((prev) => prev.map((t) => (t.id === id ? { ...t, is_featured: !current } : t)))
+    try {
+      const { error } = await supabase.from("customer_testimonies").update({ is_featured: !current }).eq("id", id)
+      if (error) throw error
+      toast.success(!current ? "Featured" : "Unfeatured")
+    } catch {
+      setTestimonies((prev) => prev.map((t) => (t.id === id ? { ...t, is_featured: current } : t)))
       toast.error("Failed to update featured status")
-      console.error(error)
-    } else {
-      toast.success(`Testimony ${!currentState ? "featured" : "unfeatured"}`)
-      fetchTestimonies()
     }
   }
 
@@ -156,7 +146,7 @@ export default function TestimoniesAdminPage() {
       customer_location: testimony.customer_location || "",
       testimony_text: testimony.testimony_text || "",
       screenshot_url: testimony.screenshot_url,
-      rating: testimony.rating || 5,
+      rating: testimony.rating ?? 5,
       platform: testimony.platform || "",
       verified_purchase: testimony.verified_purchase,
       testimony_date: testimony.testimony_date || "",
@@ -169,220 +159,139 @@ export default function TestimoniesAdminPage() {
 
   function resetForm() {
     setEditingId(null)
-    setFormData({
-      customer_name: "",
-      customer_location: "",
-      testimony_text: "",
-      screenshot_url: "",
-      rating: 5,
-      platform: "",
-      verified_purchase: false,
-      testimony_date: "",
-      is_featured: false,
-      is_active: true,
-      display_order: 0,
-    })
+    setFormData({ ...EMPTY_FORM })
     setShowForm(false)
   }
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-
     setUploading(true)
+    const tid = toast.loading("Uploading screenshot…")
     try {
-      const imageUrl = await uploadTestimonyScreenshot(file)
-      setFormData({ ...formData, screenshot_url: imageUrl })
-      toast.success("Screenshot uploaded successfully")
-    } catch (error) {
-      toast.error("Failed to upload screenshot")
-      console.error(error)
+      const url = await uploadTestimonyScreenshot(file)
+      setFormData((prev) => ({ ...prev, screenshot_url: url }))
+      toast.success("Screenshot uploaded", { id: tid })
+    } catch {
+      toast.error("Upload failed", { id: tid })
     } finally {
       setUploading(false)
     }
   }
 
+  const set = (k: string, v: unknown) => setFormData((prev) => ({ ...prev, [k]: v }))
+
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
+    <div className="space-y-5">
+      {/* Header */}
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 dark:text-zinc-100">
+          <h1 className="text-lg font-black tracking-tight text-zinc-900 dark:text-zinc-100 uppercase">
             Customer Testimonies
           </h1>
-          <p className="text-gray-600 dark:text-zinc-400 mt-1">
-            Upload and manage customer testimony screenshots
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+            {testimonies.length} testimon{testimonies.length !== 1 ? "ies" : "y"}
           </p>
         </div>
         <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center gap-2 font-bold"
+          onClick={() => { if (showForm && !editingId) resetForm(); else setShowForm((v) => !v) }}
+          className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white text-xs font-bold px-3 py-1.5 rounded-md transition-colors"
         >
-          <Plus size={20} />
-          {showForm ? "Cancel" : "New Testimony"}
+          {showForm && !editingId ? <><X size={13} /> Cancel</> : <><Plus size={13} /> New Testimony</>}
         </button>
       </div>
 
       {/* Form */}
       {showForm && (
-        <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold mb-4">
-            {editingId ? "Edit Testimony" : "Add New Testimony"}
-          </h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200">
+              {editingId ? "Edit Testimony" : "New Testimony"}
+            </p>
+            <button onClick={resetForm} className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200">
+              <X size={15} />
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-bold mb-2">Customer Name *</label>
-                <input
-                  type="text"
-                  value={formData.customer_name}
-                  onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800"
-                  required
-                />
+                <label className={LABEL}>Customer Name *</label>
+                <input className={INPUT} required value={formData.customer_name} onChange={(e) => set("customer_name", e.target.value)} placeholder="Jane Doe" />
               </div>
               <div>
-                <label className="block text-sm font-bold mb-2">Location</label>
-                <input
-                  type="text"
-                  value={formData.customer_location}
-                  onChange={(e) => setFormData({ ...formData, customer_location: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800"
-                  placeholder="e.g., United States"
-                />
+                <label className={LABEL}>Location</label>
+                <input className={INPUT} value={formData.customer_location} onChange={(e) => set("customer_location", e.target.value)} placeholder="United States" />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Testimony Text</label>
-              <textarea
-                value={formData.testimony_text}
-                onChange={(e) => setFormData({ ...formData, testimony_text: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800"
-                rows={4}
-                placeholder="Customer's testimony text..."
-              />
+              <label className={LABEL}>Testimony Text</label>
+              <textarea className={INPUT} rows={3} value={formData.testimony_text} onChange={(e) => set("testimony_text", e.target.value)} placeholder="Customer's words…" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="block text-sm font-bold mb-2">Rating</label>
-                <select
-                  value={formData.rating}
-                  onChange={(e) => setFormData({ ...formData, rating: parseInt(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800"
-                >
-                  <option value={5}>5 Stars</option>
-                  <option value={4}>4 Stars</option>
-                  <option value={3}>3 Stars</option>
-                  <option value={2}>2 Stars</option>
-                  <option value={1}>1 Star</option>
+                <label className={LABEL}>Rating</label>
+                <select className={INPUT} value={formData.rating} onChange={(e) => set("rating", parseInt(e.target.value))}>
+                  {[5, 4, 3, 2, 1].map((n) => <option key={n} value={n}>{n} Star{n !== 1 ? "s" : ""}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-bold mb-2">Platform</label>
-                <input
-                  type="text"
-                  value={formData.platform}
-                  onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800"
-                  placeholder="e.g., Instagram, Facebook"
-                />
+                <label className={LABEL}>Platform</label>
+                <input className={INPUT} value={formData.platform} onChange={(e) => set("platform", e.target.value)} placeholder="Instagram" />
               </div>
               <div>
-                <label className="block text-sm font-bold mb-2">Testimony Date</label>
-                <input
-                  type="date"
-                  value={formData.testimony_date}
-                  onChange={(e) => setFormData({ ...formData, testimony_date: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800"
-                />
+                <label className={LABEL}>Date</label>
+                <input className={INPUT} type="date" value={formData.testimony_date} onChange={(e) => set("testimony_date", e.target.value)} />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-bold mb-2">Display Order</label>
-                <input
-                  type="number"
-                  value={formData.display_order}
-                  onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800"
-                />
+                <label className={LABEL}>Display Order</label>
+                <input className={INPUT} type="number" value={formData.display_order} onChange={(e) => set("display_order", parseInt(e.target.value) || 0)} />
               </div>
-              <div className="flex items-center gap-4 pt-6">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="verified_purchase"
-                    checked={formData.verified_purchase}
-                    onChange={(e) => setFormData({ ...formData, verified_purchase: e.target.checked })}
-                    className="w-4 h-4"
-                  />
-                  <label htmlFor="verified_purchase" className="text-sm font-bold">
-                    Verified Purchase
+              <div className="flex items-end gap-4 pb-1">
+                {[
+                  { key: "verified_purchase", label: "Verified" },
+                  { key: "is_featured", label: "Featured" },
+                  { key: "is_active", label: "Active" },
+                ].map(({ key, label }) => (
+                  <label key={key} className="flex items-center gap-1.5 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={formData[key as keyof typeof formData] as boolean}
+                      onChange={(e) => set(key, e.target.checked)}
+                      className="w-3.5 h-3.5 accent-green-600"
+                    />
+                    <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">{label}</span>
                   </label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="is_featured"
-                    checked={formData.is_featured}
-                    onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                    className="w-4 h-4"
-                  />
-                  <label htmlFor="is_featured" className="text-sm font-bold">
-                    Featured
-                  </label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="is_active"
-                    checked={formData.is_active}
-                    onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                    className="w-4 h-4"
-                  />
-                  <label htmlFor="is_active" className="text-sm font-bold">
-                    Active
-                  </label>
-                </div>
+                ))}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Screenshot *</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                disabled={uploading}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800"
-              />
-              {formData.screenshot_url && (
-                <div className="mt-2 relative w-full max-w-md h-64">
-                  <Image
-                    src={formData.screenshot_url}
-                    alt="Preview"
-                    fill
-                    className="object-contain rounded-md border border-gray-300 dark:border-zinc-700"
-                  />
-                </div>
-              )}
+              <label className={LABEL}>Screenshot *</label>
+              <div className="flex items-start gap-3">
+                <label className="flex-1 flex items-center gap-2 px-3 py-2 border border-dashed border-zinc-300 dark:border-zinc-700 rounded-md cursor-pointer hover:border-green-500 transition-colors">
+                  <ImageIcon size={14} className="text-zinc-400 shrink-0" />
+                  <span className="text-xs text-zinc-500">{uploading ? "Uploading…" : "Choose screenshot"}</span>
+                  <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
+                </label>
+                {formData.screenshot_url && (
+                  <div className="relative w-20 h-14 rounded-md overflow-hidden border border-zinc-200 dark:border-zinc-700 shrink-0 bg-zinc-50 dark:bg-zinc-800">
+                    <Image src={formData.screenshot_url} alt="Preview" fill className="object-contain" />
+                  </div>
+                )}
+              </div>
             </div>
 
-            <div className="flex gap-2">
-              <button
-                type="submit"
-                disabled={!formData.screenshot_url}
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {editingId ? "Update" : "Create"} Testimony
+            <div className="flex gap-2 pt-1">
+              <button type="submit" disabled={saving || uploading || !formData.screenshot_url} className="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-4 py-1.5 rounded-md disabled:opacity-50 transition-colors">
+                {saving ? "Saving…" : editingId ? "Update" : "Add"}
               </button>
-              <button
-                type="button"
-                onClick={resetForm}
-                className="bg-gray-200 hover:bg-gray-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 px-6 py-2 rounded-md font-bold"
-              >
+              <button type="button" onClick={resetForm} className="text-xs font-bold px-4 py-1.5 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 transition-colors">
                 Cancel
               </button>
             </div>
@@ -390,123 +299,72 @@ export default function TestimoniesAdminPage() {
         </div>
       )}
 
-      {/* Testimonies List */}
+      {/* List */}
       {loading ? (
-        <div className="text-center py-12">
-          <p className="text-gray-600 dark:text-zinc-400">Loading testimonies...</p>
+        <div className="space-y-2">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-16 bg-zinc-100 dark:bg-zinc-800 rounded-xl animate-pulse" />
+          ))}
         </div>
       ) : testimonies.length === 0 ? (
-        <div className="text-center py-12 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-lg">
-          <p className="text-gray-600 dark:text-zinc-400">No testimonies yet. Upload your first one to get started!</p>
+        <div className="flex flex-col items-center justify-center py-16 text-center bg-white dark:bg-zinc-900 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">
+          <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">No testimonies yet</p>
+          <p className="text-xs text-zinc-400 dark:text-zinc-600 mt-1">Upload your first customer testimony screenshot</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden divide-y divide-zinc-100 dark:divide-zinc-800">
           {testimonies.map((testimony) => (
-            <div
-              key={testimony.id}
-              className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden"
-            >
-              <div className="relative h-64">
-                <Image
-                  src={testimony.screenshot_url}
-                  alt={testimony.customer_name}
-                  fill
-                  className="object-contain bg-gray-50 dark:bg-zinc-800"
-                />
-                {!testimony.is_active && (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                    <span className="bg-red-600 text-white px-3 py-1 rounded-md text-sm font-bold">
-                      Inactive
-                    </span>
-                  </div>
-                )}
-                {testimony.is_featured && testimony.is_active && (
-                  <div className="absolute top-2 right-2">
-                    <span className="bg-yellow-400 text-black px-2 py-1 rounded-md text-xs font-bold flex items-center gap-1">
-                      <Star size={12} className="fill-current" />
-                      Featured
-                    </span>
-                  </div>
-                )}
+            <div key={testimony.id} className="flex items-center gap-3 px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+              {/* Screenshot thumbnail */}
+              <div className="w-14 h-10 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0 relative border border-zinc-200 dark:border-zinc-700">
+                <Image src={testimony.screenshot_url} alt={testimony.customer_name} fill className="object-cover" />
               </div>
-              <div className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h3 className="font-bold text-lg">{testimony.customer_name}</h3>
-                    {testimony.customer_location && (
-                      <p className="text-xs text-gray-500 dark:text-zinc-500">
-                        {testimony.customer_location}
-                      </p>
-                    )}
-                  </div>
+
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate">{testimony.customer_name}</p>
                   {testimony.rating != null && (
-                    <div className="flex gap-0.5">
+                    <div className="flex gap-0.5 shrink-0">
                       {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={12}
-                          className={
-                            i < testimony.rating!
-                              ? "fill-yellow-400 text-yellow-400"
-                              : "fill-gray-300 text-gray-300"
-                          }
-                        />
+                        <Star key={i} size={10} className={i < testimony.rating! ? "fill-yellow-400 text-yellow-400" : "fill-zinc-200 text-zinc-200 dark:fill-zinc-700 dark:text-zinc-700"} />
                       ))}
                     </div>
                   )}
-                </div>
-                {testimony.testimony_text && (
-                  <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2 line-clamp-3">
-                    {testimony.testimony_text}
-                  </p>
-                )}
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {testimony.platform && (
-                    <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded">
-                      {testimony.platform}
-                    </span>
+                  {testimony.is_featured && (
+                    <span className="shrink-0 text-[10px] font-bold bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-400 px-1.5 py-0.5 rounded-full">Featured</span>
                   )}
-                  {testimony.verified_purchase && (
-                    <span className="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-0.5 rounded">
-                      Verified
-                    </span>
+                  {!testimony.is_active && (
+                    <span className="shrink-0 text-[10px] font-bold bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded-full">Inactive</span>
                   )}
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleEdit(testimony)}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-bold flex items-center justify-center gap-1"
-                  >
-                    <Pencil size={14} />
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => toggleFeatured(testimony.id, testimony.is_featured)}
-                    className={`px-3 py-2 rounded-md text-sm font-bold ${
-                      testimony.is_featured
-                        ? "bg-yellow-100 hover:bg-yellow-200 text-yellow-800"
-                        : "bg-gray-100 hover:bg-gray-200 text-gray-800 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-200"
-                    }`}
-                  >
-                    <Star size={14} className={testimony.is_featured ? "fill-current" : ""} />
-                  </button>
-                  <button
-                    onClick={() => toggleActive(testimony.id, testimony.is_active)}
-                    className={`px-3 py-2 rounded-md text-sm font-bold ${
-                      testimony.is_active
-                        ? "bg-yellow-100 hover:bg-yellow-200 text-yellow-800"
-                        : "bg-green-100 hover:bg-green-200 text-green-800"
-                    }`}
-                  >
-                    {testimony.is_active ? <EyeOff size={14} /> : <Eye size={14} />}
-                  </button>
-                  <button
-                    onClick={() => handleDelete(testimony.id)}
-                    className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm font-bold"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </div>
+                <p className="text-[11px] text-zinc-400 dark:text-zinc-500 mt-0.5 truncate">
+                  {testimony.customer_location}{testimony.platform ? ` · ${testimony.platform}` : ""}
+                </p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-1 shrink-0">
+                <button title="Edit" onClick={() => handleEdit(testimony)} className="p-1.5 rounded-md text-zinc-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors">
+                  <Pencil size={13} />
+                </button>
+                <button
+                  title={testimony.is_featured ? "Unfeature" : "Feature"}
+                  onClick={() => toggleFeatured(testimony.id, testimony.is_featured)}
+                  className={`p-1.5 rounded-md transition-colors ${testimony.is_featured ? "text-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-900/30" : "text-zinc-400 hover:text-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-900/30"}`}
+                >
+                  <Star size={13} className={testimony.is_featured ? "fill-current" : ""} />
+                </button>
+                <button
+                  title={testimony.is_active ? "Deactivate" : "Activate"}
+                  onClick={() => toggleActive(testimony.id, testimony.is_active)}
+                  className={`p-1.5 rounded-md transition-colors ${testimony.is_active ? "text-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-900/30" : "text-zinc-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30"}`}
+                >
+                  {testimony.is_active ? <EyeOff size={13} /> : <Eye size={13} />}
+                </button>
+                <button title="Delete" onClick={() => handleDelete(testimony.id, testimony.customer_name)} className="p-1.5 rounded-md text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors">
+                  <Trash2 size={13} />
+                </button>
               </div>
             </div>
           ))}
