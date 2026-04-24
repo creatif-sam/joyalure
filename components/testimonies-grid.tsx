@@ -182,7 +182,7 @@ export default function TestimoniesGrid({ testimonies }: { testimonies: Testimon
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl lg:text-4xl font-black tracking-tighter text-gray-900 dark:text-zinc-100 mb-4 uppercase">
-              Join Thousands of Happy Customers
+              Join Our Happy Customers
             </h2>
             <p className="text-lg text-gray-600 dark:text-zinc-400 mb-8">
               Experience the Joyalure difference for yourself
