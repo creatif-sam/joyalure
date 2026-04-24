@@ -51,15 +51,17 @@ export default function TestimoniesAdminPage() {
 
   async function fetchTestimonies() {
     setLoading(true)
+    const toastId = toast.loading("Loading testimonies...")
     const { data, error } = await supabase
       .from("customer_testimonies")
       .select("*")
       .order("display_order", { ascending: true })
 
     if (error) {
-      toast.error("Failed to fetch testimonies")
+      toast.error("Failed to load testimonies. Check that the database table exists.", { id: toastId })
       console.error(error)
     } else {
+      toast.dismiss(toastId)
       setTestimonies(data || [])
     }
     setLoading(false)

@@ -45,15 +45,17 @@ export default function SpecialOffersPage() {
 
   async function fetchOffers() {
     setLoading(true)
+    const toastId = toast.loading("Loading special offers...")
     const { data, error } = await supabase
       .from("special_offers")
       .select("*")
       .order("display_order", { ascending: true })
 
     if (error) {
-      toast.error("Failed to fetch offers")
+      toast.error("Failed to load offers. Check that the database table exists.", { id: toastId })
       console.error(error)
     } else {
+      toast.dismiss(toastId)
       setOffers(data || [])
     }
     setLoading(false)
