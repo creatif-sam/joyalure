@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ShoppingBag, Heart, ArrowLeft, Check, Star } from "lucide-react"
+import { FaLeaf, FaPaw, FaRecycle, FaLock, FaTruck } from "react-icons/fa"
 import { useCartStore } from "@/lib/cart-store"
 import { useShopStore } from "@/lib/shop-store"
 import { useCurrencyStore } from "@/lib/currency-store"
@@ -110,15 +111,15 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                 className="mt-8 grid grid-cols-3 gap-4"
               >
                 {[
-                  { icon: "🌿", label: "Organic" },
-                  { icon: "🐰", label: "Cruelty Free" },
-                  { icon: "♻️", label: "Sustainable" },
+                  { icon: FaLeaf, label: "Organic" },
+                  { icon: FaPaw, label: "Cruelty Free" },
+                  { icon: FaRecycle, label: "Sustainable" },
                 ].map((feature, i) => (
                   <div
                     key={i}
                     className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4 text-center border border-gray-100 dark:border-zinc-800"
                   >
-                    <div className="text-2xl mb-1">{feature.icon}</div>
+                    <feature.icon className="text-2xl mb-1 mx-auto text-green-600 dark:text-green-500" />
                     <p className="text-xs font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-wide">
                       {feature.label}
                     </p>
@@ -226,17 +227,17 @@ export default function ProductDetailClient({ product }: { product: Product }) {
             {/* Trust Badges */}
             <div className="grid grid-cols-2 gap-4 pt-6">
               <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg border border-gray-100 dark:border-zinc-800">
-                <div className="text-2xl">🔒</div>
+                <FaLock className="text-2xl text-gray-700 dark:text-zinc-300" />
                 <div>
                   <p className="text-xs font-bold text-gray-900 dark:text-zinc-100">Secure Checkout</p>
                   <p className="text-[10px] text-gray-500 dark:text-zinc-400">SSL Encrypted</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg border border-gray-100 dark:border-zinc-800">
-                <div className="text-2xl">🚚</div>
+                <FaTruck className="text-2xl text-gray-700 dark:text-zinc-300" />
                 <div>
                   <p className="text-xs font-bold text-gray-900 dark:text-zinc-100">Free Shipping</p>
-                  <p className="text-[10px] text-gray-500 dark:text-zinc-400">On orders $50+</p>
+                  <p className="text-[10px] text-gray-500 dark:text-zinc-400">On orders $40+ USD</p>
                 </div>
               </div>
             </div>

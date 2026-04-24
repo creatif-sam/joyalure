@@ -136,7 +136,7 @@ export default function AboutPage() {
             </div>
           </motion.div>
 
-          {/* Image */}
+          {/* Video */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -145,15 +145,21 @@ export default function AboutPage() {
             className="flex justify-center md:justify-end"
           >
             <div className="relative">
-              <motion.img
+              <motion.video
                 initial={{ scale: 0.92 }}
                 whileInView={{ scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, ease }}
-                src="https://images.unsplash.com/photo-1556228578-8c89e6adf883"
-                alt="Joyalure skincare origins"
+                autoPlay
+                muted
+                loop
+                playsInline
                 className="w-72 h-72 object-cover rounded-[2.5rem] shadow-2xl relative z-10 border dark:border-zinc-800"
-              />
+              >
+                <source src="/videos/about-video.MOV" type="video/quicktime" />
+                <source src="/videos/about-video.MOV" type="video/mp4" />
+                Your browser does not support the video tag.
+              </motion.video>
               <span className="absolute -bottom-5 -right-5 w-full h-full rounded-[2.5rem] border-2 border-green-200 dark:border-green-500/20 z-0" />
               <motion.span
                 initial={{ scale: 0, opacity: 0 }}

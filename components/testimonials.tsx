@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import Link from "next/link"
 
 type Testimonial = {
   name: string
@@ -14,31 +15,40 @@ type Testimonial = {
 
 const testimonials: Testimonial[] = [
   {
-    name: "Sarah M.",
+    name: "Abena Ako",
     country: "United States",
     flag: "https://flagcdn.com/w20/us.png",
     avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     rating: 5,
     review:
-      "My skin feels calmer and more hydrated than ever. Joyalure products are gentle but truly effective."
+      "Joy Allure Shea Butter is a game-changer! Light, warm scent; silky texture that melts right in. Skin stays soft and hydrated for 24+ hours with zero greasiness. Deep nourishment that actually lasts. A must-have!"
   },
   {
-    name: "Michelle R.",
-    country: "United Kingdom",
-    flag: "https://flagcdn.com/w20/gb.png",
+    name: "Abena",
+    country: "United States",
+    flag: "https://flagcdn.com/w20/us.png",
     avatar: "https://randomuser.me/api/portraits/women/68.jpg",
     rating: 5,
     review:
-      "I love how clean and lightweight the formulas are. No irritation at all, just healthy glowing skin."
+      "I received my package few minutes ago and was immediately intrigued to try it out! It really has a beautiful buttery consistency and instantly adds a nourishing and shimmering glow to the skin."
   },
   {
-    name: "Nana A.",
-    country: "Ghana",
-    flag: "https://flagcdn.com/w20/gh.png",
+    name: "Menaoye",
+    country: "United States",
+    flag: "https://flagcdn.com/w20/us.png",
     avatar: "https://randomuser.me/api/portraits/women/12.jpg",
-    rating: 4,
+    rating: 5,
     review:
-      "Finally a skincare brand that works well in warmer climates. My skin looks balanced and fresh."
+      "Fantastic product. My family loves it especially my son who has eczema."
+  },
+  {
+    name: "Hagar Bauah",
+    country: "United States",
+    flag: "https://flagcdn.com/w20/us.png",
+    avatar: "https://randomuser.me/api/portraits/women/32.jpg",
+    rating: 5,
+    review:
+      "Is 10/10 minus nothing. Am definitely going back for more. Highly recommended for dry skin. Try it out and thank me later 👌"
   }
 ]
 
@@ -167,6 +177,35 @@ export default function TestimonialsCarousel() {
               />
             ))}
           </div>
+
+          {/* See More Link */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-12"
+          >
+            <Link
+              href="/testimonies"
+              className="inline-flex items-center gap-2 text-sm font-bold text-green-600 dark:text-green-500 hover:text-green-700 dark:hover:text-green-400 transition-colors group"
+            >
+              See More Testimonies
+              <svg
+                className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </Link>
+          </motion.div>
         </div>
       </div>
     </section>
