@@ -191,14 +191,23 @@ export default function TestimoniesPage() {
                             </p>
                           )}
                         </div>
-                        {testimony.rating && (
+                        {testimony.rating != null && (
                           <div className="flex gap-0.5">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
                                 size={14}
                                 className={
-                                  i < (testimony.rating ?? 0)
+                                  i < testimony.rating!
+                                    ? "fill-yellow-400 text-yellow-400"
+                                    : "fill-gray-300 text-gray-300 dark:fill-zinc-700 dark:text-zinc-700"
+                                }
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
                       {testimony.testimony_text && (
                         <p className="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed mb-4">
                           &ldquo;{testimony.testimony_text}&rdquo;
