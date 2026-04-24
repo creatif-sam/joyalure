@@ -35,7 +35,7 @@ export default function CategoryForm() {
       const fileExt = imageFile.name.split('.').pop()
       const fileName = `${slug}-${Math.random()}.${fileExt}`
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('categories')
+        .from('category-images')
         .upload(fileName, imageFile)
 
       if (uploadError) {
@@ -45,7 +45,7 @@ export default function CategoryForm() {
       }
       
       const { data: { publicUrl } } = supabase.storage
-        .from('categories')
+        .from('category-images')
         .getPublicUrl(uploadData.path)
         
       image_url = publicUrl
